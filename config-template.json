@@ -1,0 +1,23 @@
+{
+  "channel": "wechat",
+  "bot": "openai",
+
+  "openai": {
+    "api_key": "YOUR API KEY",
+    "conversation_max_tokens": 1000,
+    "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
+  },
+
+  "wechat": {
+    "single_chat_prefix": ["bot", "@bot"],
+    "single_chat_reply_prefix": "[bot] ",
+    "group_chat_prefix": ["@bot"],
+    "group_name_white_list": ["ALL_GROUP"],
+    "image_create_prefix": ["画", "看", "找一张"]
+  },
+
+  "wechat_mp": {
+    "token": "YOUR TOKEN",
+    "port": "8088"
+  }
+}
