@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 from model.model import Model
-from config import fetch
+from config import model_conf
 from common import const
 from common.log import logger
 import openai
@@ -12,7 +12,7 @@ user_session = dict()
 # OpenAI对话模型API (可用)
 class OpenAIModel(Model):
     def __init__(self):
-        openai.api_key = fetch(const.OPEN_AI).get('api_key')
+        openai.api_key = model_conf(const.OPEN_AI).get('api_key')
 
 
     def reply(self, query, context=None):
@@ -103,7 +103,7 @@ class Session(object):
         :param user_id: from user id
         :return: query content with conversaction
         '''
-        prompt = fetch(const.OPEN_AI).get("character_desc", "")
+        prompt = model_conf(const.OPEN_AI).get("character_desc", "")
         if prompt:
             prompt += "<|endoftext|>\n\n\n"
         session = user_session.get(user_id, None)
@@ -117,7 +117,7 @@ class Session(object):
 
     @staticmethod
     def save_session(query, answer, user_id):
-        max_tokens = fetch(const.OPEN_AI).get("conversation_max_tokens")
+        max_tokens = model_conf(const.OPEN_AI).get("conversation_max_tokens")
         if not max_tokens:
             # default 3000
             max_tokens = 1000

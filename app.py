@@ -12,7 +12,7 @@ if __name__ == '__main__':
         logger.info("[INIT] load config: {}".format(config.conf()))
 
         # create channel
-        channel = channel_factory.create_channel(config.conf().get("channel"))
+        channel = channel_factory.create_channel(config.conf().get("channel").get("type"))
 
         # startup channel
         channel.startup()
