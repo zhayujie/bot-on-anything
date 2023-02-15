@@ -1,12 +1,12 @@
 import werobot
 import time
-import config
+from config import channel_conf
 from common import const
 from common.log import logger
 from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
 
-robot = werobot.WeRoBot(token=config.fetch(const.WECHAT_MP).get('token'))
+robot = werobot.WeRoBot(token=channel_conf(const.WECHAT_MP).get('token'))
 thread_pool = ThreadPoolExecutor(max_workers=8)
 cache = {}
 
@@ -15,14 +15,15 @@ def hello_world(msg):
     logger.info('[WX_Public] receive public msg: {}, userId: {}'.format(msg.content, msg.source))
     key = msg.content + '|' + msg.source
     if cache.get(key):
+        # request time
         cache.get(key)['req_times'] += 1
-    return WechatPublicAccount().handle(msg)
+    return WechatSubsribeAccount().handle(msg)
 
 
-class WechatPublicAccount(Channel):
+class WechatSubsribeAccount(Channel):
     def startup(self):
         logger.info('[WX_Public] Wechat Public account service start!')
-        robot.config['PORT'] = config.fetch(const.WECHAT_MP).get('port')
+        robot.config['PORT'] = channel_conf(const.WECHAT_MP).get('port')
         robot.run()
 
     def handle(self, msg, count=0):

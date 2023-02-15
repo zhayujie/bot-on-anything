@@ -28,5 +28,25 @@ def read_file(path):
 def conf():
     return config
 
-def fetch(model):
-    return config.get(model)
+
+def model_conf(model_type):
+    return config.get('model').get(model_type)
+
+def model_conf_val(model_type, key):
+    val = config.get('model').get(model_type).get(key)
+    if not val:
+        # common default config
+        return config.get('model').get(key)
+    return val
+
+
+def channel_conf(channel_type):
+    return config.get('channel').get(channel_type)
+
+
+def channel_conf_val(channel_type, key, default=None):
+    val = config.get('channel').get(channel_type).get(key)
+    if not val:
+        # common default config
+        return config.get('channel').get(key, default)
+    return val
