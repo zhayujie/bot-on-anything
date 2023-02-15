@@ -14,8 +14,12 @@ def create_channel(channel_type):
         return WechatChannel()
 
     elif channel_type == const.WECHAT_MP:
-        from channel.wechat.wechat_mp_channel import WechatPublicAccount
-        return WechatPublicAccount()
+        from channel.wechat.wechat_mp_channel import WechatSubsribeAccount
+        return WechatSubsribeAccount()
+
+    elif channel_type == const.WECHAT_MP_SERVICE:
+        from channel.wechat.wechat_mp_service_channel import WechatServiceAccount
+        return WechatServiceAccount()
 
     else:
         raise RuntimeError
