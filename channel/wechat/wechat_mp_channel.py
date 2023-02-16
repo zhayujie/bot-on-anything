@@ -44,7 +44,7 @@ class WechatSubsribeAccount(Channel):
             return res['data']
 
         elif res.get('flag', False) and not res.get('data', None):
-            if res.get('req_times') == 3 and count == 9:
+            if res.get('req_times') == 3 and count == 8:
                 return '不好意思我的CPU烧了，请再问我一次吧~'
             if count < 10:
                 time.sleep(0.5)

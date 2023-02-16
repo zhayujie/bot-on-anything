@@ -42,7 +42,7 @@ cd bot-on-anything/
 cp config-template.json config.json
 ```
 
-配置文件结构如下：
+完整的配置文件结构如下：
 
 ```bash
 {
@@ -78,7 +78,15 @@ cp config-template.json config.json
 
 > 项目中使用的对话模型是 davinci，计费方式是约每 750 字 (包含请求和回复) 消耗 $0.02，图片生成是每张消耗 $0.016，账号创建有免费的 $18 额度，使用完可以更换邮箱重新注册。
 
-#### 1.2 配置项说明
+#### 1.2 安装依赖
+
+```bash
+pip3 install --upgrade openai
+```
+> 注： 如果安装失败可先升级pip， `pip3 install --upgrade pip`
+
+
+#### 1.3 配置项说明
 
 ```bash
 {
@@ -125,6 +133,8 @@ cp config-template.json config.json
 
 ### 2.个人订阅号
 
+**需要：**一台服务器，一个个人订阅号，一个已备案的域名。
+
 #### 2.1 依赖安装
 
 安装 [werobot](https://github.com/offu/WeRoBot) 依赖：
@@ -164,8 +174,8 @@ Hit Ctrl-C to quit.
 
 ![wx_mp_config.png](docs/images/wx_mp_config.png)
 
-- 服务器地址 (URL)：在浏览器访问该URL需要能访问到服务器上运行的python程序 (默认为8088端口)，智能填写 80/443端口，所以需要在服务器进行端口转发 (如使用nginx)，并将域名地址配置在url处 (仅用ip不行)
-- 令牌 (Token)：需和配置中的token一致
+- **服务器地址 (URL)**：在浏览器访问该URL需要能访问到服务器上运行的python程序 (默认监听8088端口)。由于公众号只能配置 80/443端口，所以需要在服务器进行端口转发 (如使用nginx)，或改为直接监听80端口，并将对应的域名地址配置在url处 (仅用ip不行)。
+- **令牌 (Token)**：需和配置中的token一致。
 
 #### 2.3 使用
 
