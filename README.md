@@ -164,7 +164,7 @@ Hit Ctrl-C to quit.
 
 ![wx_mp_config.png](docs/images/wx_mp_config.png)
 
-- 服务器地址 (URL)：在浏览器访问该URL需要能访问到服务器上运行的python程序 (默认为8088端口)
+- 服务器地址 (URL)：在浏览器访问该URL需要能访问到服务器上运行的python程序 (默认为8088端口)，智能填写 80/443端口，所以需要在服务器进行端口转发 (如使用nginx)，并将域名地址配置在url处 (仅用ip不行)
 - 令牌 (Token)：需和配置中的token一致
 
 #### 2.3 使用
