@@ -8,7 +8,7 @@
  
 **应用：**
 
- - [ ] 终端
+ - [x] 终端
  - [ ] Web
  - [x] 个人微信
  - [x] 公众号 (个人/企业)
@@ -36,13 +36,13 @@ cd bot-on-anything/
 
 ### 2.配置说明
 
-核心配置文件为 `config.json`，项目中提供了模板文件 `config-template.json` ，可以从模板复制生成最终生效的 `config.json` 文件：
+核心配置文件为 `config.json`，在项目中提供了模板文件 `config-template.json` ，可以从模板复制生成最终生效的 `config.json` 文件：
 
 ```bash
 cp config-template.json config.json
 ```
 
-完整的配置文件结构如下：
+每一个模型和应用都有自己的配置块，最终组成完整的配置文件，整体结构如下：
 
 ```bash
 {
@@ -63,9 +63,9 @@ cp config-template.json config.json
   }
 }
 ```
-配置文件在最外层分成 `model` 和 `channel` 两部分，model 部分为模型配置，其中的 `type` 指定了选用哪个模型；`channel` 部分包含了应用渠道的配置，`type` 字段指定了接入哪个应用，同时下方对应的配置块也会生效。
+配置文件在最外层分成 `model` 和 `channel` 两部分，model部分为模型配置，其中的 `type` 指定了选用哪个模型；channel部分包含了应用渠道的配置，`type` 字段指定了接入哪个应用。
 
-在使用时只需要更改 `model` 和 `channel` 配置块下的 `type` 字段，即可在任意模型和应用间完成切换，连接不同的通路。下面将依次介绍各个 模型 及 应用 的配置和运行过程。
+在使用时只需要更改 model 和 channel 配置块下的 type 字段，即可在任意模型和应用间完成切换，连接不同的通路。下面将依次介绍各个 模型 及 应用 的配置和运行过程。
 
 
 ## 二、选择模型
@@ -105,9 +105,17 @@ pip3 install --upgrade openai
 + `character_desc` 配置中保存着你对机器人说的一段话，他会记住这段话并作为他的设定，你可以为他定制任何人格      
 
 
-## 三、运行应用
+## 三、选择应用
 
-### 1.个人微信
+### 1.命令行终端
+
+配置模板中默认启动的应用即是终端，无需任何额外配置，直接在项目目录下通过命令行执行 `python3 app.py` 便可启动程序。用户通过命令行的输入与对话模型交互，且支持流式响应效果。
+
+![terminal_demo.png](docs/images/terminal_demo.png)
+
+
+
+### 2.个人微信
 
 与项目 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat) 的使用方式相同，目前接入个人微信可能导致账号被限制，暂时不建议使用。
 
@@ -131,9 +139,9 @@ pip3 install --upgrade openai
 
 在项目根目录下执行 `python3 app.py` 即可启动程序，用手机扫码后完成登录，使用详情参考 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat)。
 
-### 2.个人订阅号
+### 3.个人订阅号
 
-**需要：**一台服务器，一个个人订阅号，一个已备案的域名。
+**需要：** 一台服务器，一个订阅号
 
 #### 2.1 依赖安装
 
@@ -174,21 +182,28 @@ Hit Ctrl-C to quit.
 
 ![wx_mp_config.png](docs/images/wx_mp_config.png)
 
-- **服务器地址 (URL)**：在浏览器访问该URL需要能访问到服务器上运行的python程序 (默认监听8088端口)。由于公众号只能配置 80/443端口，所以需要在服务器进行端口转发 (如使用nginx)，或改为直接监听80端口，并将对应的域名地址配置在url处 (仅用ip不行)。
-- **令牌 (Token)**：需和配置中的token一致。
+**服务器地址 (URL) 配置**： 如果在浏览器上通过配置的URL 能够访问到服务器上的Python程序 (默认监听8088端口)，则说明配置有效。由于公众号只能配置 80/443端口，可以修改配置为直接监听 80 端口 (需要sudo权限)，或者使用反向代理进行转发 (如nginx)。 根据官方文档说明，此处填写公网ip或域名均可。
+
+**令牌 (Token) 配置**：需和 `config.json` 配置中的token一致。
+
+详细操作过程参考 [官方文档](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Getting_Started_Guide.html)
+
 
 #### 2.3 使用
 
 用户关注订阅号后，发送消息即可。
 
 > 注：用户发送消息后，微信后台会向配置的URL地址推送，但如果5s内未回复就会断开连接，同时重试3次，但往往请求openai接口不止5s。本项目中通过异步和缓存将5s超时限制优化至15s，但超出该时间仍无法正常回复。 同时每次5s连接断开时web框架会报错，待后续优化。
- 
 
-### 3.企业服务号
 
-在企业服务号中，通过先异步访问openai接口，再通过客服接口主动推送用户的方式，解决了个人订阅号的15s超时问题。
 
-企业服务号配置只需修改type为`wechat_mp_service`，配置块仍复用 `wechat_mp`，在基础上增加了 `app_id` 和 `app_secret` 两个配置项。
+### 4.企业服务号
+
+**需要：** 一个服务器、一个已微信认证的服务号
+
+在企业服务号中，通过先异步访问openai接口，再通过客服接口主动推送给用户的方式，解决了个人订阅号的15s超时问题。服务号的开发者模式配置和上述订阅号类似，详情参考 [官方文档](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Getting_Started_Guide.html)。
+
+企业服务号的 `config.json` 配置只需修改type为`wechat_mp_service`，但配置块仍复用 `wechat_mp`，在此基础上需要增加 `app_id` 和 `app_secret` 两个配置项。
 
 ```bash
 "channel": {
@@ -197,7 +212,7 @@ Hit Ctrl-C to quit.
     "wechat_mp": {
       "token": "YOUR TOKEN",            # token值
       "port": "8088",                   # 程序启动监听的端口
-      "app_id": "YOUR APP ID",          # appID
+      "app_id": "YOUR APP ID",          # app ID
       "app_secret": "YOUR APP SECRET"   # app secret
     }
 }
