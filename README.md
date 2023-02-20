@@ -220,8 +220,12 @@ Hit Ctrl-C to quit.
 ```
 
 ### 5. Gmail
+
 **需要：** 一个服务器、一个Gmail account
-Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to create APP password for google account, config as below, then cheers!!!
+
+Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to create APP password for google account, config as below, then cheers!!!   (contributed by [Simon](https://github.com/413675377)
+)
+
 ```json
 "channel": {
     "type": "gmail",

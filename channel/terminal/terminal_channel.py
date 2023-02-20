@@ -8,7 +8,7 @@ class TerminalChannel(Channel):
         # close log
         log.close_log()
         context = {"from_user_id": "User", "stream": True}
-        print("Please input your question\n")
+        print("\nPlease input your question")
         while True:
             try:
                 prompt = self.get_input("User:\n")
