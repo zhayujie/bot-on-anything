@@ -17,6 +17,7 @@
  - [ ] QQ
  - [ ] 钉钉 
  - [ ] 飞书
+ - [x] Gmail
 
 # 快速开始
 
@@ -216,4 +217,18 @@ Hit Ctrl-C to quit.
       "app_secret": "YOUR APP SECRET"   # app secret
     }
 }
+```
+
+### 5. Gmail
+**需要：** 一个服务器、一个Gmail account
+Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to create APP password for google account, config as below, then cheers!!!
+```json
+"channel": {
+    "type": "gmail",
+    "gmail": {
+      "subject_keyword": ["bot", "@bot"],
+      "host_email": "xxxx@gmail.com",
+      "host_password": "GMAIL ACCESS KEY"
+    }
+  }
 ```
