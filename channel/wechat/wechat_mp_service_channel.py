@@ -20,6 +20,7 @@ class WechatServiceAccount(Channel):
         robot.config['PORT'] = channel_conf(const.WECHAT_MP).get('port')
         robot.config["APP_ID"] = channel_conf(const.WECHAT_MP).get('app_id')
         robot.config["APP_SECRET"] = channel_conf(const.WECHAT_MP).get('app_secret')
+        robot.config['HOST'] = '0.0.0.0'
         robot.run()
 
     def handle(self, msg, count=0):

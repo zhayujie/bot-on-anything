@@ -15,6 +15,9 @@
     "group_name_white_list": ["ChatGPT测试群"],
     "image_create_prefix": ["画", "看", "找一张"],
 
+    "terminal": {
+    },
+
     "wechat": {
     },
 
