@@ -219,6 +219,8 @@ Hit Ctrl-C to quit.
 }
 ```
 
+注意：需将服务器ip地址配置在 "IP白名单" 内，否则用户将收不到主动推送的消息。
+
 ### 5. Gmail
 
 **需要：** 一个服务器、一个Gmail account
