@@ -25,5 +25,9 @@ def create_channel(channel_type):
         from channel.wechat.wechat_mp_service_channel import WechatServiceAccount
         return WechatServiceAccount()
 
+    elif channel_type == const.GMAIL:
+        from channel.gmail.gmail_channel import GmailChannel
+        return GmailChannel()
+
     else:
         raise RuntimeError

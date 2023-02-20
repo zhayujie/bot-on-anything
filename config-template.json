@@ -21,6 +21,12 @@
     "wechat_mp": {
       "token": "YOUR TOKEN",
       "port": "8088"
+    },
+
+    "gmail": {
+      "subject_keyword": ["bot", "@bot"],
+      "host_email": "xxxx@gmail.com",
+      "host_password": "GMAIL ACCESS KEY"
     }
   }
 }
