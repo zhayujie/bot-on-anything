@@ -30,31 +30,33 @@ class WechatSubsribeAccount(Channel):
     def handle(self, msg, count=0):
         context = dict()
         context['from_user_id'] = msg.source
-        key = msg.content + '|' + msg.source
+        key = msg.source
         res = cache.get(key)
-        if not res:
+        if msg.content == "继续":
+            if not res or res.get("status") == "done":
+                return "目前不在等待回复状态，请输入对话"
+            if res.get("status") == "waiting":
+                return "还在处理中，请稍后再试"
+            elif res.get("status") == "success":
+                cache[key] = {"status":"done"}
+                return res.get("data")
+            else:
+                return "目前不在等待回复状态，请输入对话"
+        elif not res or res.get('status') == "done":
             thread_pool.submit(self._do_send, msg.content, context)
-            temp = {'flag': True, 'req_times': 1}
-            cache[key] = temp
-            if count < 10:
-                time.sleep(2)
-                return self.handle(msg, count+1)
-
-        elif res.get('flag', False) and res.get('data', None):
-            cache.pop(key)
-            return res['data']
-
-        elif res.get('flag', False) and not res.get('data', None):
-            if res.get('req_times') == 3 and count == 8:
-                return '不好意思我的CPU烧了，请再问我一次吧~'
-            if count < 10:
-                time.sleep(0.5)
-                return self.handle(msg, count+1)
-        return "请再说一次"
-
+            return "已开始处理，请稍等片刻后输入\"继续\"查看回复"
+        else:
+            if res.get('status') == "done":
+                reply = res.get("data")
+                thread_pool.submit(self._do_send, msg.content, context)
+                return reply
+            else:
+                return "上一句对话正在处理中，请稍后输入\"继续\"查看回复"
 
     def _do_send(self, query, context):
+        key = context['from_user_id']
+        cache[key] = {"status": "waiting"}
         reply_text = super().build_reply_content(query, context)
         logger.info('[WX_Public] reply content: {}'.format(reply_text))
-        key = query + '|' + context['from_user_id']
-        cache[key] = {'flag': True, 'data': reply_text}
+
+        cache[key] = {"status": "success", "data": reply_text}
