@@ -1,4 +1,4 @@
-import json
+from telebot import util
 from concurrent.futures import ThreadPoolExecutor
 import io
 import requests
@@ -10,6 +10,9 @@ from config import channel_conf_val, channel_conf
 bot = telebot.TeleBot(token=channel_conf(const.TELEGRAM).get('bot_token'))
 thread_pool = ThreadPoolExecutor(max_workers=8)
 
+@bot.message_handler(commands=['help'])
+def send_welcome(message):
+	bot.send_message(message.chat.id, "<p>使用普通文本消息进行查询</p><p>‘画’开头使用绘画功能</p>", parse_mode = "HTML")
 
 @bot.message_handler(content_types=['text'])
 def send_welcome(msg):
@@ -56,7 +59,9 @@ class TelegramChannel(Channel):
 
             # 图片发送
             logger.info('[Telegrame] sendImage, receiver={}'.format(reply_user_id))
-            bot.reply_to(msg, image_storage)
+            splitted_text = util.split_string(image_storage, 3000)
+            for text in splitted_text:
+                bot.send_message(msg.chat.id, text)
         except Exception as e:
             logger.exception(e)
 
