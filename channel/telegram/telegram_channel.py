@@ -11,7 +11,7 @@ thread_pool = ThreadPoolExecutor(max_workers=8)
 
 @bot.message_handler(commands=['help'])
 def send_welcome(message):
-	bot.send_message(message.chat.id, "<a>我是chatGPT机器人，开始和我聊天吧!</a>", parse_mode = "HTML")
+    bot.send_message(message.chat.id, "<a>我是chatGPT机器人，开始和我聊天吧!</a>", parse_mode = "HTML")
 
 # 处理文本类型消息
 @bot.message_handler(content_types=['text'])
@@ -22,11 +22,13 @@ def send_welcome(msg):
 class TelegramChannel(Channel):
     def __init__(self):
         pass
+
     def startup(self):
         logger.info("开始启动[telegram]机器人")
         bot.infinity_polling()
+
     def handle(self, msg):
-        logger.debug("[Telegram]receive msg: " + msg.text)
+        logger.debug("[Telegram] receive msg: " + msg.text)
         img_match_prefix = self.check_prefix(msg, channel_conf_val(const.TELEGRAM, 'image_create_prefix'))
         # 如果是图片请求
         if img_match_prefix:
@@ -38,7 +40,7 @@ class TelegramChannel(Channel):
         context= dict()
         context['from_user_id'] = str(msg.chat.id)
         reply_text = super().build_reply_content(query, context)
-        logger.info('[Telegram]] reply content: {}'.format(reply_text))
+        logger.info('[Telegram] reply content: {}'.format(reply_text))
         bot.reply_to(msg,reply_text)
         
     def _do_send_img(self, msg, reply_user_id):

@@ -13,7 +13,7 @@
  - [x] 个人微信
  - [x] 公众号 (个人/企业)
  - [ ] 企业微信
- - [ ] Telegram
+ - [x] Telegram
  - [ ] QQ
  - [ ] 钉钉 
  - [ ] 飞书
@@ -221,36 +221,47 @@ Hit Ctrl-C to quit.
 
 注意：需将服务器ip地址配置在 "IP白名单" 内，否则用户将收不到主动推送的消息。
 
-### 5. Gmail
+
+### 5.Telegram
+
+**Contributor:** [brucelt1993](https://github.com/brucelt1993)
+
+**5.1 获取token**
+
+telegram机器人申请主要是获取机器人的token id，参考[文档](https://juejin.cn/s/telegram%20bot%20token%20%E8%8E%B7%E5%8F%96)。
+
+**5.2 依赖安装** 
+
+```bash
+pip3 install pyTelegramBotAPI
+```
+
+**5.3 配置**
+
+```bash
+"channel": {
+    "type": "telegram",
+    "telegram":{
+      "bot_token": "YOUR BOT TOKEN ID"
+    }
+  }
+```
+
+### 6.Gmail
 
 **需要：** 一个服务器、一个Gmail account
 
-Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to create APP password for google account, config as below, then cheers!!!   (contributed by [Simon](https://github.com/413675377)
-)
+**Contributor:** [Simon](https://github.com/413675377)
 
-```json
+Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to create APP password for google account, config as below, then cheers!!!
+
+```bash
 "channel": {
     "type": "gmail",
     "gmail": {
       "subject_keyword": ["bot", "@bot"],
       "host_email": "xxxx@gmail.com",
       "host_password": "GMAIL ACCESS KEY"
-    }
-  }
-```
-### 6. Telegram
-
-telegram 机器人申请可以自行谷歌下，很简单。重要的是获取机器人的token id。
-
-**依赖安装** pip install pyTelegramBotAPI
-
-**配置**
-
-```json
-"channel": {
-    "type": "telegram",
-    "telegram":{
-      "bot_token": "你的bot token id"
     }
   }
 ```
