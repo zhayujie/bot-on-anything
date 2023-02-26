@@ -8,7 +8,7 @@
     }
   },
   "channel": {
-    "type": "terminal",
+    "type": "telegram",
     "single_chat_prefix": ["bot", "@bot"],
     "single_chat_reply_prefix": "[bot] ",
     "group_chat_prefix": ["@bot"],
@@ -30,6 +30,9 @@
       "subject_keyword": ["bot", "@bot"],
       "host_email": "xxxx@gmail.com",
       "host_password": "GMAIL ACCESS KEY"
+    },
+    "telegram":{
+      "bot_token": "xx:xx"
     }
   }
 }

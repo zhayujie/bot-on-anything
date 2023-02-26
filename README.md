@@ -238,3 +238,19 @@ Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to cr
     }
   }
 ```
+### 6. Telegram
+
+telegram 机器人申请可以自行谷歌下，很简单。重要的是获取机器人的token id。
+
+**依赖安装** pip install pyTelegramBotAPI
+
+**配置**
+
+```json
+"channel": {
+    "type": "telegram",
+    "telegram":{
+      "bot_token": "你的bot token id"
+    }
+  }
+```
