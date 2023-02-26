@@ -224,6 +224,8 @@ Hit Ctrl-C to quit.
 
 ### 5.Telegram
 
+**需要：** 一台能访问外网环境的机器、一个telegram账号
+
 **Contributor:** [brucelt1993](https://github.com/brucelt1993)
 
 **5.1 获取token**
@@ -236,6 +238,7 @@ telegram机器人申请主要是获取机器人的token id，参考[文档](http
 pip3 install pyTelegramBotAPI
 ```
 
+
 **5.3 配置**
 
 ```bash
@@ -246,6 +249,7 @@ pip3 install pyTelegramBotAPI
     }
   }
 ```
+
 
 ### 6.Gmail
 
