@@ -28,6 +28,9 @@ def create_channel(channel_type):
     elif channel_type == const.GMAIL:
         from channel.gmail.gmail_channel import GmailChannel
         return GmailChannel()
+    elif channel_type == const.TELEGRAM:
+        from channel.telegram.telegram_channel import TelegramChannel
+        return TelegramChannel()
 
     else:
         raise RuntimeError
