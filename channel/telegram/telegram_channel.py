@@ -59,9 +59,10 @@ class TelegramChannel(Channel):
 
             # 图片发送
             logger.info('[Telegrame] sendImage, receiver={}'.format(reply_user_id))
-            splitted_text = util.split_string(image_storage, 3000)
-            for text in splitted_text:
-                bot.send_message(msg.chat.id, text)
+            # splitted_text = util.split_string(image_storage, 3000)
+            # for text in splitted_text:
+            #     bot.send_message(msg.chat.id, text)
+            bot.reply_to(msg,pic_res)
         except Exception as e:
             logger.exception(e)
 
