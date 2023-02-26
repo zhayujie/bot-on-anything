@@ -19,6 +19,7 @@ class TelegramChannel(Channel):
         pass
     def startup(self):
         logger.info("开始启动telegram机器人")
+        bot.infinity_polling()
     def handle(self, msg):
         logger.debug("[Telegram]receive msg: " + msg.text)
         thread_pool.submit(self._dosend,msg.text.replace("/ask",""),msg)
