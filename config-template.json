@@ -30,6 +30,9 @@
       "subject_keyword": ["bot", "@bot"],
       "host_email": "xxxx@gmail.com",
       "host_password": "GMAIL ACCESS KEY"
+    },
+    "telegram":{
+      "bot_token": "5684663516:AAFRYGIcDalEZzExyoBwt-t33BZjxcTISxg"
     }
   }
 }
