@@ -1,4 +1,3 @@
-from telebot import util
 from concurrent.futures import ThreadPoolExecutor
 import io
 import requests
@@ -12,8 +11,9 @@ thread_pool = ThreadPoolExecutor(max_workers=8)
 
 @bot.message_handler(commands=['help'])
 def send_welcome(message):
-	bot.send_message(message.chat.id, "<p>使用普通文本消息进行查询</p><p>‘画’开头使用绘画功能</p>", parse_mode = "HTML")
+	bot.send_message(message.chat.id, "<a>我是chatGPT机器人，开始和我聊天吧!</a>", parse_mode = "HTML")
 
+# 处理文本类型消息
 @bot.message_handler(content_types=['text'])
 def send_welcome(msg):
     # telegram消息处理
@@ -23,11 +23,12 @@ class TelegramChannel(Channel):
     def __init__(self):
         pass
     def startup(self):
-        logger.info("开始启动telegram机器人")
+        logger.info("开始启动[telegram]机器人")
         bot.infinity_polling()
     def handle(self, msg):
         logger.debug("[Telegram]receive msg: " + msg.text)
         img_match_prefix = self.check_prefix(msg, channel_conf_val(const.TELEGRAM, 'image_create_prefix'))
+        # 如果是图片请求
         if img_match_prefix:
             thread_pool.submit(self._do_send_img, msg, str(msg.chat.id))
         else:
@@ -59,10 +60,7 @@ class TelegramChannel(Channel):
 
             # 图片发送
             logger.info('[Telegrame] sendImage, receiver={}'.format(reply_user_id))
-            # splitted_text = util.split_string(image_storage, 3000)
-            # for text in splitted_text:
-            #     bot.send_message(msg.chat.id, text)
-            bot.reply_to(msg,pic_res)
+            bot.send_photo(msg.chat.id,image_storage)
         except Exception as e:
             logger.exception(e)
 
