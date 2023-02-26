@@ -25,9 +25,14 @@ def create_channel(channel_type):
         from channel.wechat.wechat_mp_service_channel import WechatServiceAccount
         return WechatServiceAccount()
 
+    elif channel_type == const.QQ:
+        from channel.qq.qq_channel import QQChannel
+        return QQChannel()
+
     elif channel_type == const.GMAIL:
         from channel.gmail.gmail_channel import GmailChannel
         return GmailChannel()
+
     elif channel_type == const.TELEGRAM:
         from channel.telegram.telegram_channel import TelegramChannel
         return TelegramChannel()
