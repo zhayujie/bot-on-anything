@@ -11,10 +11,10 @@
  - [x] [终端](https://github.com/zhayujie/bot-on-anything#1%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%88%E7%AB%AF)
  - [ ] Web
  - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
- - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
+ - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#3%E4%B8%AA%E4%BA%BA%E8%AE%A2%E9%98%85%E5%8F%B7)
  - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
  - [ ] 企业微信
- - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
+ - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [ ] 钉钉 
  - [ ] 飞书
@@ -141,11 +141,12 @@ pip3 install --upgrade openai
 
 在项目根目录下执行 `python3 app.py` 即可启动程序，用手机扫码后完成登录，使用详情参考 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat)。
 
+
 ### 3.个人订阅号
 
 **需要：** 一台服务器，一个订阅号
 
-#### 2.1 依赖安装
+#### 3.1 依赖安装
 
 安装 [werobot](https://github.com/offu/WeRoBot) 依赖：
 
@@ -153,7 +154,7 @@ pip3 install --upgrade openai
 pip3 install werobot
 ```
 
-#### 2.2 配置
+#### 3.2 配置
 
 ```bash
 "channel": {
@@ -166,7 +167,7 @@ pip3 install werobot
 }
 ```
 
-#### 2.1 运行程序
+#### 3.3 运行程序
 
 在项目目录下运行 `python3 app.py`，终端显示如下则表示已成功运行：
 
@@ -269,8 +270,7 @@ cd channel/qq
 
 ### 6.Telegram
 
-
-**Contributor:** [Simon](https://github.com/413675377)
+Contributor: [brucelt1993](https://github.com/brucelt1993)
 
 **6.1 获取token**
 
@@ -295,7 +295,7 @@ pip install pyTelegramBotAPI
 
 ### 7.Gmail
 
-**需要：** 一个服务器、一个Gmail account
+需要: 一个服务器、一个Gmail account
 
 **Contributor:** [Simon](https://github.com/413675377)
 
