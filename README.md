@@ -4,20 +4,21 @@
 
 **模型：**
 
- - [x] ChatGPT
+ - [x] [ChatGPT](https://github.com/zhayujie/bot-on-anything#1chatgpt)
  
 **应用：**
 
- - [x] 终端
+ - [x] [终端](https://github.com/zhayujie/bot-on-anything#1%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%88%E7%AB%AF)
  - [ ] Web
- - [x] 个人微信
- - [x] 公众号 (个人/企业)
+ - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
+ - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
+ - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
  - [ ] 企业微信
- - [x] Telegram
- - [x] QQ
+ - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
+ - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [ ] 钉钉 
  - [ ] 飞书
- - [x] Gmail
+ - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
 
 # 快速开始
 
