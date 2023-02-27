@@ -14,7 +14,7 @@
  - [x] 公众号 (个人/企业)
  - [ ] 企业微信
  - [x] Telegram
- - [ ] QQ
+ - [x] QQ
  - [ ] 钉钉 
  - [ ] 飞书
  - [x] Gmail
@@ -221,25 +221,67 @@ Hit Ctrl-C to quit.
 
 注意：需将服务器ip地址配置在 "IP白名单" 内，否则用户将收不到主动推送的消息。
 
+### 5.QQ
 
-### 5.Telegram
+需要：一台PC或服务器 (国内网络)、一个QQ号
 
-**需要：** 一台能访问外网环境的机器、一个telegram账号
+运行qq机器人 需要额外运行一个`go-cqhttp` 程序，cqhttp程序负责接收和发送qq消息， 我们的`bot-on-anything`程序负责访问`openai`生成对话内容。
 
-**Contributor:** [brucelt1993](https://github.com/brucelt1993)
+#### 5.1 下载 go-cqhttp
 
-**5.1 获取token**
+在 [go-cqhttp的Release](https://github.com/Mrs4s/go-cqhttp/releases) 中下载对应机器的程序，解压后将 `go-cqhttp` 二进制文件放置在我们的 `bot-on-anything/channel/qq` 目录下。 同时这里已经准备好了一个 `config.yml` 配置文件，仅需要填写其中的 QQ 账号配置 (account-uin)。
 
-telegram机器人申请主要是获取机器人的token id，参考[文档](https://juejin.cn/s/telegram%20bot%20token%20%E8%8E%B7%E5%8F%96)。
+#### 5.2 安装 aiocqhttp
 
-**5.2 依赖安装** 
+使用 [aiocqhttp](https://github.com/nonebot/aiocqhttp) 来与 go-cqhttp 交互， 执行以下语句安装依赖：
 
 ```bash
-pip3 install pyTelegramBotAPI
+pip3 install aiocqhttp
 ```
 
+#### 5.3 配置
 
-**5.3 配置**
+只需修改 `config.json` 配置文件 channel 块中的 type 为 `qq`：
+
+```bash
+"channel": {
+    "type": "qq"
+}
+```
+
+#### 5.4 运行
+
+首先进入 `bot-on-anything` 项目根目录，在 终端1 运行：
+
+```bash
+python3 app.py    # 此时会监听8080端口
+```
+
+第二步打开 终端2，进入到放置 `cqhttp` 的目录并运行：
+
+```bash
+cd channel/qq
+./go-cqhttp
+```
+注意：目前未设置任何 关键词匹配 及 群聊白名单，对所有私聊均会自动回复，在群聊中只要被@也会自动回复。
+
+
+### 6.Telegram
+
+
+**Contributor:** [Simon](https://github.com/413675377)
+
+**6.1 获取token**
+
+telegram 机器人申请可以自行谷歌下，很简单，重要的是获取机器人的token id。
+
+
+
+**6.2 依赖安装**
+
+pip install pyTelegramBotAPI
+
+**6.3 配置**
 
 ```bash
 "channel": {
@@ -247,11 +289,10 @@ pip3 install pyTelegramBotAPI
     "telegram":{
       "bot_token": "YOUR BOT TOKEN ID"
     }
-  }
+}
 ```
 
-
-### 6.Gmail
+### 7.Gmail
 
 **需要：** 一个服务器、一个Gmail account
 
