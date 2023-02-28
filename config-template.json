@@ -33,8 +33,13 @@
       "host_password": "GMAIL ACCESS KEY"
     },
 
-    "telegram":{
+    "telegram": {
       "bot_token": "xx:xx"
+    },
+
+    "slack": {
+      "slack_bot_token": "xoxb-xxxx",
+      "slack_signing_secret": "xxxx"
     }
   }
 }
