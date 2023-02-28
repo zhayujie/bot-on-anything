@@ -6,6 +6,7 @@ WECHAT_MP_SERVICE = "wechat_mp_service"
 QQ = "qq"
 GMAIL = "gmail"
 TELEGRAM = "telegram"
+SLACK = "slack"
 
 # model
 OPEN_AI = "openai"

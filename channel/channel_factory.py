@@ -36,6 +36,10 @@ def create_channel(channel_type):
     elif channel_type == const.TELEGRAM:
         from channel.telegram.telegram_channel import TelegramChannel
         return TelegramChannel()
+    
+    elif channel_type == const.SLACK:
+        from channel.slack.slack_channel import SlackChannel
+        return SlackChannel()
 
     else:
         raise RuntimeError
