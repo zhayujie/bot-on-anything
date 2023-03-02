@@ -5,7 +5,7 @@
 **模型：**
 
  - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1chatgpt)
- - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#1chatgpt)
+ - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
 
  
 **应用：**
@@ -74,7 +74,7 @@ cp config-template.json config.json
 
 ## 二、选择模型
 
-### 1. ChatGPT (gpt-3.5)
+### 1. ChatGPT
 
 使用的模型是 `gpt-3.5-turbo`，详情参考[官方文档](https://platform.openai.com/docs/guides/chat)。
 
