@@ -1,6 +1,6 @@
 {
   "model": {
-    "type" : "openai",
+    "type" : "chatgpt",
     "openai": {
       "api_key": "YOUR API KEY",
       "conversation_max_tokens": 1000,
