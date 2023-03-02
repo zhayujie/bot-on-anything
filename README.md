@@ -4,7 +4,9 @@
 
 **模型：**
 
- - [x] [ChatGPT](https://github.com/zhayujie/bot-on-anything#1chatgpt)
+ - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1chatgpt)
+ - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#1chatgpt)
+
  
 **应用：**
 
@@ -49,7 +51,7 @@ cp config-template.json config.json
 ```bash
 {
   "model": {
-    "type" : "openai",              # 选用的算法模型
+    "type" : "chatgpt",             # 选用的算法模型
     "openai": {
       # openAI配置
     }
@@ -72,24 +74,50 @@ cp config-template.json config.json
 
 ## 二、选择模型
 
-### 1.ChatGPT
+### 1. ChatGPT (gpt-3.5)
 
-#### 1.1 注册 OpenAI 账号
+使用的模型是 `gpt-3.5-turbo`，详情参考[官方文档](https://platform.openai.com/docs/guides/chat)。
+
+#### (1) 注册 OpenAI 账号
 
 前往 [OpenAI注册页面](https://beta.openai.com/signup) 创建账号，参考这篇 [教程](https://www.cnblogs.com/damugua/p/16969508.html) 可以通过虚拟手机号来接收验证码。创建完账号则前往 [API管理页面](https://beta.openai.com/account/api-keys) 创建一个 API Key 并保存下来，后面需要在项目中配置这个key。
 
 > 项目中使用的对话模型是 davinci，计费方式是约每 750 字 (包含请求和回复) 消耗 $0.02，图片生成是每张消耗 $0.016，账号创建有免费的 $18 额度，使用完可以更换邮箱重新注册。
 
-#### 1.2 安装依赖
+#### (2) 安装依赖
 
 ```bash
 pip3 install --upgrade openai
 ```
-> 注： 如果安装失败可先升级pip， `pip3 install --upgrade pip`
+> 注： openai版本需要`0.27.0`以上。如果安装失败可先升级pip，`pip3 install --upgrade pip`
 
 
-#### 1.3 配置项说明
+#### (3) 配置项说明
 
+```bash
+{
+  "model": {
+    "type" : "chatgpt",
+   
+    "openai": {
+      "api_key": "YOUR API KEY",
+      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
+    }
+}
+```
+ + `api_key`: 填入上面注册账号时创建的 `OpenAI API KEY`
++ `character_desc`: 配置中保存着你对chatgpt说的一段话，他会记住这段话并作为他的设定，你可以为他定制任何人格      
+
+### 2.GPT-3.0
+
+使用的模型是 `text-davinci-003`，详情参考[官方文档]([https://platform.openai.com/docs/guides/chat](https://platform.openai.com/docs/guides/completion/introduction))。
+
+使用步骤和上述GPT-3.5基本相同：
+
+1. 注册OpenAI账号并配置API KEY
+2. 安装openai依赖，要求版本高于 `0.25.0` 
+3. 修改`config.json`配置中的type字段为 `openai`
+ 
 ```bash
 {
   "model": {
@@ -97,14 +125,10 @@ pip3 install --upgrade openai
    
     "openai": {
       "api_key": "YOUR API KEY",
-      "conversation_max_tokens": 1000,
       "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
     }
 }
 ```
-+ `api_key`：填入上面注册账号时创建的 `OpenAI API KEY`
-+ `conversation_max_tokens`：表示能够记忆的上下文最大字数（一问一答为一组对话，如果累积的对话字数超出限制，就会优先移除最早的一组对话）
-+ `character_desc` 配置中保存着你对机器人说的一段话，他会记住这段话并作为他的设定，你可以为他定制任何人格      
 
 
 ## 三、选择应用
