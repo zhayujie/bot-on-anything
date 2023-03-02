@@ -21,6 +21,7 @@
  - [ ] 钉钉 
  - [ ] 飞书
  - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
+ - [x] [Slack](https://github.com/zhayujie/bot-on-anything#8slack)
 
 # 快速开始
 
@@ -334,4 +335,59 @@ Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to cr
       "host_password": "GMAIL ACCESS KEY"
     }
   }
+```
+
+### 8.Slack
+
+**需要：** 服务器、 Slack 应用
+
+**Contributor:** [amao](https://github.com/amaoo)
+
+**依赖**
+
+```bash
+pip3 install slack_bolt flask
+```
+
+**配置**
+
+```bash
+"channel": {
+    "type": "slack",
+    "slack": {
+      "slack_bot_token": "xoxb-xxxx",
+      "slack_signing_secret": "xxxx"
+    }
+  }
+```
+
+需要 80 端口,可以在 **channel/slack/slack_channel.py:45** 修改相应端口
+
+将范围设置为机器人令牌范围 OAuth & Permission:
+
+```
+app_mentions:read
+channels:join
+chat:write
+im:history
+im:read
+im:writ
+```
+
+在事件订阅中设置范围 - Subscribe to bot events
+
+```
+app_mention
+```
+
+订阅 URL，如果端口是 80 ，可不填
+
+```
+http:/你的固定公网ip或者域名:端口/slack/events
+```
+
+参考文档
+
+```
+https://slack.dev/bolt-python/tutorial/getting-started
 ```
