@@ -10,3 +10,4 @@ SLACK = "slack"
 
 # model
 OPEN_AI = "openai"
+CHATGPT = "chatgpt"
