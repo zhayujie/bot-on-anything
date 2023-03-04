@@ -5,7 +5,6 @@ from common import const
 from common.log import logger
 from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
-sensitive_word = []
 
 robot = werobot.WeRoBot(token=channel_conf(const.WECHAT_MP).get('token'))
 thread_pool = ThreadPoolExecutor(max_workers=8)
