@@ -102,11 +102,13 @@ pip3 install --upgrade openai
    
     "openai": {
       "api_key": "YOUR API KEY",
+      "proxy": "http://127.0.0.1:7890",
       "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
     }
 }
 ```
  + `api_key`: 填入上面注册账号时创建的 `OpenAI API KEY`
+ + `proxy`: 代理客户端的地址，详情参考  [#56](https://github.com/zhayujie/bot-on-anything/issues/56)
 + `character_desc`: 配置中保存着你对chatgpt说的一段话，他会记住这段话并作为他的设定，你可以为他定制任何人格      
 
 ### 2.GPT-3.0
