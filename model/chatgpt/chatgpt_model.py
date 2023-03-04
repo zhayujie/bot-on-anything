@@ -13,7 +13,9 @@ user_session = dict()
 class ChatGPTModel(Model):
     def __init__(self):
         openai.api_key = model_conf(const.OPEN_AI).get('api_key')
-        openai.proxy = model_conf(const.OPEN_AI).get('proxy')
+        proxy = model_conf(const.OPEN_AI).get('proxy')
+        if proxy:
+            openai.proxy = proxy
 
     def reply(self, query, context=None):
         # acquire reply content
