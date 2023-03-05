@@ -20,23 +20,21 @@ class ChatGPTModel(Model):
     def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':
-            log.info("[OPEN_AI] query={}".format(query))
+            log.info("[CHATGPT] query={}".format(query))
             from_user_id = context['from_user_id']
             if query == '#清除记忆':
                 Session.clear_session(from_user_id)
                 return '记忆已清除'
 
             new_query = Session.build_session_query(query, from_user_id)
-            log.debug("[OPEN_AI] session query={}".format(new_query))
+            log.debug("[CHATGPT] session query={}".format(new_query))
 
             # if context.get('stream'):
             #     # reply in stream
             #     return self.reply_text_stream(query, new_query, from_user_id)
 
             reply_content = self.reply_text(new_query, from_user_id, 0)
-            log.debug("[OPEN_AI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
-            if reply_content:
-                Session.save_session(query, reply_content, from_user_id)
+            #log.debug("[CHATGPT] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
             return reply_content
 
         elif context.get('type', None) == 'IMAGE_CREATE':
@@ -48,24 +46,35 @@ class ChatGPTModel(Model):
                 model="gpt-3.5-turbo",  # 对话模型的名称
                 messages=query,
                 temperature=0.9,  # 值在[0,1]之间，越大表示回复越具有不确定性
-                #max_tokens=1200,  # 回复最大的字符数
                 top_p=1,
                 frequency_penalty=0.0,  # [-2,2]之间，该值越大则更倾向于产生不同的内容
                 presence_penalty=0.0,  # [-2,2]之间，该值越大则更倾向于产生不同的内容
             )
-            # res_content = response.choices[0]['text'].strip().replace('<|endoftext|>', '')
-            log.info(response.choices[0]['message']['content'])
-            # log.info("[OPEN_AI] reply={}".format(res_content))
+            reply_content = response.choices[0]['message']['content']
+            used_token = response['usage']['total_tokens']
+            log.debug(response)
+            log.info("[CHATGPT] reply={}", reply_content)
+            if reply_content:
+                # save conversation
+                Session.save_session(query, reply_content, user_id, used_token)
             return response.choices[0]['message']['content']
         except openai.error.RateLimitError as e:
             # rate limit exception
             log.warn(e)
             if retry_count < 1:
                 time.sleep(5)
-                log.warn("[OPEN_AI] RateLimit exceed, 第{}次重试".format(retry_count+1))
+                log.warn("[CHATGPT] RateLimit exceed, 第{}次重试".format(retry_count+1))
                 return self.reply_text(query, user_id, retry_count+1)
             else:
                 return "提问太快啦，请休息一下再问我吧"
+        except openai.error.APIConnectionError as e:
+            log.warn(e)
+            log.warn("[CHATGPT] APIConnection failed")
+            return "我连接不到你的网络"
+        except openai.error.Timeout as e:
+            log.warn(e)
+            log.warn("[CHATGPT] Timeout")
+            return "我没有收到你的消息"
         except Exception as e:
             # unknown exception
             log.exception(e)
@@ -93,10 +102,18 @@ class ChatGPTModel(Model):
             log.warn(e)
             if retry_count < 1:
                 time.sleep(5)
-                log.warn("[OPEN_AI] RateLimit exceed, 第{}次重试".format(retry_count+1))
-                return self.reply_text(query, user_id, retry_count+1)
+                log.warn("[CHATGPT] RateLimit exceed, 第{}次重试".format(retry_count+1))
+                return self.reply_text_stream(query, user_id, retry_count+1)
             else:
                 return "提问太快啦，请休息一下再问我吧"
+        except openai.error.APIConnectionError as e:
+            log.warn(e)
+            log.warn("[CHATGPT] APIConnection failed")
+            return "我连接不到你的网络"
+        except openai.error.Timeout as e:
+            log.warn(e)
+            log.warn("[CHATGPT] Timeout")
+            return "我没有收到你的消息"
         except Exception as e:
             # unknown exception
             log.exception(e)
@@ -176,12 +193,21 @@ class Session(object):
         return session
 
     @staticmethod
-    def save_session(query, answer, user_id):
+    def save_session(query, answer, user_id, used_tokens=0):
+        max_tokens = model_conf(const.OPEN_AI).get('conversation_max_tokens')
+        if not max_tokens or max_tokens > 4000:
+            # default value
+            max_tokens = 1000
         session = user_session.get(user_id)
         if session:
             # append conversation
             gpt_item = {'role': 'assistant', 'content': answer}
             session.append(gpt_item)
+
+        if used_tokens > max_tokens and len(session) >= 3:
+            # pop first conversation (TODO: more accurate calculation)
+            session.pop(1)
+            session.pop(1)
 
     @staticmethod
     def clear_session(user_id):
