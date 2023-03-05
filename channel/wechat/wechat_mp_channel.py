@@ -5,7 +5,9 @@ from common import const
 from common.log import logger
 from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
-sensitive_word = []
+import os
+
+
 
 robot = werobot.WeRoBot(token=channel_conf(const.WECHAT_MP).get('token'))
 thread_pool = ThreadPoolExecutor(max_workers=8)
@@ -16,10 +18,9 @@ def hello_world(msg):
     with open('sensitive_words.txt', 'r', encoding='utf-8') as f: #加入检测违规词
         sensitive_wordss = [msg.content[i:i+2] for i in range(0, len(msg.content), 2)]
         found = False
-        #如果文件为空
-        if not f.read():
-            print('empty file in sensitive_words.txt') #如为空则不限制
-            return WechatSubsribeAccount().handle(msg)
+        #判断文件是否为空
+        if not os.path.getsize('sensitive_words.txt'):
+            found = False
         else:
             for i in sensitive_wordss:
                 if i in f.read():
@@ -27,15 +28,15 @@ def hello_world(msg):
                     break
                 else:
                     found = False
-            if found:
-                return '你输入的内容包含敏感词汇'
-            else:
-                logger.info('[WX_Public] receive public msg: {}, userId: {}'.format(msg.content, msg.source))
-                key = msg.content + '|' + msg.source
-                if cache.get(key):
-                    # request time
-                    cache.get(key)['req_times'] += 1
-                return WechatSubsribeAccount().handle(msg)
+        if found:
+            return '你输入的内容包含敏感词汇'
+        else:
+            logger.info('[WX_Public] receive public msg: {}, userId: {}'.format(msg.content, msg.source))
+            key = msg.content + '|' + msg.source
+            if cache.get(key):
+                # request time
+                cache.get(key)['req_times'] += 1
+            return WechatSubsribeAccount().handle(msg)
 
 
 class WechatSubsribeAccount(Channel):
