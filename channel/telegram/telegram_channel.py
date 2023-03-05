@@ -66,8 +66,9 @@ class TelegramChannel(Channel):
         except Exception as e:
             logger.exception(e)
 
-        
-    def check_prefix(self,msg,prefix_list):
+    def check_prefix(self, msg, prefix_list):
+        if not prefix_list:
+            return None
         for prefix in prefix_list:
             if msg.text.startswith(prefix):
                 return prefix
