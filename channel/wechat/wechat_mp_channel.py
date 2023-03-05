@@ -13,7 +13,15 @@ cache = {}
 @robot.text
 def hello_world(msg):
     with open('sensitive_words.txt', 'r', encoding='utf-8') as f: #加入检测违规词
-        if msg.content in f.read():
+        sensitive_wordss = [msg.content[i:i+2] for i in range(0, len(msg.content), 2)]
+        found = False
+        for i in sensitive_wordss:
+            if i in f.read():
+                found = True
+                break
+            else:
+                found = False
+        if found:
             return '你输入的内容包含敏感词汇'
         else:
             logger.info('[WX_Public] receive public msg: {}, userId: {}'.format(msg.content, msg.source))
@@ -22,6 +30,7 @@ def hello_world(msg):
                 # request time
                 cache.get(key)['req_times'] += 1
             return WechatSubsribeAccount().handle(msg)
+
 
 
 class WechatSubsribeAccount(Channel):
