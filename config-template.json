@@ -41,6 +41,12 @@
     "slack": {
       "slack_bot_token": "xoxb-xxxx",
       "slack_signing_secret": "xxxx"
+    },
+
+    "http": {
+      "http_auth_secret_key": "6d25a684-9558-11e9-aa94-efccd7a0659b",
+      "http_auth_password": "6.67428e-11",
+      "port": "80"
     }
   }
 }

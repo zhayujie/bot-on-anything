@@ -11,7 +11,7 @@
 **应用：**
 
  - [x] [终端](https://github.com/zhayujie/bot-on-anything#1%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%88%E7%AB%AF)
- - [ ] Web
+ - [x] [Web](https://github.com/zhayujie/bot-on-anything#9web)
  - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
  - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#3%E4%B8%AA%E4%BA%BA%E8%AE%A2%E9%98%85%E5%8F%B7)
  - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
@@ -392,4 +392,36 @@ http:/你的固定公网ip或者域名:端口/slack/events
 
 ```
 https://slack.dev/bolt-python/tutorial/getting-started
+```
+
+### 9.Web
+#### http
+**需要：** 服务器
+
+
+**依赖**
+
+```bash
+pip3 install PyJWT flask
+```
+
+**配置**
+
+```bash
+"channel": {
+    "type": "http",
+    "http": {
+      "http_auth_secret_key": "6d25a684-9558-11e9-aa94-efccd7a0659b",//jwt认证秘钥
+      "http_auth_password": "6.67428e-11",//认证密码,仅仅只是自用,最初步的防御别人扫描端口后DDOS浪费tokens
+      "port": "80"//端口
+    }
+  }
+```
+
+
+
+URL，如果端口是 80 ，可不填
+
+```
+http:/你的固定公网ip或者域名:端口/
 ```

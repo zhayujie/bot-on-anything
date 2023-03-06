@@ -7,6 +7,7 @@ QQ = "qq"
 GMAIL = "gmail"
 TELEGRAM = "telegram"
 SLACK = "slack"
+HTTP = "http"
 
 # model
 OPEN_AI = "openai"
