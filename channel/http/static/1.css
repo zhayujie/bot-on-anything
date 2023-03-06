@@ -1,0 +1,329 @@
+
+.typing_loader {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    -webkit-animation: typing 1s linear infinite alternate;
+    -moz-animation: typing 1s linear infinite alternate;
+    -ms-animation: typing 1s linear infinite alternate;
+    animation: typing 1s linear infinite alternate;
+    position: relative;
+    left: -12px;
+    margin: 7px 15px 6px;
+}
+ol,pre {
+    background-color: #b1e3b1c4;
+    border: 1px solid #c285e3ab;
+    padding: 0.5rem 1.5rem 0.5rem;
+    color: black;
+    border-radius: 10px;
+}
+.to .typing_loader {
+    animation: typing-black 1s linear infinite alternate;
+}
+
+@-webkit-keyframes typing {
+    0% {
+        background-color: rgba(255,255,255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+    }
+
+    50% {
+        background-color: rgba(255,255,255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+    }
+
+    100% {
+        background-color: rgba(255,255,255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+    }
+}
+
+@-moz-keyframes typing {
+    0% {
+        background-color: rgba(255,255,255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+    }
+
+    50% {
+        background-color: rgba(255,255,255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+    }
+
+    100% {
+        background-color: rgba(255,255,255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+    }
+}
+
+@keyframes typing-black {
+    0% {
+        background-color: rgba(74, 74, 74, 1);
+        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74, 0.4), 24px 0px 0px 0px rgba(74, 74, 74, 0.2);
+    }
+
+    50% {
+        background-color: rgba(74, 74, 74, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74, 1), 24px 0px 0px 0px rgba(74, 74, 74,0.4);
+    }
+
+    100% {
+        background-color: rgba(74, 74, 74, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74,0.4), 24px 0px 0px 0px rgba(74, 74, 74,1);
+    }
+}
+
+@keyframes typing {
+    0% {
+        background-color: rgba(255,255,255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+    }
+
+    50% {
+        background-color: rgba(255,255,255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+    }
+
+    100% {
+        background-color: rgba(255,255,255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+    }
+}
+
+.convFormDynamic {
+    text-align: center;
+    margin: 10px 10px;
+    padding: 0 !important;
+    position: relative;
+    border: 2px solid rgba(0, 40, 100, 0.12);
+}
+
+.convFormDynamic textarea.userInputDynamic {
+    border: none;
+    padding: 7px 10px;
+    overflow-x: hidden!important;
+    outline: none;
+    font-size: 0.905rem;
+    float: left;
+    width: calc(100% - 70px);
+    line-height: 1.3em;
+    min-height: 1.7em;
+    max-height: 10rem;
+    display: block;
+    max-width: 89vw;
+    margin-right: -1vw;
+    resize: none;
+}
+.convFormDynamic textarea::-webkit-scrollbar{
+    width: 2px;
+    background-color: lawngreen;
+}
+.convFormDynamic textarea::-webkit-scrollbar-thumb{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color:  dodgerblue;
+}
+.convFormDynamic input.userInputDynamic {
+    border: none;
+    padding: 7px 10px;
+    outline: none;
+    font-size: 0.905rem;
+    float: left;
+    width: calc(100% - 70px);
+    line-height: 1.3em;
+    min-height: 1.7em;
+    max-height: 10rem;
+    display: block;
+    max-width: 89vw;
+    margin-right: -1vw;
+}
+
+div.conv-form-wrapper div#messages {
+    max-height: 71vh;
+    height: auto !important;
+    overflow-y: scroll;
+}
+
+div.conv-form-wrapper div#messages:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+div.conv-form-wrapper {
+    position: relative;
+}
+
+div.conv-form-wrapper div.wrapper-messages {
+    position: relative;
+    height: 76vh;
+    max-height: 80vh;
+    overflow-y: scroll;
+}
+
+div.conv-form-wrapper:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    display: block;
+    height: 30px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: linear-gradient(#fff, transparent);
+}
+
+@media (max-width: 767px) {
+    div.conv-form-wrapper div.wrapper-messages, div.conv-form-wrapper div#messages {
+        max-height: 71vh;
+    }
+}
+
+div.conv-form-wrapper div.wrapper-messages::-webkit-scrollbar, div#feed ul::-webkit-scrollbar, div.conv-form-wrapper div.options::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    /* remove scrollbar space */
+    background: transparent;
+    /* optional: just make scrollbar invisible */
+}
+
+input[type="text"].userInputDynamic.error {
+    color: #ac0000 !important;
+}
+
+input[type="text"].userInputDynamic {
+    border-radius: 3px;
+    margin: 7px 10px;
+}
+
+textarea.userInputDynamic.error {
+    color: #ac0000 !important;
+}
+
+textarea.userInputDynamic {
+    border-radius: 3px;
+    margin: 7px 10px;
+}
+
+div.conv-form-wrapper div#messages {
+    transition: bottom 0.15s, padding-bottom 0.15s;
+    position: absolute;
+    bottom: 0;
+    height: auto !important;
+    width: 100%;
+    padding-bottom: 20px;
+    /*max-height: 71vh;*/
+}
+
+div.conv-form-wrapper div.message {
+    animation: slideTop 0.15s ease;
+}
+
+div.conv-form-wrapper div.message:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+div.conv-form-wrapper div.message.ready {
+    animation: bounceIn 0.2s ease;
+    transform-origin: 0 0 0;
+}
+
+div.conv-form-wrapper div#messages div.message {
+    border-radius: 20px;
+    padding: 12px 22px;
+    font-size: 0.905rem;
+    display: inline-block;
+    padding: 10px 15px 8px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+    float: right;
+    clear: both;
+    max-width: 65%;
+    word-wrap: break-word;
+}
+
+div.conv-form-wrapper div#messages div.message.to {
+    float: left;
+    background: lawngreen;
+    border-top-left-radius: 0;
+}
+
+div.conv-form-wrapper div#messages div.message.from {
+    background:  dodgerblue;
+    color: #fff;
+    border-top-right-radius: 0;
+}
+
+.message.to+.message.from, .message.from+.message.to {
+    margin-top: 15px;
+}
+
+@keyframes slideTop {
+    0% {
+        margin-bottom: -25px;
+    }
+
+    100% {
+        margin-bottom: 0;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.75, 0.75);
+    }
+
+    100% {
+        transform: scale(1.0, 1.0);
+    }
+}
+
+.convFormDynamic button.submit {
+    position: absolute;
+    bottom: 0px;
+    border: none;
+    left:95%;
+    margin: 5px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1.6rem;
+    width: 50px;
+    height: 42px;
+    border: 1px solid #b7b7b7;
+    background: #c3c3c3;
+    outline: none !important;
+}
+
+.center-block {
+    margin-right: 0;
+    margin-left: 0;
+    float: none;
+    text-align: center;
+}
+
+button.submit.glow {
+    border: 1px solid  dodgerblue !important;
+    background:  dodgerblue !important;
+    box-shadow: 0 0 5px 2px rgba(14, 144, 255,0.4);
+}
+.no-border {
+    border: none !important;
+}
+
+.dragscroll {
+    cursor: grab;
+}
+
+div.conv-form-wrapper div#messages::-webkit-scrollbar, div#feed ul::-webkit-scrollbar {
+    width: 0px;
+    /* remove scrollbar space */
+    background: transparent;
+    /* optional: just make scrollbar invisible */
+}
+
+span.clear {
+    display: block;
+    clear: both;
+}

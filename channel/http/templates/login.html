@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- Title -->
+    <title>登录</title><!-- Bootstrap Css -->
+    <style>
+        .login-form {
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            width: 350px;
+            max-width: 100%;
+            padding: 15px 35px 15px;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -160px 0 0 -200px;
+        }
+
+        .Button {
+            width: 80px;
+            margin: 3px 1px 0 5px;
+            padding: 0 10px;
+            background-color: #16a0d3;
+            border: none;
+            display: inline-block;
+            font-family: "Microsoft Yahei";
+            font-size: 12px;
+            height: 27px;
+            color: #FFF;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body class="">
+    <form name="login" class="login-form" action="./login" method="post" autocomplete="off">
+        <input type="password" name="password" placeholder="Password" style="border: none; height: 25px;width: 250px;"
+            required>
+        </input>
+        <input type="submit" class="Button" value="登录" />
+        <span style="color:red">
+            <p id="err"></p>
+        </span>
+    </form>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+    $(function () {
+        var err=getUrlParam('err')
+        $('#err')[0].innerHTML=err
+    });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); return null;
+    }
+</script>
+
+</html>
