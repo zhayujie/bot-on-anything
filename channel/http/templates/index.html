@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- Title -->
+    <title>ChatGPT</title><!-- Bootstrap Css -->
+    <link href="./static/1.css" rel="stylesheet" />
+    <style>
+        button {
+            font-family: 'Microsoft YaHei';
+        }
+    </style>
+</head>
+
+<body class="">
+    <div class="no-border">
+        <div id="chat" class="conv-form-wrapper">
+        </div>
+    </div>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/marked/4.2.12/marked.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/autosize.js/6.0.1/autosize.min.js"></script>
+<script src="./static/1.js"></script>
+<script>
+    var rollbackTo = false;
+    var originalState = false;
+    function storeState(a) {
+        rollbackTo = a.current
+    }
+    function rollback(a) {
+        if (rollbackTo != false) {
+            if (originalState == false) {
+                originalState = a.current.next
+            }
+            a.current.next = rollbackTo
+        }
+    }
+    function restore(a) {
+        if (originalState != false) {
+            a.current.next = originalState
+        }
+    }
+    jQuery(function (a) {
+        var b = a("#chat").convform()
+    });
+</script>
+</body>
+
+</html>
