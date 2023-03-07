@@ -41,5 +41,9 @@ def create_channel(channel_type):
         from channel.slack.slack_channel import SlackChannel
         return SlackChannel()
 
+    elif channel_type == const.HTTP:
+        from channel.http.http_channel import HttpChannel
+        return HttpChannel()
+
     else:
         raise RuntimeError
