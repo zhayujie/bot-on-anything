@@ -10,3 +10,8 @@ device.json
 go-cqhttp
 logs/
 session.token
+*venv
+chatgpt.bat
+configtmp.json
+config-template.json
+sensitive_words.txt

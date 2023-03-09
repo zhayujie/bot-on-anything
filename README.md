@@ -395,9 +395,8 @@ https://slack.dev/bolt-python/tutorial/getting-started
 ```
 
 ### 9.Web
-#### http
-**需要：** 服务器
 
+**Contributor:** [RegimenArsenic](https://github.com/RegimenArsenic)
 
 **依赖**
 
@@ -411,17 +410,13 @@ pip3 install PyJWT flask
 "channel": {
     "type": "http",
     "http": {
-      "http_auth_secret_key": "6d25a684-9558-11e9-aa94-efccd7a0659b",//jwt认证秘钥
-      "http_auth_password": "6.67428e-11",//认证密码,仅仅只是自用,最初步的防御别人扫描端口后DDOS浪费tokens
-      "port": "80"//端口
+      "http_auth_secret_key": "6d25a684-9558-11e9-aa94-efccd7a0659b",    //jwt认证秘钥
+      "http_auth_password": "6.67428e-11",        //认证密码,仅仅只是自用,最初步的防御别人扫描端口后DDOS浪费tokens
+      "port": "80"       //端口
     }
   }
 ```
 
+本地运行：`python3 app.py`运行后访问 `http://127.0.0.1:80`
 
-
-URL，如果端口是 80 ，可不填
-
-```
-http:/你的固定公网ip或者域名:端口/
-```
+服务器运行：部署后访问 `http://公网域名或IP:端口`
