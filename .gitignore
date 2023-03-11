@@ -15,3 +15,7 @@ chatgpt.bat
 configtmp.json
 config-template.json
 sensitive_words.txt
+common/test_sensitive_word copy.py
+common/test_sensitive_word.py
+.vscode/launch.json
+sensitive_words.txt
