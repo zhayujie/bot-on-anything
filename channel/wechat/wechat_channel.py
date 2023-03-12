@@ -11,9 +11,9 @@ from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
 from common.log import logger
 from common import const
-from config import channel_conf_val, channel_conf
+from config import channel_conf_val
 import requests
-from urllib.parse import urlencode, quote
+from urllib.parse import urlencode
 
 from common.sensitive_word import SensitiveWord
 
@@ -67,7 +67,7 @@ class WechatChannel(Channel):
 
         # 调用敏感词检测函数
         if sw.process_text(content):
-            self.send('请注意文明用语', from_user_id)
+            self.send('请检查您的输入是否有违规内容', from_user_id)
             return
 
         match_prefix = self.check_prefix(content, channel_conf_val(const.WECHAT, 'single_chat_prefix'))
@@ -113,12 +113,15 @@ class WechatChannel(Channel):
         elif len(content_list) == 2:
             content = content_list[1]
 
-        # 调用敏感词检测函数
-        if sw.process_text(content):
-            self.send('请注意文明用语', group_id)
-            return
+        
 
         match_prefix = (msg['IsAt'] and not channel_conf_val(const.WECHAT, "group_at_off", False)) or self.check_prefix(origin_content, channel_conf_val(const.WECHAT, 'group_chat_prefix')) or self.check_contain(origin_content, channel_conf_val(const.WECHAT, 'group_chat_keyword'))
+
+        # 如果在群里被at了 或 触发机器人关键字，则调用敏感词检测函数
+        if match_prefix is True:
+            if sw.process_text(content):
+                self.send('请检查您的输入是否有违规内容', group_id)
+                return
 
         group_white_list = channel_conf_val(const.WECHAT, 'group_name_white_list')
         
@@ -217,5 +220,4 @@ handler_single_msg() 函数和 handler_group_msg() 函数分别用于处理接�
 
 整体上来说，这段代码实现了一个简单的微信机器人，并且具有较好的可扩展性，可以通过增加不同的处理函数或者修改匹配规则等方式来实现更为丰富的功能。
 '''
-
 
