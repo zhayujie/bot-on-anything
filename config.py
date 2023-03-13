@@ -15,6 +15,9 @@ def load_config():
     config_str = read_file(config_path)
     # 将json字符串反序列化为dict类型
     config = json.loads(config_str)
+    print("载入环节" )
+    print(config)
+    return config
 
 def get_root():
     return os.path.dirname(os.path.abspath( __file__ ))

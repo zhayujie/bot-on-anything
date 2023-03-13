@@ -1,20 +1,19 @@
 import requests
 import json
 import os
-
+import config
 
 class SensitiveWord:
     def __init__(self):
-
-
-        # 计算配置文件绝对路径
-        config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json"))
-
         # 读取配置文件
-        with open(config_path, "r", encoding="utf-8") as f:
-            self.config = json.load(f)
-        #print(self.config)  # 输出配置文件内容以进行调试
+        try:
+            self.config = config.load_config()  # 加载配置文件
+            #print(self.config) # 输出配置文件内容以进行调试
+        except Exception as e:
+            print(e)  # 打印错误信息
 
+        
+        print(self.config)
 
         # 设置请求 URL
         self.url = "https://aip.baidubce.com/rest/2.0/antispam/v2/spam"
@@ -31,7 +30,7 @@ class SensitiveWord:
         """
         
         #检测敏感词配置是否存在
-        if self.config is not None and self.config.get("common") is not None and self.config["common"].get("type") is not None:
+        if self.config is not None and "common" in self.config and "type" in self.config["common"] and self.config["common"]["type"]:
 
             url = "https://aip.baidubce.com/oauth/2.0/token"
             params = {
@@ -47,16 +46,17 @@ class SensitiveWord:
             if not access_token:
                 raise ValueError(f"获取 access_token 失败: {response_json.get('error_description')}")
             
-            #print(f"Access token: {access_token}")  # 输出访问令牌以进行调试
+            print(f"Access token: {access_token}")  # 输出访问令牌以进行调试
             return access_token
         else:
             print("百度云接口配置不存在")
+            print(self.config)
 
 
     def process_text(self, text):
 
         #检测敏感词配置是否存在
-        if self.config is not None and self.config.get("common") is not None and self.config["common"].get("type") is not None:
+        if self.config is not None and "common" in self.config and "type" in self.config["common"] and self.config["common"]["type"]:
             #存在则执行正常检测流程
             url = "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined"  # API 请求地址
             access_token = self.get_access_token()
