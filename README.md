@@ -146,9 +146,18 @@ pip3 install --upgrade openai
 
 ### 2.个人微信
 
-与项目 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat) 的使用方式相同，目前接入个人微信可能导致账号被限制，暂时不建议使用。
+与项目 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat) 的使用方式相似。
 
-配置项说明：
+**安装依赖：**
+
+```bash
+pip3 install itchat-uos==1.5.0.dev0
+pip3 install --upgrade openai
+```
+注：`itchat-uos`使用指定版本1.5.0.dev0，`openai`使用最新版本，需高于0.27.0。
+
+
+**配置项说明：**
 
 ```bash
 "channel": {
