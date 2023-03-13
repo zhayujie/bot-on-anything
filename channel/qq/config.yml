@@ -19,7 +19,7 @@ account: # 账号相关
 heartbeat:
   # 心跳频率, 单位秒
   # -1 为关闭心跳
-  interval: 5
+  interval: -1
 
 message:
   # 上报数据类型
