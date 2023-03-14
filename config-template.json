@@ -40,7 +40,7 @@
 
     "slack": {
       "slack_bot_token": "xoxb-xxxx",
-      "slack_signing_secret": "xxxx"
+      "slack_app_token": "xapp-xxxx"
     },
 
     "http": {
