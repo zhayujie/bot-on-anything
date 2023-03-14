@@ -21,13 +21,7 @@ import io
 
 
 thread_pool = ThreadPoolExecutor(max_workers=8)
-
-
-
 sw = SensitiveWord()
-
-# ...
-
 
 @itchat.msg_register(TEXT)
 def handler_single_msg(msg):
@@ -41,9 +35,6 @@ def handler_group_msg(msg):
     return None
 
 
-
-
-
 class WechatChannel(Channel):
     def __init__(self):
         pass
@@ -54,8 +45,6 @@ class WechatChannel(Channel):
 
         # start message listener
         itchat.run()
-
-
 
 
     def handle(self, msg):
@@ -199,25 +188,3 @@ class WechatChannel(Channel):
             if content.find(ky) != -1:
                 return True
         return None
-    
-
-'''
-这是一个基于itchat库的微信机器人实现，支持单聊和群聊消息的自动回复和图片发送等功能。代码中使用了线程池技术和异步回调函数等方式来提高程序的性能和并发处理能力。
-
-其中，WechatChannel 类实现了 Channel 接口，并定义了一些额外的方法，如发送消息、检测敏感词汇、处理单聊和群聊消息等。
-
-send() 函数用于向指定用户发送文本消息；
-_do_send() 函数用于处理接收到的文本消息并回复相应的内容；
-_do_send_img() 函数用于处理接收到的图片消息并发送相应的图片内容；
-_do_send_group() 函数用于处理接收到的群组消息并回复相应的内容；
-
-check_prefix() 函数用于检查消息是否以指定前缀开头；
-check_contain() 函数用于检查消息是否包含指定关键字。
-
-handler_single_msg() 函数和 handler_group_msg() 函数分别用于处理接收到的单聊和群聊消息，并回复相应的内容。
-
-在handle() 函数中，先根据消息类型和内容进行分类和处理，然后利用线程池并发处理多个消息，提高程序的处理效率。
-
-整体上来说，这段代码实现了一个简单的微信机器人，并且具有较好的可扩展性，可以通过增加不同的处理函数或者修改匹配规则等方式来实现更为丰富的功能。
-'''
-
