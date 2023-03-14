@@ -10,3 +10,7 @@ device.json
 go-cqhttp
 logs/
 session.token
+*venv
+common/test_sensitive_word.py
+.vscode/launch.json
+sensitive_words.txt
