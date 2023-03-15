@@ -36,7 +36,9 @@
     },
 
     "telegram": {
-      "bot_token": "xx:xx"
+      "bot_token": "xx:xx",
+      "group_chat_prefix": ["@username", "@xxx_bot"],
+      "group_chat_keyword": ["群主", "请问"]
     },
 
     "slack": {

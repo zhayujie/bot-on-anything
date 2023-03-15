@@ -328,10 +328,14 @@ pip install pyTelegramBotAPI
 "channel": {
     "type": "telegram",
     "telegram":{
-      "bot_token": "YOUR BOT TOKEN ID"
-    }
+      "bot_token": "YOUR BOT TOKEN ID",
+      "group_chat_prefix": ["@username", "@xxx_bot"],
+      "group_chat_keyword": ["群主", "请问"]
+    },
 }
 ```
++ group_chat_prefix 聊天前缀匹配，一般用来匹配@特定人，匹配成功后会去掉前缀再发送给chatgpt
++ group_chat_keyword 聊天关键字匹配
 
 ### 7.Gmail
 
