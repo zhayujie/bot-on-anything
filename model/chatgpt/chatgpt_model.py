@@ -70,7 +70,7 @@ class ChatGPTModel(Model):
         except openai.error.APIConnectionError as e:
             log.warn(e)
             log.warn("[CHATGPT] APIConnection failed")
-            return "我连接不到你的网络"
+            return "我连接不到网络，请稍后重试"
         except openai.error.Timeout as e:
             log.warn(e)
             log.warn("[CHATGPT] Timeout")
