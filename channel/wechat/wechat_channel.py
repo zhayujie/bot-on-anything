@@ -41,7 +41,7 @@ class WechatChannel(Channel):
 
     def startup(self):
         # login by scan QRCode
-        itchat.auto_login(enableCmdQR=2)
+        itchat.auto_login(enableCmdQR=2, hotReload=True)
 
         # start message listener
         itchat.run()
