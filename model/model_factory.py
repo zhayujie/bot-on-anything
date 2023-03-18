@@ -25,5 +25,9 @@ def create_bot(model_type):
         from model.baidu.yiyan_model import YiyanModel
         return YiyanModel()
 
+    elif model_type == const.BING:
+        from model.bing.new_bing_model import BingModel
+        return BingModel()
+
     raise RuntimeError
 
