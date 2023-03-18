@@ -18,7 +18,7 @@ def create_bot(model_type):
 
     elif model_type == const.CHATGPT:
         # ChatGPT API (gpt-3.5-turbo)
-        from model.chatgpt.chatgpt_model import ChatGPTModel
+        from model.openai.chatgpt_model import ChatGPTModel
         return ChatGPTModel()
 
     raise RuntimeError
