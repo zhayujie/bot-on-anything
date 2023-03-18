@@ -21,5 +21,9 @@ def create_bot(model_type):
         from model.openai.chatgpt_model import ChatGPTModel
         return ChatGPTModel()
 
+    elif model_type == const.BAIDU:
+        from model.baidu.yiyan_model import YiyanModel
+        return YiyanModel()
+
     raise RuntimeError
 
