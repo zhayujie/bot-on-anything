@@ -28,6 +28,7 @@
     },
 
     "wechat": {
+      "receive_qrcode_api": ""
     },
 
     "wechat_mp": {
