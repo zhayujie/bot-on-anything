@@ -6,7 +6,7 @@ from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 
 user_session = dict()
-# newBing对话模型逆向网页API
+# newBing对话模型逆向网页gitAPI
 
 class BingModel(Model):
 
@@ -14,7 +14,10 @@ class BingModel(Model):
     bot: Chatbot = None
 
     def __init__(self):
-        self.bot = Chatbot(cookies=model_conf_val("bing", "cookies"))
+        try:
+            self.bot = Chatbot(cookies=model_conf_val("bing", "cookies"))
+        except Exception as e:
+            log.exception(e)
 
     def reply(self, query: str, context=None) -> tuple[str, dict]:
         bot = user_session.get(context['from_user_id'], None)
