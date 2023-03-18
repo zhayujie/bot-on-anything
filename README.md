@@ -6,6 +6,7 @@
 
  - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
+ - [x] 文心一言 (测试版)
 
  
 **应用：**
@@ -135,6 +136,9 @@ pip3 install --upgrade openai
 }
 ```
 
+### 3.文心一言 (测试版)
+
+参考: [#154](https://github.com/zhayujie/bot-on-anything/issues/154)
 
 ## 三、选择应用
 
