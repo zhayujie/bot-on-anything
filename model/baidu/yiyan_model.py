@@ -45,7 +45,7 @@ class YiyanModel(Model):
             "deviceType": "pc"
         }
         res = requests.post(url=self.base_url+'/session/new', headers=self._create_header(), json=data)
-        print(res.headers)
+        # print(res.headers)
         context['chat_session_id'] = res.json()['data']['sessionId']
 
 
@@ -63,6 +63,7 @@ class YiyanModel(Model):
             "msg": ""
         }
         res = requests.post(url=self.base_url+'/chat/new', headers=headers, json=data)
+        print(res.text)
         context['chat_id'] = res.json()['data']['botChat']['id']
         context['parent_chat_id'] = res.json()['data']['botChat']['parent']
 
