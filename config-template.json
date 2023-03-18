@@ -15,7 +15,7 @@
   },
 
   "channel": {
-    "type": "terminal",
+    "type": ["http","terminal","wechat"],
     "single_chat_prefix": ["bot", "@bot"],
     "single_chat_reply_prefix": "[bot] ",
     "group_chat_prefix": ["@bot"],
