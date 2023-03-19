@@ -14,7 +14,7 @@
     },
     "bing":{
         "cookies":[]
-  }
+    }
   },
   "channel": {
     "type": "terminal",
