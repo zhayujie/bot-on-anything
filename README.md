@@ -149,7 +149,7 @@ pip3 install --upgrade openai
 #### (1) 安装依赖
 
 ```bash
-pip install EdgeGPT --upgrade
+pip3 install EdgeGPT --upgrade
 ```
 
 #### (2) 配置项说明
@@ -158,27 +158,26 @@ pip install EdgeGPT --upgrade
 {
   "model": {
     "type" : "bing",
-   
     "bing": {
       "cookies":[]  //edge登录https://www.bing.com/new 获取的json格式name为"_U"的cookies，目前看cookies有效期应该为14天
     }
 }
 cookie示例:
 "cookies":[
-            {
-                "domain": ".bing.com",
-                "expirationDate": 1680372573.67057,
-                "hostOnly": false,
-                "httpOnly": false,
-                "name": "_U",
-                "path": "/",
-                "sameSite": "no_restriction",
-                "secure": true,
-                "session": false,
-                "storeId": null,
-                "value": ""
-            }
-        ]
+    {
+        "domain": ".bing.com",
+        "expirationDate": 1680372573.67057,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_U",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": ""
+    }
+]
 ```
 
 ## 三、选择应用
