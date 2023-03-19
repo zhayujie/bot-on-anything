@@ -14,7 +14,6 @@ if __name__ == '__main__':
         if proxy:
             os.environ['http_proxy'] = proxy
             os.environ['https_proxy'] = proxy
-            print(os.environ)
 
         model_type = config.conf().get("model").get("type")
         channel_type = config.conf().get("channel").get("type")
