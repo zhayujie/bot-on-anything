@@ -13,7 +13,8 @@
       "cookie": "YOUR COOKIE"
     },
     "bing":{
-        "cookies":[]
+      "cookies":[]
+    }
   },
 
   "channel": {
