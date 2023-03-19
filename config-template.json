@@ -11,7 +11,9 @@
     "baidu": {
       "acs_token": "YOUR ACS TOKEN",
       "cookie": "YOUR COOKIE"
-    }
+    },
+    "bing":{
+        "cookies":[]
   },
 
   "channel": {
