@@ -83,6 +83,9 @@ def identify(request):
     :return: list
     """
     try:
+        authPassword = channel_conf(const.HTTP).get('http_auth_password')
+        if (not authPassword):
+            return True
         if (request is None):
             return False
         authorization = request.cookies.get('Authorization')
