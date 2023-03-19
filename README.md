@@ -480,3 +480,8 @@ pip3 install PyJWT flask
 本地运行：`python3 app.py`运行后访问 `http://127.0.0.1:80`
 
 服务器运行：部署后访问 `http://公网域名或IP:端口`
+
+**允许无密码访问**
+```
+bash ./allow-http-nopassword.sh
+```
