@@ -202,6 +202,11 @@ pip3 install --upgrade openai
 ```
 注：`itchat-uos`使用指定版本1.5.0.dev0，`openai`使用最新版本，需高于0.27.0。
 
+**修复 itchat-uos bug**
+···
+bash fix-itchat.sh
+···
+
 
 **配置项说明：**
 
