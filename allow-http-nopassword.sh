@@ -13,4 +13,4 @@ fi
 echo "current sed command is: $cmd"
 
 echo "allow http nopasword"
-$cmd -i 's/"http_auth_password": "6.67428e-11"/"http_auth_password": ""/' config.json 
+$cmd -i "s/\"http_auth_password\": \".*\"/\"http_auth_password\": \"\"/" config.json 
