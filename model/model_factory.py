@@ -18,8 +18,16 @@ def create_bot(model_type):
 
     elif model_type == const.CHATGPT:
         # ChatGPT API (gpt-3.5-turbo)
-        from model.chatgpt.chatgpt_model import ChatGPTModel
+        from model.openai.chatgpt_model import ChatGPTModel
         return ChatGPTModel()
+
+    elif model_type == const.BAIDU:
+        from model.baidu.yiyan_model import YiyanModel
+        return YiyanModel()
+
+    elif model_type == const.BING:
+        from model.bing.new_bing_model import BingModel
+        return BingModel()
 
     raise RuntimeError
 

@@ -12,3 +12,5 @@ HTTP = "http"
 # model
 OPEN_AI = "openai"
 CHATGPT = "chatgpt"
+BAIDU = "baidu"
+BING = "bing"

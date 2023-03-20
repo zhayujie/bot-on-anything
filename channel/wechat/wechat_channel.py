@@ -13,7 +13,6 @@ from common.log import logger
 from common import const
 from config import channel_conf_val
 import requests
-from urllib.parse import urlencode
 
 from common.sensitive_word import SensitiveWord
 

@@ -41,7 +41,7 @@ ConvState.prototype.sendMessage = function (msg) {
     $.ajax({
         url: "./chat",
         type: "POST",
-        timeout:60000,
+        timeout:180000,
         data: JSON.stringify({
             "id": _this.id,
             "msg": msg

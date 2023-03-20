@@ -46,4 +46,5 @@ class QQChannel(Channel):
                     context['from_user_id'] = str(msg.user_id)
                     reply_text = super().build_reply_content(query, context)
                     reply_text = '[CQ:at,qq=' + str(msg.user_id) + '] ' + reply_text
+
                     bot.sync.send_group_msg(group_id=msg['group_id'], message=reply_text)
