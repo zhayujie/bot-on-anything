@@ -6,7 +6,9 @@ from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 
 user_session = dict()
+suggestion_session = dict()
 # newBing对话模型逆向网页gitAPI
+
 
 class BingModel(Model):
 
@@ -23,6 +25,15 @@ class BingModel(Model):
         bot = user_session.get(context['from_user_id'], None)
         if (bot == None):
             bot = self.bot
+        else:
+            if (len(query) == 1 and query.isdigit() and query != "0"):
+                suggestion_dict = suggestion_session[context['from_user_id']]
+                if (suggestion_dict != None):
+                    query = suggestion_dict[int(query)-1]
+                    if (query == None):
+                        return "输入的序号不在建议列表范围中"
+                    else:
+                        query = "在上面的基础上，"+query
         log.info("[NewBing] query={}".format(query))
         task = bot.ask(query, conversation_style=self.style)
         answer = asyncio.run(task)
@@ -39,6 +50,18 @@ class BingModel(Model):
 
             if len(reference) > 0:
                 reference = "***\n"+reference
+
+            suggestion = ""
+            if "suggestedResponses" in reply:
+                suggestion_dict = dict()
+                for i, attribution in enumerate(reply["suggestedResponses"]):
+                    suggestion_dict[i] = attribution["text"]
+                    suggestion += f">{i+1}、{attribution['text']}\n\n"
+                suggestion_session[context['from_user_id']] = suggestion_dict
+
+            if len(suggestion) > 0:
+                suggestion = "***\n你可以通过输入序号快速追问我以下建议问题：\n\n"+suggestion
+
             throttling = answer["item"]["throttling"]
             throttling_str = ""
 
@@ -48,7 +71,7 @@ class BingModel(Model):
             else:
                 throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
 
-            response = f"{reply_text}\n{reference}\n***\n{throttling_str}"
+            response = f"{reply_text}\n{reference}\n{suggestion}\n***\n{throttling_str}"
             log.info("[NewBing] reply={}", response)
             user_session[context['from_user_id']] = bot
             return response

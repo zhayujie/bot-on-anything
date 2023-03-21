@@ -16,7 +16,6 @@
       "cookies":[]
     }
   },
-
   "channel": {
     "type": "terminal",
     "single_chat_prefix": ["bot", "@bot"],
