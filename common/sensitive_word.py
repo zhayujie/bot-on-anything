@@ -43,9 +43,6 @@ class SensitiveWord:
             
             print(f"Access token: {access_token}")  # 输出访问令牌以进行调试
             return access_token
-        else:
-            print("百度云接口配置不存在")
-            print(self.config)
 
 
     def process_text(self, text):
