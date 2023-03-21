@@ -6,7 +6,7 @@
 
  - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
- - [x] 文心一言 (测试版)
+ - [x] [文心一言 (测试版)](https://github.com/zhayujie/bot-on-anything#3%E6%96%87%E5%BF%83%E4%B8%80%E8%A8%80-%E6%B5%8B%E8%AF%95%E7%89%88)
  - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
 
  
@@ -202,10 +202,15 @@ pip3 install --upgrade openai
 ```
 注：`itchat-uos`使用指定版本1.5.0.dev0，`openai`使用最新版本，需高于0.27.0。
 
-**修复 itchat-uos bug**
-···
+**修复 itchat bug**
+
+如果 扫码后手机提示登录验证需要等待5s，而终端的二维码一直刷新并提示 Log in time out, reloading QR code，可以执行以下脚本快速修复：
+
+```bash
 bash fix-itchat.sh
-···
+```
+
+若自动修复无效，参考 [chatgpt-on-wechat/#8](https://github.com/zhayujie/chatgpt-on-wechat/issues/8) 手动修复。
 
 
 **配置项说明：**
@@ -480,8 +485,3 @@ pip3 install PyJWT flask
 本地运行：`python3 app.py`运行后访问 `http://127.0.0.1:80`
 
 服务器运行：部署后访问 `http://公网域名或IP:端口`
-
-**允许无密码访问**
-```
-bash ./allow-http-nopassword.sh
-```
