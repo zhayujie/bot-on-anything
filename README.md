@@ -7,6 +7,7 @@
  - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
  - [x] 文心一言 (测试版)
+ - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
 
  
 **应用：**
@@ -140,6 +141,45 @@ pip3 install --upgrade openai
 
 参考: [#154](https://github.com/zhayujie/bot-on-anything/issues/154)
 
+
+### 4.NewBing
+
+使用的是https://github.com/acheong08/EdgeGPT 网页版逆向API
+
+#### (1) 安装依赖
+
+```bash
+pip3 install EdgeGPT --upgrade
+```
+
+#### (2) 配置项说明
+
+```bash
+{
+  "model": {
+    "type" : "bing",
+    "bing": {
+      "cookies":[]  //edge登录https://www.bing.com/new 获取的json格式name为"_U"的cookies，目前看cookies有效期应该为14天
+    }
+}
+cookie示例:
+"cookies":[
+    {
+        "domain": ".bing.com",
+        "expirationDate": 1680372573.67057,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_U",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": ""
+    }
+]
+```
+
 ## 三、选择应用
 
 ### 1.命令行终端
@@ -161,6 +201,11 @@ pip3 install itchat-uos==1.5.0.dev0
 pip3 install --upgrade openai
 ```
 注：`itchat-uos`使用指定版本1.5.0.dev0，`openai`使用最新版本，需高于0.27.0。
+
+**修复 itchat-uos bug**
+···
+bash fix-itchat.sh
+···
 
 
 **配置项说明：**
@@ -435,3 +480,8 @@ pip3 install PyJWT flask
 本地运行：`python3 app.py`运行后访问 `http://127.0.0.1:80`
 
 服务器运行：部署后访问 `http://公网域名或IP:端口`
+
+**允许无密码访问**
+```
+bash ./allow-http-nopassword.sh
+```

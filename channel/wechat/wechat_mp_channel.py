@@ -46,36 +46,49 @@ class WechatSubsribeAccount(Channel):
         robot.config['HOST'] = '0.0.0.0'
         robot.run()
 
-    def handle(self, msg, count=0):
+    def handle(self, msg, count=1):
+        if msg.content == "继续":
+            return self.get_un_send_content(msg.source)
+
         context = dict()
         context['from_user_id'] = msg.source
-        key = msg.source
+        key = msg.content + '|' + msg.source
         res = cache.get(key)
-        if msg.content == "继续":
-            if not res or res.get("status") == "done":
-                return "目前不在等待回复状态，请输入对话"
-            if res.get("status") == "waiting":
-                return "还在处理中，请稍后再试"
-            elif res.get("status") == "success":
-                cache[key] = {"status":"done"}
-                return res.get("data")
-            else:
-                return "目前不在等待回复状态，请输入对话"
-        elif not res or res.get('status') == "done":
+        if not res:
+            cache[key] = {"status": "waiting", "req_times": 1}
             thread_pool.submit(self._do_send, msg.content, context)
+
+        res = cache.get(key)
+        logger.info("count={}, res={}".format(count, res))
+        if res.get('status') == 'success':
+            res['status'] = "done"
+            cache.pop(key)
+            return res.get("data")
+
+        if cache.get(key)['req_times'] == 3 and count >= 4:
+            logger.info("微信超时3次")
             return "已开始处理，请稍等片刻后输入\"继续\"查看回复"
-        else:
-            if res.get('status') == "done":
-                reply = res.get("data")
-                thread_pool.submit(self._do_send, msg.content, context)
-                return reply
-            else:
-                return "上一句对话正在处理中，请稍后输入\"继续\"查看回复"
+
+        if count <= 5:
+            time.sleep(1)
+            if count == 5:
+                # 第5秒不做返回，防止消息发送出去了但是微信已经中断连接
+                return None
+            return self.handle(msg, count+1)
 
     def _do_send(self, query, context):
-        key = context['from_user_id']
-        cache[key] = {"status": "waiting"}
+        key = query + '|' + context['from_user_id']
         reply_text = super().build_reply_content(query, context)
         logger.info('[WX_Public] reply content: {}'.format(reply_text))
+        cache[key]['status'] = "success"
+        cache[key]['data'] = reply_text
 
-        cache[key] = {"status": "success", "data": reply_text}
+    def get_un_send_content(self, from_user_id):
+        for key in cache:
+            if from_user_id in key:
+                value = cache[key]
+                if value.get('status') == "success":
+                    cache.pop(key)
+                    return value.get("data")
+                return "还在处理中，请稍后再试"
+        return "目前无等待回复信息，请输入对话"

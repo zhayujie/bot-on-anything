@@ -13,7 +13,6 @@ from common.log import logger
 from common import const
 from config import channel_conf_val
 import requests
-from urllib.parse import urlencode
 
 from common.sensitive_word import SensitiveWord
 
@@ -41,11 +40,19 @@ class WechatChannel(Channel):
 
     def startup(self):
         # login by scan QRCode
-        itchat.auto_login(enableCmdQR=2, hotReload=True)
+        if (channel_conf_val(const.WECHAT, 'receive_qrcode_api')):
+            itchat.auto_login(enableCmdQR=2, hotReload=True, qrCallback=self.login)
+        else:
+            itchat.auto_login(enableCmdQR=2, hotReload=True)
 
         # start message listener
         itchat.run()
 
+    def login(self, uuid=None, status='0', qrcode=None):
+        print('uuid:', uuid)
+        print('status:', status)
+        # 请将链接转发到外部接口，并在外部自行通过二维码生成库将链接转换为二维码后展示，例如：将下方的 qrcode_link 通过草料二维码进行处理后，再通过手机端扫码登录微信小号
+        print('qrcode_link:', 'https://login.weixin.qq.com/l/'+uuid)
 
     def handle(self, msg):
         logger.debug("[WX]receive msg: " + json.dumps(msg, ensure_ascii=False))
