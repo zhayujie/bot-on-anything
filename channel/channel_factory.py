@@ -46,4 +46,4 @@ def create_channel(channel_type):
         return HttpChannel()
 
     else:
-        raise RuntimeError
+        raise RuntimeError("unknown channel_type in config.json: " + channel_type)

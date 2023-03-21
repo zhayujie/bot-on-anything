@@ -13,7 +13,7 @@
       "cookie": "YOUR COOKIE"
     },
     "bing":{
-        "cookies":[]
+      "cookies":[]
     }
   },
   "channel": {
@@ -28,6 +28,7 @@
     },
 
     "wechat": {
+      "receive_qrcode_api": ""
     },
 
     "wechat_mp": {
