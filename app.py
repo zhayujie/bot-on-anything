@@ -38,26 +38,25 @@ if __name__ == '__main__':
             exit(0)
 
         # 3.多通道配置时，进程池启动
+        # 使用主进程启动终端通道
+        if const.TERMINAL in channel_type:
+            index = channel_type.index(const.TERMINAL)
+            terminal = channel_type.pop(index)
         else:
-            # 使用主进程启动终端通道
-            if const.TERMINAL in channel_type:
-                index = channel_type.index(const.TERMINAL)
-                terminal = channel_type.pop(index)
-            else:
-                terminal = None
+            terminal = None
 
-            # 使用进程池启动其他通道子进程
-            pool = Pool(len(channel_type))
-            for type_item in channel_type:
-                log.info("[INIT] Start up: {} on {}", model_type, type_item)
-                pool.apply_async(start_process, args=[type_item])
+        # 使用进程池启动其他通道子进程
+        pool = Pool(len(channel_type))
+        for type_item in channel_type:
+            log.info("[INIT] Start up: {} on {}", model_type, type_item)
+            pool.apply_async(start_process, args=[type_item])
 
-            if terminal:
-                start_process(terminal)
+        if terminal:
+            start_process(terminal)
 
-            # 等待池中所有进程执行完毕
-            pool.close()
-            pool.join()
+        # 等待池中所有进程执行完毕
+        pool.close()
+        pool.join()
     except Exception as e:
         log.error("App startup failed!")
         log.exception(e)
