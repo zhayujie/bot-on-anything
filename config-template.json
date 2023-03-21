@@ -11,9 +11,11 @@
     "baidu": {
       "acs_token": "YOUR ACS TOKEN",
       "cookie": "YOUR COOKIE"
+    },
+    "bing":{
+      "cookies":[]
     }
   },
-
   "channel": {
     "type": ["http","wechat","terminal"],
     "single_chat_prefix": ["bot", "@bot"],
@@ -26,6 +28,7 @@
     },
 
     "wechat": {
+      "receive_qrcode_api": ""
     },
 
     "wechat_mp": {
