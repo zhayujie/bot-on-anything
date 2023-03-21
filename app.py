@@ -6,6 +6,7 @@ from common import log
 import os
 from multiprocessing import Pool
 
+
 def startProcess(channel_type):
     # load config
     config.load_config()
@@ -14,8 +15,10 @@ def startProcess(channel_type):
     # startup channel
     channel.startup()
 
+
 def wrapper(channel_type):
     startProcess(channel_type)
+
 
 if __name__ == '__main__':
     try:
@@ -29,10 +32,12 @@ if __name__ == '__main__':
 
         model_type = config.conf().get("model").get("type")
         channel_type = config.conf().get("channel").get("type")
+        if isinstance(channel_type, list) == False:  # 兼容字符串格式的type
+            channel_type = [channel_type]
 
         # 使用主进程启动终端通道
         if "terminal" in channel_type:
-            index=channel_type.index("terminal")
+            index = channel_type.index("terminal")
             terminal = channel_type.pop(index)
         else:
             terminal = None
