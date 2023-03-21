@@ -33,7 +33,7 @@
 
     "wechat_mp": {
       "token": "YOUR TOKEN",
-      "port": "8088"
+      "port": "80"
     },
 
     "gmail": {
