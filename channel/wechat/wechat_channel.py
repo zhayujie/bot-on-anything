@@ -4,6 +4,7 @@
 wechat channel
 """
 
+import time
 import itchat
 import json
 from itchat.content import *
@@ -40,10 +41,11 @@ class WechatChannel(Channel):
 
     def startup(self):
         # login by scan QRCode
-        if (channel_conf_val(const.WECHAT, 'receive_qrcode_api')):
-            itchat.auto_login(enableCmdQR=2, hotReload=True, qrCallback=self.login)
+        hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
+        if channel_conf_val(const.WECHAT, 'receive_qrcode_api'):
+            itchat.auto_login(enableCmdQR=2, hot_reload=hot_reload, qrCallback=self.login)
         else:
-            itchat.auto_login(enableCmdQR=2, hotReload=True)
+            itchat.auto_login(enableCmdQR=2, hotReload=hot_reload)
 
         # start message listener
         itchat.run()
@@ -59,7 +61,13 @@ class WechatChannel(Channel):
         from_user_id = msg['FromUserName']
         to_user_id = msg['ToUserName']              # 接收人id
         other_user_id = msg['User']['UserName']     # 对手方id
+        create_time = msg['CreateTime']             # 消息时间
         content = msg['Text']
+
+        hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
+        if hot_reload == True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
+            logger.debug("[WX]history message skipped")
+            return
 
         # 调用敏感词检测函数
         if sw.process_text(content):
@@ -98,6 +106,13 @@ class WechatChannel(Channel):
         logger.debug("[WX]receive group msg: " + json.dumps(msg, ensure_ascii=False))
         group_name = msg['User'].get('NickName', None)
         group_id = msg['User'].get('UserName', None)
+        create_time = msg['CreateTime']             # 消息时间
+
+        hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
+        if hot_reload == True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
+            logger.debug("[WX]history message skipped")
+            return
+
         if not group_name:
             return None
         origin_content = msg['Content']
