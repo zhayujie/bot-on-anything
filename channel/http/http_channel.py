@@ -73,6 +73,8 @@ class HttpChannel(Channel):
         context['from_user_id'] = str(id)
         reply = super().build_reply_content(data["msg"], context)
         if img_match_prefix:
+            if not isinstance(reply, list):
+                return reply
             images = ""
             for url in reply:
                 images += f"[!['IMAGE_CREATE']({url})]({url})\n"
