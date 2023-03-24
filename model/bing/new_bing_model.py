@@ -97,7 +97,7 @@ class BingModel(Model):
             image_generator = ImageGen(cookie_value)
             img_list = image_generator.get_images(query)
             log.info("[NewBing] image_list={}".format(img_list))
-            return img_list[0]
+            return img_list
         except Exception as e:
             log.exception(e)
             return None

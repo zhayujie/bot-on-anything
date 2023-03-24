@@ -52,6 +52,8 @@ class TelegramChannel(Channel):
             img_urls = super().build_reply_content(msg.text, context)
             if not img_urls:
                 return
+            if not isinstance(img_urls, list):
+                return img_urls
             for url in img_urls:
             # 图片下载
                 pic_res = requests.get(url, stream=True)
