@@ -172,7 +172,8 @@ class WechatChannel(Channel):
             if not img_urls:
                 return
             if not isinstance(img_urls, list):
-                return img_urls
+                self.send(channel_conf_val(const.WECHAT, "single_chat_reply_prefix") + img_urls, reply_user_id)
+                return
             for url in img_urls:
             # 图片下载
                 pic_res = requests.get(url, stream=True)

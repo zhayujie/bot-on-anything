@@ -53,7 +53,8 @@ class TelegramChannel(Channel):
             if not img_urls:
                 return
             if not isinstance(img_urls, list):
-                return img_urls
+                bot.reply_to(msg,img_urls)
+                return
             for url in img_urls:
             # 图片下载
                 pic_res = requests.get(url, stream=True)
