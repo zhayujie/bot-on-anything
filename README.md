@@ -78,6 +78,7 @@ cp config-template.json config.json
 
 + `clear_memory_commands`: 对话内指令，主动清空前文记忆，字符串数组可自定义指令别名。
   + default: ["#清除记忆"]
++ `max_history_per_session`[optional]: 对话最大记忆长度，超过该长度则清理前面的记忆。
 
 ## 二、选择模型
 
