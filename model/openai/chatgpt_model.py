@@ -196,6 +196,7 @@ class Session(object):
     @staticmethod
     def save_session(query, answer, user_id, used_tokens=0):
         max_tokens = model_conf(const.OPEN_AI).get('conversation_max_tokens')
+        max_history_per_session = model_conf(const.OPEN_AI).get('max_history_per_session', None)
         if not max_tokens or max_tokens > 4000:
             # default value
             max_tokens = 1000
@@ -209,6 +210,10 @@ class Session(object):
             # pop first conversation (TODO: more accurate calculation)
             session.pop(1)
             session.pop(1)
+
+        if max_history_per_session is not None:
+            while len(session) > max_history_per_session + 1:
+                session.pop(1)
 
     @staticmethod
     def clear_session(user_id):
