@@ -153,7 +153,7 @@ class ChatGPTModel(Model):
             )
             image_url = response['data'][0]['url']
             log.info("[OPEN_AI] image_url={}".format(image_url))
-            return image_url
+            return [image_url]
         except openai.error.RateLimitError as e:
             log.warn(e)
             if retry_count < 1:
