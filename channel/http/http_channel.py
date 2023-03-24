@@ -9,6 +9,7 @@ from common import functions
 from config import channel_conf
 from config import channel_conf_val
 from channel.channel import Channel
+
 http_app = Flask(__name__,)
 # 自动重载模板文件
 http_app.jinja_env.auto_reload = True
@@ -63,11 +64,10 @@ class HttpChannel(Channel):
 
     def handle(self, data):
         context = dict()
-        img_match_prefix = functions.check_prefix(data["msg"], channel_conf_val(const.HTTP, 'image_create_prefix'))
+        img_match_prefix = functions.check_prefix(
+            data["msg"], channel_conf_val(const.HTTP, 'image_create_prefix'))
         if img_match_prefix:
             data["msg"] = data["msg"].split(img_match_prefix, 1)[1].strip()
-            if functions.contain_chinese(data["msg"]):
-                return "ImageGen目前仅支持使用英文关键词生成图片"
             context['type'] = 'IMAGE_CREATE'
         id = data["id"]
         context['from_user_id'] = str(id)
@@ -75,6 +75,6 @@ class HttpChannel(Channel):
         if img_match_prefix:
             images = ""
             for url in reply:
-                images+=f"[!['IMAGE_CREATE']({url})]({url})\n"
-            reply=images
+                images += f"[!['IMAGE_CREATE']({url})]({url})\n"
+            reply = images
         return reply

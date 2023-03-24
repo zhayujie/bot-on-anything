@@ -5,6 +5,8 @@ from config import model_conf_val
 from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 from ImageGen import ImageGen
+from common import functions
+
 user_session = dict()
 suggestion_session = dict()
 # newBing对话模型逆向网页gitAPI
@@ -84,12 +86,14 @@ class BingModel(Model):
                 log.warn("[NewBing] reply={}", answer)
                 return "对话被接口拒绝，已开启新的一轮对话。"
         elif context.get('type', None) == 'IMAGE_CREATE':
+            if functions.contain_chinese(query):
+                return "ImageGen目前仅支持使用英文关键词生成图片"
             return self.create_img(query)
 
     def create_img(self, query):
         try:
             log.info("[NewBing] image_query={}".format(query))
-            cookie_value=self.cookies[0]["value"]
+            cookie_value = self.cookies[0]["value"]
             image_generator = ImageGen(cookie_value)
             img_list = image_generator.get_images(query)
             log.info("[NewBing] image_list={}".format(img_list))
