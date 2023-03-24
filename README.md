@@ -74,6 +74,10 @@ cp config-template.json config.json
 
 在使用时只需要更改 model 和 channel 配置块下的 type 字段，即可在任意模型和应用间完成切换，连接不同的通路。下面将依次介绍各个 模型 及 应用 的配置和运行过程。
 
+#### settings
+
++ `clear_memory_commands`: 对话内指令，主动清空前文记忆，字符串数组可自定义指令别名。
+  + default: ["#清除记忆"]
 
 ## 二、选择模型
 
