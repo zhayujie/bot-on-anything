@@ -5,7 +5,9 @@ from channel.http import auth
 from flask import Flask, request, render_template, make_response
 from datetime import timedelta
 from common import const
+from common import functions
 from config import channel_conf
+from config import channel_conf_val
 from channel.channel import Channel
 http_app = Flask(__name__,)
 # 自动重载模板文件
@@ -60,9 +62,12 @@ class HttpChannel(Channel):
         http_app.run(host='0.0.0.0', port=channel_conf(const.HTTP).get('port'))
 
     def handle(self, data):
-        context = dict()            
+        context = dict()
         img_match_prefix = functions.check_prefix(data["msg"], channel_conf_val(const.HTTP, 'image_create_prefix'))
         if img_match_prefix:
+            data["msg"] = data["msg"].split(img_match_prefix, 1)[1].strip()
+            if functions.contain_chinese(data["msg"]):
+                return "ImageGen目前仅支持使用英文关键词生成图片"
             context['type'] = 'IMAGE_CREATE'
         id = data["id"]
         context['from_user_id'] = str(id)
