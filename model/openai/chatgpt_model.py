@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 from model.model import Model
-from config import model_conf
+from config import model_conf, common_conf_val
 from common import const
 from common import log
 import openai
@@ -22,7 +22,8 @@ class ChatGPTModel(Model):
         if not context or not context.get('type') or context.get('type') == 'TEXT':
             log.info("[CHATGPT] query={}".format(query))
             from_user_id = context['from_user_id']
-            if query == '#清除记忆':
+            clear_memory_commands = common_conf_val('clear_memory_commands', ['#清除记忆'])
+            if query in clear_memory_commands:
                 Session.clear_session(from_user_id)
                 return '记忆已清除'
 
@@ -195,6 +196,7 @@ class Session(object):
     @staticmethod
     def save_session(query, answer, user_id, used_tokens=0):
         max_tokens = model_conf(const.OPEN_AI).get('conversation_max_tokens')
+        max_history_num = model_conf(const.OPEN_AI).get('max_history_num', None)
         if not max_tokens or max_tokens > 4000:
             # default value
             max_tokens = 1000
@@ -208,6 +210,11 @@ class Session(object):
             # pop first conversation (TODO: more accurate calculation)
             session.pop(1)
             session.pop(1)
+
+        if max_history_num is not None:
+            while len(session) > max_history_num * 2 + 1:
+                session.pop(1)
+                session.pop(1)
 
     @staticmethod
     def clear_session(user_id):
