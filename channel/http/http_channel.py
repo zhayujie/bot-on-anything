@@ -5,8 +5,11 @@ from channel.http import auth
 from flask import Flask, request, render_template, make_response
 from datetime import timedelta
 from common import const
+from common import functions
 from config import channel_conf
+from config import channel_conf_val
 from channel.channel import Channel
+
 http_app = Flask(__name__,)
 # 自动重载模板文件
 http_app.jinja_env.auto_reload = True
@@ -38,9 +41,9 @@ def index():
 
 @http_app.route("/login", methods=['POST', 'GET'])
 def login():
-    response = make_response("<html></html>",301)
-    response.headers.add_header('content-type','text/plain')
-    response.headers.add_header('location','./')
+    response = make_response("<html></html>", 301)
+    response.headers.add_header('content-type', 'text/plain')
+    response.headers.add_header('location', './')
     if (auth.identify(request) == True):
         return response
     else:
@@ -51,8 +54,9 @@ def login():
                 return response
         else:
             return render_template('login.html')
-    response.headers.set('location','./login?err=登录失败')
+    response.headers.set('location', './login?err=登录失败')
     return response
+
 
 class HttpChannel(Channel):
     def startup(self):
@@ -60,7 +64,19 @@ class HttpChannel(Channel):
 
     def handle(self, data):
         context = dict()
+        img_match_prefix = functions.check_prefix(
+            data["msg"], channel_conf_val(const.HTTP, 'image_create_prefix'))
+        if img_match_prefix:
+            data["msg"] = data["msg"].split(img_match_prefix, 1)[1].strip()
+            context['type'] = 'IMAGE_CREATE'
         id = data["id"]
         context['from_user_id'] = str(id)
-        return super().build_reply_content(data["msg"], context)
-
+        reply = super().build_reply_content(data["msg"], context)
+        if img_match_prefix:
+            if not isinstance(reply, list):
+                return reply
+            images = ""
+            for url in reply:
+                images += f"[!['IMAGE_CREATE']({url})]({url})\n"
+            reply = images
+        return reply
