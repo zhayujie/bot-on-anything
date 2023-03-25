@@ -57,7 +57,7 @@
       "port": "80"
     }
   },
-  "settings": {
+  "common": {
     "clear_memory_commands": ["#清除记忆"]
   }
 }
