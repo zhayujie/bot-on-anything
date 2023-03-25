@@ -8,8 +8,9 @@ from multiprocessing import Pool
 
 # 启动通道
 def start_process(channel_type):
+    # 若为多进程启动,子进程无法直接访问主进程的内存空间,重新创建config类
+    config.load_config()
     model_type = config.conf().get("model").get("type")
-    # load config
     log.info("[INIT] Start up: {} on {}", model_type, channel_type)
 
     # create channel
@@ -17,7 +18,6 @@ def start_process(channel_type):
 
     # startup channel
     channel.startup()
-
 
 if __name__ == '__main__':
     try:

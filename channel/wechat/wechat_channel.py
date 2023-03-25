@@ -168,20 +168,23 @@ class WechatChannel(Channel):
                 return
             context = dict()
             context['type'] = 'IMAGE_CREATE'
-            img_url = super().build_reply_content(query, context)
-            if not img_url:
+            img_urls = super().build_reply_content(query, context)
+            if not img_urls:
                 return
-
+            if not isinstance(img_urls, list):
+                self.send(channel_conf_val(const.WECHAT, "single_chat_reply_prefix") + img_urls, reply_user_id)
+                return
+            for url in img_urls:
             # 图片下载
-            pic_res = requests.get(img_url, stream=True)
-            image_storage = io.BytesIO()
-            for block in pic_res.iter_content(1024):
-                image_storage.write(block)
-            image_storage.seek(0)
+                pic_res = requests.get(url, stream=True)
+                image_storage = io.BytesIO()
+                for block in pic_res.iter_content(1024):
+                    image_storage.write(block)
+                image_storage.seek(0)
 
-            # 图片发送
-            logger.info('[WX] sendImage, receiver={}'.format(reply_user_id))
-            itchat.send_image(image_storage, reply_user_id)
+                # 图片发送
+                logger.info('[WX] sendImage, receiver={}'.format(reply_user_id))
+                itchat.send_image(image_storage, reply_user_id)
         except Exception as e:
             logger.exception(e)
 
