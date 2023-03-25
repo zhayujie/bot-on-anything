@@ -52,3 +52,12 @@ def channel_conf_val(channel_type, key, default=None):
         # common default config
         return config.get('channel').get(key, default)
     return val
+
+
+def common_conf():
+    return config.get('common')
+
+
+def common_conf_val(key, default=None):
+    return config.get('common').get(key, default)
+
