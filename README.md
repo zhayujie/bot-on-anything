@@ -491,3 +491,7 @@ pip3 install PyJWT flask
 
 + `clear_memory_commands`: 对话内指令，主动清空前文记忆，字符串数组可自定义指令别名。
   + default: ["#清除记忆"]
+
+# 教程
+
+1.视频教程：https://www.bilibili.com/video/BV1KM4y167e8
