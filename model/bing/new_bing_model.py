@@ -44,7 +44,12 @@ class BingModel(Model):
             answer = asyncio.run(task)
 
             # 最新一条回复
-            reply = answer["item"]["messages"][-1]
+            try:
+                reply = answer["item"]["messages"][-1]
+            except Exception as e:
+                self.reset_chat(context['from_user_id'])
+                log.exception(answer)
+                return "本轮对话已超时，已开启新的一轮对话,请重新提问。"
             reply_text = reply["text"]
             reference = ""
             if "sourceAttributions" in reply:
@@ -100,7 +105,7 @@ class BingModel(Model):
             return img_list
         except Exception as e:
             log.exception(e)
-            return None
+            return "输入的内容可能违反微软的图片生成内容策略。过多的策略冲突可能会导致你被暂停访问。"
 
     def reset_chat(self, from_user_id):
         asyncio.run(user_session.get(from_user_id, None).reset())
