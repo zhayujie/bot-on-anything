@@ -44,6 +44,9 @@ class SydneyBot(Chatbot):
 
         return ordered_messages
 
+    def pop_last_conversation(self):
+        self.conversations_cache[self.conversation_key]["messages"].pop()
+
     async def ask(
         self,
         prompt: str,
