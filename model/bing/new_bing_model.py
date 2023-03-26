@@ -6,6 +6,7 @@ from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 from ImageGen import ImageGen
 from common import functions
+from model.bing.jailbroken_sydney import SydneyBot
 
 user_session = dict()
 suggestion_session = dict()
@@ -21,7 +22,8 @@ class BingModel(Model):
     def __init__(self):
         try:
             self.cookies = model_conf_val("bing", "cookies")
-            self.bot = Chatbot(cookies=self.cookies)
+            self.jailbreak = model_conf_val("bing", "jailbreak")
+            self.bot = SydneyBot(cookies=self.cookies,options={}) if(self.jailbreak) else Chatbot(cookies=self.cookies)
         except Exception as e:
             log.exception(e)
 
@@ -40,7 +42,10 @@ class BingModel(Model):
                         else:
                             query = "在上面的基础上，"+query
             log.info("[NewBing] query={}".format(query))
-            task = bot.ask(query, conversation_style=self.style)
+            if(self.jailbreak):
+                task = bot.ask(query, conversation_style=self.style,message_id=bot.user_message_id)
+            else:
+                task = bot.ask(query, conversation_style=self.style)
             answer = asyncio.run(task)
 
             # 最新一条回复
