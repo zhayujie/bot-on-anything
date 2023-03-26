@@ -19,7 +19,7 @@ def hello_world(msg):
         sensitive_words = [line.strip() for line in f.readlines()]
         found = False
         for word in sensitive_words:
-            if word in msg.content:
+            if word != '' and word in msg.content:
                 found = True
                 break
         if found:
