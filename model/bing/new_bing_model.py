@@ -56,7 +56,7 @@ class BingModel(Model):
             except Exception as e:
                 bot.pop_last_conversation()
                 log.exception(answer)
-                return f"AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请使用{clear_memory_commands[0]}命令清楚全部记忆"
+                return f"AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请使用{clear_memory_commands[0]}命令清除全部记忆"
             # 最新一条回复
             try:
                 reply = answer["item"]["messages"][-1]
