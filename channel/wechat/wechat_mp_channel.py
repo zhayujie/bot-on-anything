@@ -16,20 +16,15 @@ cache = {}
 @robot.text
 def hello_world(msg):
     with open('sensitive_words.txt', 'r', encoding='utf-8') as f: #加入检测违规词
-        sensitive_wordss = [msg.content[i:i+2] for i in range(0, len(msg.content), 2)]
+        sensitive_words = [line.strip() for line in f.readlines()]
         found = False
-        #判断文件是否为空
-        if not os.path.getsize('sensitive_words.txt'):
-            found = False
-        else:
-            for i in sensitive_wordss:
-                if i in f.read():
-                    found = True
-                    break
-                else:
-                    found = False
+        for word in sensitive_words:
+            if word != '' and word in msg.content:
+                found = True
+                break
         if found:
-            return '你输入的内容包含敏感词汇'
+            return "输入内容有敏感词汇"
+
         else:
             logger.info('[WX_Public] receive public msg: {}, userId: {}'.format(msg.content, msg.source))
             key = msg.content + '|' + msg.source

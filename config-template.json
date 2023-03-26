@@ -59,5 +59,8 @@
       "http_auth_password": "6.67428e-11",
       "port": "80"
     }
+  },
+  "common": {
+    "clear_memory_commands": ["#清除记忆"]
   }
 }
