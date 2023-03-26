@@ -44,13 +44,16 @@ class SydneyBot(Chatbot):
 
         return ordered_messages
 
+    def pop_last_conversation(self):
+        self.conversations_cache[self.conversation_key]["messages"].pop()
+
     async def ask(
         self,
         prompt: str,
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
         message_id: str = None,
     ) -> dict:
-        #开启新对话
+        # 开启新对话
         self.chat_hub = SydneyHub(Conversation(
             self.cookiePath, self.cookies, self.proxy))
         self.parent_message_id = message_id if message_id != None else uuid.uuid4()
@@ -127,9 +130,10 @@ class SydneyHub(ChatHub):
     async def ask_stream(
         self,
         prompt: str,
+        wss_link: str = "wss://sydney.bing.com/sydney/ChatHub",
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
     ) -> Generator[str, None, None]:
-        async for item in super().ask_stream(prompt, conversation_style):
+        async for item in super().ask_stream(prompt=prompt, conversation_style=conversation_style, wss_link=wss_link):
             yield item
 
 
@@ -142,8 +146,8 @@ class SydneyHubRequest(ChatHubRequest):
         conversation_id: str,
         invocation_id: int = 0,
     ) -> None:
-        super().__init__(conversation_signature, client_id,
-                         conversation_id, invocation_id)
+        super().__init__(conversation_signature=conversation_signature, client_id=client_id,
+                         conversation_id=conversation_id, invocation_id=invocation_id)
         self.previous_messages = ""
 
     def update(
@@ -153,7 +157,7 @@ class SydneyHubRequest(ChatHubRequest):
         options: list | None = None,
     ) -> None:
         self.invocation_id = 0
-        super().update(prompt, conversation_style, options)
+        super().update(prompt=prompt, conversation_style=conversation_style, options=options)
         self.struct["arguments"][0]["message"]["messageType"] = "SearchQuery"
         self.struct["arguments"][0]["previousMessages"] = [
             {"text":  "N/A\n\n"+self.previous_messages, "author": 'bot', }]

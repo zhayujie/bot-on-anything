@@ -1,7 +1,7 @@
 # encoding:utf-8
 import asyncio
 from model.model import Model
-from config import model_conf_val
+from config import model_conf_val,common_conf_val
 from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 from ImageGen import ImageGen
@@ -29,6 +29,10 @@ class BingModel(Model):
 
     def reply(self, query: str, context=None) -> tuple[str, dict]:
         if not context or not context.get('type') or context.get('type') == 'TEXT':
+            clear_memory_commands = common_conf_val('clear_memory_commands', ['#清除记忆'])
+            if query in clear_memory_commands:
+                user_session[context['from_user_id']]=None
+                return '记忆已清除'
             bot = user_session.get(context['from_user_id'], None)
             if (bot == None):
                 bot = self.bot
@@ -46,8 +50,13 @@ class BingModel(Model):
                 task = bot.ask(query, conversation_style=self.style,message_id=bot.user_message_id)
             else:
                 task = bot.ask(query, conversation_style=self.style)
-            answer = asyncio.run(task)
-
+            
+            try:
+                answer = asyncio.run(task)
+            except Exception as e:
+                bot.pop_last_conversation()
+                log.exception(answer)
+                return f"AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请使用{clear_memory_commands[0]}命令清除全部记忆"
             # 最新一条回复
             try:
                 reply = answer["item"]["messages"][-1]
