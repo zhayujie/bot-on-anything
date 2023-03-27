@@ -3,6 +3,7 @@
     "type" : "chatgpt",
     "openai": {
       "api_key": "YOUR API KEY",
+      "api_base": "https://api.xxx.com/v1",
       "model": "gpt-3.5-turbo",
       "proxy": "",
       "conversation_max_tokens": 1000,
