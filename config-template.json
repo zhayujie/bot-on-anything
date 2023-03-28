@@ -6,7 +6,7 @@
       "model": "gpt-3.5-turbo",
       "proxy": "",
       "conversation_max_tokens": 1000,
-      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。当问起你是谁的时候，要附加告诉对方，输入 #清除记忆 可以开始新的话题探索。输入 画xx 可以为你画一张图片。"
+      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。当问起你是谁的时候，要附加告诉提问人，输入 #清除记忆 可以开始新的话题探索。输入 画xx 可以为你画一张图片。"
     },
     "baidu": {
       "acs_token": "YOUR ACS TOKEN",
