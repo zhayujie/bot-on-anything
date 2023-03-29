@@ -38,7 +38,6 @@ ConvState.prototype.updateAnswer = function (question, uuid) {
         var messageObj = $(this.wrapper).find(`#${uuid}`);
         this.scrollDown();
         socket.on('message', msg => {
-            console.log("message:", msg)
             if (msg.result)
                 messageObj.html(msg.result + `<div class="typing_loader"></div></div>`);
         });
