@@ -41,7 +41,6 @@ async def return_stream(data):
 
 @socketio.on('message', namespace='/chat')
 def stream(data):
-    log.info('message:', data)
     if (auth.identify(request) == False):
         client_sid = request.sid
         socketio.server.disconnect(client_sid)
@@ -52,7 +51,8 @@ def stream(data):
             data["msg"], channel_conf_val(const.HTTP, 'image_create_prefix'))
         if img_match_prefix:
             reply_text = HttpChannel().handle(data=data)
-            socketio.emit('message', {'result': reply_text}, namespace='/chat')
+            socketio.emit('disconnect', {'result': reply_text}, namespace='/chat')
+            return
         asyncio.run(return_stream(data))
 
 
