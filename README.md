@@ -472,7 +472,7 @@ https://slack.dev/bolt-python/tutorial/getting-started
 **依赖**
 
 ```bash
-pip3 install PyJWT flask
+pip3 install PyJWT flask flask_socketio
 ```
 
 **配置**
