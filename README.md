@@ -117,7 +117,7 @@ pip3 install --upgrade openai
 
 ### 2.GPT-3.0
 
-使用的模型是 `text-davinci-003`，详情参考[官方文档]([https://platform.openai.com/docs/guides/chat](https://platform.openai.com/docs/guides/completion/introduction))。
+使用的模型是 `text-davinci-003`，详情参考[官方文档]([https://platform.openai.com/docs/guides/chat](https://platform.openai.com/docs/guides/completion/introduction))。注意，gpt3.0模型使用流式输出对话会出现提前中断的问题，请尽量使用一次性输出对话。
 
 使用步骤和上述GPT-3.5基本相同：
 

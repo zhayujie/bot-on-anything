@@ -29,3 +29,7 @@ class Channel(object):
 
     def build_reply_content(self, query, context=None):
         return Bridge().fetch_reply_content(query, context)
+
+    async def build_reply_stream(self, query, context=None):
+        async for final,response in Bridge().fetch_reply_stream(query, context):
+            yield final,response

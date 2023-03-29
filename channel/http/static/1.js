@@ -1,20 +1,29 @@
 
-function ConvState(wrapper, form, params) {
-    this.id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+function generateUUID () {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
             v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
-    });
+    })
+}
+
+const conversationType = {
+    DISPOSABLE: 1,
+    STREAM: 1 << 1
+}
+function ConvState (wrapper, form, params) {
+    this.id = generateUUID()
     this.form = form;
     this.wrapper = wrapper;
+    this.backgroundColor = '#ffffff';
     this.parameters = params;
     this.scrollDown = function () {
         $(this.wrapper).find('#messages').stop().animate({ scrollTop: $(this.wrapper).find('#messages')[0].scrollHeight }, 600);
     }.bind(this);
 };
-ConvState.prototype.printAnswer = function (answer = '我是ChatGPT, 一个由OpenAI训练的大型语言模型, 我旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。') {
+ConvState.prototype.printAnswer = function (uuid, answer = '我是ChatGPT, 一个由OpenAI训练的大型语言模型, 我旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。') {
     setTimeout(function () {
-        var messageObj = $(this.wrapper).find('.message.typing');
+        var messageObj = $(this.wrapper).find(`#${uuid}`);
         answer = marked.parse(answer);
         messageObj.html(answer);
         messageObj.removeClass('typing').addClass('ready');
@@ -22,39 +31,66 @@ ConvState.prototype.printAnswer = function (answer = '我是ChatGPT, 一个由Op
         $(this.wrapper).find(this.parameters.inputIdHashTagName).focus();
     }.bind(this), 500);
 };
+ConvState.prototype.updateAnswer = function (question, uuid) {
+    setTimeout(function () {
+        var socket = io('/chat');
+        socket.connect('/chat');
+        var messageObj = $(this.wrapper).find(`#${uuid}`);
+        this.scrollDown();
+        socket.on('message', msg => {
+            console.log("message:", msg)
+            if (msg.result)
+                messageObj.html(msg.result + `<div class="typing_loader"></div></div>`);
+        });
+        socket.on('connect', msg => {
+            socket.emit('message', { data: JSON.stringify(question) });
+        });
+        socket.on('disconnect', msg => {
+            if (msg.result) {
+                answer = marked.parse(msg.result);
+                messageObj.html(answer);
+            }
+            messageObj.removeClass('typing').addClass('ready');
+            this.scrollDown();
+            $(this.wrapper).find(this.parameters.inputIdHashTagName).focus();
+            console.log("disconnect", msg)
+        });
+    }.bind(this), 1000);
+};
 ConvState.prototype.sendMessage = function (msg) {
     var message = $('<div class="message from">' + msg + '</div>');
-
     $('button.submit').removeClass('glow');
     $(this.wrapper).find(this.parameters.inputIdHashTagName).focus();
     setTimeout(function () {
         $(this.wrapper).find("#messages").append(message);
         this.scrollDown();
     }.bind(this), 100);
-
-    var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
+    var uuid = generateUUID().toLowerCase();
+    var messageObj = $(`<div class="message to typing" id="${uuid}"><div class="typing_loader"></div></div>`);
     setTimeout(function () {
         $(this.wrapper).find('#messages').append(messageObj);
         this.scrollDown();
     }.bind(this), 150);
     var _this = this
-    $.ajax({
-        url: "./chat",
-        type: "POST",
-        timeout:180000,
-        data: JSON.stringify({
-            "id": _this.id,
-            "msg": msg
-        }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data) {
-            _this.printAnswer(data.result)
-        },
-        error:function () {
-            _this.printAnswer("网络故障，对话未送达")
-        },
-    })
+    var question = { "id": _this.id, "msg": msg }
+    if (localConfig.conversationType == conversationType.STREAM)
+        this.updateAnswer(question, uuid)
+    else
+        $.ajax({
+            url: "./chat",
+            type: "POST",
+            timeout: 180000,
+            data: JSON.stringify(question),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                _this.printAnswer(uuid, data.result)
+            },
+            error: function (data) {
+                console.log(data)
+                _this.printAnswer(uuid, "网络故障，对话未送达")
+            },
+        })
 };
 (function ($) {
     $.fn.convform = function () {
@@ -81,13 +117,30 @@ ConvState.prototype.sendMessage = function (msg) {
         $(wrapper).append(inputForm);
 
         var state = new ConvState(wrapper, form, parameters);
+        // Bind checkbox values to ConvState object
+        $('input[type="checkbox"]').change(function () {
+            var key = $(this).attr('name');
+            state[key] = $(this).is(':checked');
+        });
+
+        // Bind radio button values to ConvState object
+        $('input[type="radio"]').change(function () {
+            var key = $(this).attr('name');
+            state[key] = $(this).val();
+        });
+
+        // Bind color input value to ConvState object
+        $('#backgroundColor').change(function () {
+            state["backgroundColor"] = $(this).val();
+        });
 
         //prints first contact
         $.when($('div.spinLoader').addClass('hidden')).done(function () {
-            var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
+            var uuid = generateUUID()
+            var messageObj = $(`<div class="message to typing" id="${uuid}"><div class="typing_loader"></div></div>`);
             $(state.wrapper).find('#messages').append(messageObj);
             state.scrollDown();
-            state.printAnswer();
+            state.printAnswer(uuid = uuid);
         });
 
         //binds enter to send message

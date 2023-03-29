@@ -41,17 +41,13 @@ class SydneyBot(Chatbot):
                 break
             ordered_messages.insert(0, message)
             current_message_id = message.get('parentMessageId')
-
         return ordered_messages
 
-    def pop_last_conversation(self):
-        self.conversations_cache[self.conversation_key]["messages"].pop()
-
-    async def ask(
+    async def ask_stream(
         self,
         prompt: str,
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
-        message_id: str = None,
+        message_id: str = None
     ) -> dict:
         # 开启新对话
         self.chat_hub = SydneyHub(Conversation(
@@ -90,9 +86,30 @@ class SydneyBot(Chatbot):
             conversation_style=conversation_style
         ):
             if final:
+                try:
+                    self.update_reply_cache(response["item"]["messages"][-1])
+                except Exception as e:
+                    self.conversations_cache[self.conversation_key]["messages"].pop()
+                    yield True, f"AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请清除全部记忆后再次尝试"
+            yield final, response
+
+    async def ask(
+        self,
+        prompt: str,
+        conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
+        message_id: str = None
+    ) -> dict:
+        if self.chat_hub.wss:
+            if not self.chat_hub.wss.closed:
+                await self.chat_hub.wss.close()
+        async for final, response in self.ask_stream(
+            prompt=prompt,
+            conversation_style=conversation_style,
+            message_id=message_id
+        ):
+            if final:
                 self.update_reply_cache(response["item"]["messages"][-1])
                 return response
-        self.chat_hub.wss.close()
 
     def update_reply_cache(
         self,
