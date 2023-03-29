@@ -45,5 +45,9 @@ def create_channel(channel_type):
         from channel.http.http_channel import HttpChannel
         return HttpChannel()
 
+    elif channel_type == const.DINGDING:
+        from channel.dd.dd_channel import DDChannel
+        return DDChannel()
+
     else:
         raise RuntimeError("unknown channel_type in config.json: " + channel_type)
