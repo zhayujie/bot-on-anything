@@ -13,10 +13,14 @@ user_session = dict()
 class ChatGPTModel(Model):
     def __init__(self):
         openai.api_key = model_conf(const.OPEN_AI).get('api_key')
+        api_base = model_conf(const.OPEN_AI).get('api_base')
+        if api_base:
+            openai.api_base = api_base
         proxy = model_conf(const.OPEN_AI).get('proxy')
         if proxy:
             openai.proxy = proxy
-
+        log.info("[CHATGPT] api_base={} proxy={}".format(
+            api_base, proxy))
     def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':

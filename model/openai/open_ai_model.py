@@ -13,6 +13,11 @@ user_session = dict()
 class OpenAIModel(Model):
     def __init__(self):
         openai.api_key = model_conf(const.OPEN_AI).get('api_key')
+        api_base = model_conf(const.OPEN_AI).get('api_base')
+        if api_base:
+            openai.api_base = api_base
+        proxy = model_conf(const.OPEN_AI).get('proxy')
+        log.info("[OPEN_AI] api_base={}".format(openai.api_base))
         proxy = model_conf(const.OPEN_AI).get('proxy')
         if proxy:
             openai.proxy = proxy
