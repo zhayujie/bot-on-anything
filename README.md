@@ -20,7 +20,7 @@
  - [ ] 企业微信
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
- - [ ] 钉钉 
+ - [x] 钉钉 
  - [ ] 飞书
  - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
  - [x] [Slack](https://github.com/zhayujie/bot-on-anything#8slack)
@@ -503,13 +503,13 @@ pip3 install requests flask
 
 ```bash
 "channel": {
-    "type": "dingding",
-    "dingding": {
+    "type": "dingtalk",
+    "dingtalk": {
       "image_create_prefix": ["画", "draw", "Draw"],
       "port": "8081", //对外端口
-      "dd_token": "xx", //webhook地址的access_token
-      "dd_post_token": "xx", //钉钉post回消息时header中带的检验token
-      "dd_secret": "xx"// 安全加密加签串,群机器人中
+      "dingtalk_token": "xx", //webhook地址的access_token
+      "dingtalk_post_token": "xx", //钉钉post回消息时header中带的检验token
+      "dingtalk_secret": "xx"// 安全加密加签串,群机器人中
     }
   }
 ```

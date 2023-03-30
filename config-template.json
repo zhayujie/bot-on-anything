@@ -60,12 +60,12 @@
       "port": "80"
     },
 
-    "dingding": {
+    "dingtalk": {
       "image_create_prefix": ["画", "draw", "Draw"],
       "port": "8081",
-      "dd_token": "xx",
-      "dd_post_token": "xx",
-      "dd_secret": "xx"
+      "dingtalk_token": "xx",
+      "dingtalk_post_token": "xx",
+      "dingtalk_secret": "xx"
     }
   },
   "common": {
