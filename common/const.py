@@ -8,7 +8,7 @@ GMAIL = "gmail"
 TELEGRAM = "telegram"
 SLACK = "slack"
 HTTP = "http"
-DINGDING = "dingding"
+DINGTALK = "dingtalk"
 
 # model
 OPEN_AI = "openai"
