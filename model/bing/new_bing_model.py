@@ -33,7 +33,7 @@ class BingModel(Model):
             if final:
                 try:
                     reply = self.build_source_attributions(answer, context)
-                    log.info("[NewBing] reply:{}",reply)
+                    log.info("[NewBing] reply:{}", reply)
                     yield True, reply
                 except Exception as e:
                     log.warn(answer)
