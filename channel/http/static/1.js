@@ -40,6 +40,7 @@ ConvState.prototype.updateAnswer = function (question, uuid) {
         socket.on('message', msg => {
             if (msg.result)
                 messageObj.html(msg.result + `<div class="typing_loader"></div></div>`);
+            this.scrollDown();
         });
         socket.on('connect', msg => {
             socket.emit('message', { data: JSON.stringify(question) });
