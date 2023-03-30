@@ -14,7 +14,7 @@ from flask_socketio import SocketIO
 from common import log
 
 http_app = Flask(__name__,)
-socketio = SocketIO(http_app)
+socketio = SocketIO(http_app, close_timeout=5)
 # 自动重载模板文件
 http_app.jinja_env.auto_reload = True
 http_app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -29,13 +29,13 @@ async def return_stream(data):
             if(final):
                 socketio.server.emit(
                 'disconnect', {'result': response, 'final': final}, request.sid, namespace="/chat")
-                socketio.server.disconnect(request.sid)
+                disconnect()
             else:
                 socketio.server.emit(
                 'message', {'result': response, 'final': final}, request.sid, namespace="/chat")
         except Exception as e:
-            socketio.server.disconnect(request.sid)
-            log.error("[http]emit:", e)
+            disconnect()
+            log.warn("[http]emit:{}", e)
             break
 
 
@@ -52,6 +52,7 @@ def stream(data):
         if img_match_prefix:
             reply_text = HttpChannel().handle(data=data)
             socketio.emit('disconnect', {'result': reply_text}, namespace='/chat')
+            disconnect()
             return
         asyncio.run(return_stream(data))
 
@@ -65,6 +66,7 @@ def connect():
 @socketio.on('disconnect', namespace='/chat')
 def disconnect():
     log.info('disconnect')
+    socketio.server.disconnect(request.sid,namespace="/chat")
 
 
 @http_app.route("/chat", methods=['POST'])

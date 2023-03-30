@@ -146,6 +146,10 @@
             localConfig.backgroundColor = $(this).val();
         });
 
+        $(window).on('unload', function () {
+            socket.disconnect();
+        });
+
         jQuery(function (a) {
             var b = a("#chat").convform()
         });
