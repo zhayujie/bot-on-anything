@@ -1,5 +1,5 @@
 
-function generateUUID () {
+function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
             v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -11,7 +11,7 @@ const conversationType = {
     DISPOSABLE: 1,
     STREAM: 1 << 1
 }
-function ConvState (wrapper, form, params) {
+function ConvState(wrapper, form, params) {
     this.id = generateUUID()
     this.form = form;
     this.wrapper = wrapper;
@@ -31,13 +31,37 @@ ConvState.prototype.printAnswer = function (uuid, answer = '我是ChatGPT, 一�
         $(this.wrapper).find(this.parameters.inputIdHashTagName).focus();
     }.bind(this), 500);
 };
+
 ConvState.prototype.updateAnswer = function (question, uuid) {
     setTimeout(function () {
         var socket = io('/chat');
         socket.connect('/chat');
+        let timerId;
+        var _this = this
+        // 设置计时器，如果在规定的时间内没有接收到消息，则手动断开连接
+        function setTimer() {
+            timerId = setTimeout(() => {
+                if (socket.connected) {
+                    socket.disconnect();
+                    handle_disconnect();
+                }
+            }, 60000);
+        }
+        function resetTimer() {
+            clearTimeout(timerId);
+            setTimer();
+        }
+        setTimer();
         var messageObj = $(this.wrapper).find(`#${uuid}`);
+        function handle_disconnect() {
+            messageObj.removeClass('typing').addClass('ready');
+            _this.scrollDown();
+            $(_this.wrapper).find(_this.parameters.inputIdHashTagName).focus();
+        }
         this.scrollDown();
         socket.on('message', msg => {
+            // 接收到消息时重置计时器
+            resetTimer();
             if (msg.result)
                 messageObj.html(msg.result + `<div class="typing_loader"></div></div>`);
             this.scrollDown();
@@ -50,10 +74,7 @@ ConvState.prototype.updateAnswer = function (question, uuid) {
                 answer = marked.parse(msg.result);
                 messageObj.html(answer);
             }
-            messageObj.removeClass('typing').addClass('ready');
-            this.scrollDown();
-            $(this.wrapper).find(this.parameters.inputIdHashTagName).focus();
-            console.log("disconnect", msg)
+            handle_disconnect()
         });
     }.bind(this), 1000);
 };
