@@ -18,6 +18,7 @@ class OpenAIModel(Model):
             openai.api_base = api_base
         proxy = model_conf(const.OPEN_AI).get('proxy')
         log.info("[OPEN_AI] api_base={}".format(openai.api_base))
+        self.model = model_conf(const.OPEN_AI).get('model')
 
 
     def reply(self, query, context=None):
@@ -49,7 +50,7 @@ class OpenAIModel(Model):
     def reply_text(self, query, user_id, retry_count=0):
         try:
             response = openai.Completion.create(
-                model="text-davinci-003",  # 对话模型的名称
+                model=self.model,  # 对话模型的名称
                 prompt=query,
                 temperature=0.9,  # 值在[0,1]之间，越大表示回复越具有不确定性
                 max_tokens=1200,  # 回复最大的字符数
