@@ -87,6 +87,8 @@ class SydneyBot(Chatbot):
         ):
             if final:
                 try:
+                    if self.chat_hub.wss and not self.chat_hub.wss.closed:
+                        await self.chat_hub.wss.close()
                     self.update_reply_cache(response["item"]["messages"][-1])
                 except Exception as e:
                     self.conversations_cache[self.conversation_key]["messages"].pop()
@@ -99,9 +101,6 @@ class SydneyBot(Chatbot):
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
         message_id: str = None
     ) -> dict:
-        if self.chat_hub.wss:
-            if not self.chat_hub.wss.closed:
-                await self.chat_hub.wss.close()
         async for final, response in self.ask_stream(
             prompt=prompt,
             conversation_style=conversation_style,
