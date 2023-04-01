@@ -1,5 +1,6 @@
 # encoding:utf-8
 
+import argparse
 import config
 from channel import channel_factory
 from common import log, const
@@ -9,7 +10,7 @@ from multiprocessing import Pool
 # 启动通道
 def start_process(channel_type):
     # 若为多进程启动,子进程无法直接访问主进程的内存空间,重新创建config类
-    config.load_config()
+    config.load_config(args.config)
     model_type = config.conf().get("model").get("type")
     log.info("[INIT] Start up: {} on {}", model_type, channel_type)
 
@@ -19,10 +20,10 @@ def start_process(channel_type):
     # startup channel
     channel.startup()
 
-if __name__ == '__main__':
+def main():
     try:
         # load config
-        config.load_config()
+        config.load_config(args.config)
 
         model_type = config.conf().get("model").get("type")
         channel_type = config.conf().get("channel").get("type")
@@ -60,3 +61,9 @@ if __name__ == '__main__':
     except Exception as e:
         log.error("App startup failed!")
         log.exception(e)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="config.json path(e.g: ./config.json  or  /usr/local/bot-on-anything/config.json)",type=str,default="./config.json")
+    args = parser.parse_args()
+    main()
