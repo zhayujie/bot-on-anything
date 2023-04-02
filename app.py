@@ -30,12 +30,12 @@ def main():
 
         # 1.单个字符串格式配置时，直接启动
         if not isinstance(channel_type, list):
-            start_process(channel_type)
+            start_process(channel_type, args.config)
             exit(0)
 
         # 2.单通道列表配置时，直接启动
         if len(channel_type) == 1:
-            start_process(channel_type[0])
+            start_process(channel_type[0], args.config)
             exit(0)
 
         # 3.多通道配置时，进程池启动
