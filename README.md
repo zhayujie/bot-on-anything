@@ -20,7 +20,7 @@
  - [ ] 企业微信
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
- - [x] 钉钉 
+ - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
  - [ ] 飞书
  - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
  - [x] [Slack](https://github.com/zhayujie/bot-on-anything#8slack)
@@ -494,6 +494,10 @@ pip3 install PyJWT flask
 
 ### 10.钉钉
 
+**需要：**
+
+- 企业内部开发机器人
+
 **依赖**
 
 ```bash
@@ -513,14 +517,16 @@ pip3 install requests flask
     }
   }
 ```
-钉钉开放平台说明: https://open.dingtalk.com/document/robots/customize-robot-security-settin.dingtalk.com/robot/send?access_token=906dadcbc7750fef5ff60d3445b66d5bbca32804f40fbdb59039a29b20b9a3f0gs
+**参考文档**：
 
-https://open.dingtalk.com/document/orgapp/custom-robot-access
+- [钉钉内部机器人教程](https://open.dingtalk.com/document/tutorial/create-a-robot#title-ufs-4gh-poh)
+- [自定义机器人接入文档](https://open.dingtalk.com/document/tutorial/create-a-robot#title-ufs-4gh-poh)
+- [企业内部开发机器人教程文档](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)
 
 **生成机器人**
 
 地址: https://open-dev.dingtalk.com/fe/app#/corp/robot 
-添加机器人,在开发管理中设置服务器出口ip(在部署机执行curl ifconfig.me就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
+添加机器人,在开发管理中设置服务器出口 ip (在部署机执行`curl ifconfig.me`就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
 
 ### 通用配置
 
