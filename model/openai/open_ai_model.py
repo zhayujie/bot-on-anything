@@ -18,7 +18,7 @@ class OpenAIModel(Model):
             openai.api_base = api_base
         proxy = model_conf(const.OPEN_AI).get('proxy')
         log.info("[OPEN_AI] api_base={}".format(openai.api_base))
-        self.model = model_conf(const.OPEN_AI).get('model')
+        self.model = model_conf(const.OPEN_AI).get('model', 'text-davinci-003')
 
 
     def reply(self, query, context=None):
