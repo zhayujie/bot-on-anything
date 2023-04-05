@@ -7,6 +7,7 @@ echo $BASE_DIR
 
 # check the nohup.out log output file
 if [ ! -f "${BASE_DIR}/logs/log_info.log" ]; then
+  mkdir "${BASE_DIR}/logs"
   touch "${BASE_DIR}/logs/log_info.log"
 echo "${BASE_DIR}/logs/log_info.log"  
 fi
