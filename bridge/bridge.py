@@ -23,8 +23,8 @@ class Bridge(object):
         econtext = PluginManager().emit_event(EventContext(
             Event.ON_BRIDGE_HANDLE_CONTEXT, {'context': query, 'args': context}))
         type = econtext['args'].get('model') or config.conf().get("model").get("type")
-        query = econtext.get("context", None)
-        reply = econtext.get("reply", "无回复")
+        query = econtext.econtext.get("context", None)
+        reply = econtext.econtext.get("reply", "无回复")
         bot = model_factory.create_bot(type)
         if not econtext.is_pass() and query:
             async for final, response in bot.reply_text_stream(query, context):
