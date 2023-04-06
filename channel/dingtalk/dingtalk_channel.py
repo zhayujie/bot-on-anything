@@ -96,7 +96,7 @@ def chat():
         if not content:
             return
         reply_text = "您好，有什么我可以帮助您解答的问题吗？。"
-        if str(content) != 0 or content.isspace():
+        if str(content) != 0 or !content.isspace():
             reply_text = dd.handle(data=data)
         dd.notify_dingtalk(reply_text)
         return {'ret': 200}
