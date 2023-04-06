@@ -6,6 +6,8 @@ from channel import channel_factory
 from common import log, const
 from multiprocessing import Pool
 
+from plugins.plugin_manager import PluginManager
+
 
 # 启动通道
 def start_process(channel_type, config_path):
@@ -28,6 +30,7 @@ def main():
         model_type = config.conf().get("model").get("type")
         channel_type = config.conf().get("channel").get("type")
 
+        PluginManager()
         # 1.单个字符串格式配置时，直接启动
         if not isinstance(channel_type, list):
             start_process(channel_type, args.config)
