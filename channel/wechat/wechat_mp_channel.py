@@ -42,7 +42,7 @@ class WechatSubsribeAccount(Channel):
         robot.run()
 
     def handle(self, msg, count=1):
-        if msg.content == "继续":
+        if msg.content == "1":
             return self.get_un_send_content(msg.source)
 
         context = dict()
@@ -62,7 +62,7 @@ class WechatSubsribeAccount(Channel):
 
         if cache.get(key)['req_times'] == 3 and count >= 4:
             logger.info("微信超时3次")
-            return "已开始处理，请稍等片刻后输入\"继续\"查看回复"
+            return "已开始处理，请稍等片刻后输入\"1\"查看回复"
 
         if count <= 5:
             time.sleep(1)
