@@ -21,7 +21,7 @@
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
- - [ ] 飞书
+ - [x] [飞书](https://github.com/zhayujie/bot-on-anything#11%E9%A3%9E%E4%B9%A6)
  - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
  - [x] [Slack](https://github.com/zhayujie/bot-on-anything#8slack)
 
@@ -532,6 +532,48 @@ pip3 install requests flask
 
 地址: https://open-dev.dingtalk.com/fe/app#/corp/robot 
 添加机器人,在开发管理中设置服务器出口 ip (在部署机执行`curl ifconfig.me`就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
+
+添加机器人,在开发管理中设置服务器出口ip(在部署机执行curl ifconfig.me就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
+
+### 11.飞书
+
+**依赖**
+
+```bash
+pip3 install requests flask
+```
+**配置**
+
+```json
+"channel": {
+    "type": "dingtalk",
+    "feishu": {
+        "image_create_prefix": [
+            "画",
+            "draw",
+            "Draw"
+        ],
+        "port": "8082",//对外端口
+        "app_id": "xxx", //应用app_id
+        "app_secret": "xxx",//应用Secret
+        "verification_token": "xxx" //事件订阅 Verification Token
+    }
+}
+```
+
+**生成机器人**
+
+地址: https://open.feishu.cn/app/ 
+1. 添加企业自建应用 
+2. 开通权限
+    - im:message
+    - im:message.group_at_msg
+    - im:message.group_at_msg:readonly
+    - im:message.p2p_msg
+    - im:message.p2p_msg:readonly
+    - im:message:send_as_bot
+3. 订阅菜单添加事件(接收消息v2.0) 配置请求地址(配置中的对外地址如 https://xx.xx.com:8081)
+4. 版本管理与发布中上架应用,app中会收到审核信息,通过审核后在群里添加自建应用
 
 ### 通用配置
 
