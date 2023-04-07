@@ -67,6 +67,17 @@
       "dingtalk_token": "xx",
       "dingtalk_post_token": "xx",
       "dingtalk_secret": "xx"
+    },
+    "feishu": {
+        "image_create_prefix": [
+            "画",
+            "draw",
+            "Draw"
+        ],
+        "port": "8082",
+        "app_id": "xxx",
+        "app_secret": "xxx",
+        "verification_token": "xxx"
     }
   },
   "common": {
