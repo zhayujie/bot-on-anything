@@ -20,7 +20,7 @@
  - [ ] 企业微信
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
- - [x] 钉钉 
+ - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
  - [x] [飞书](https://github.com/zhayujie/bot-on-anything#11%E9%A3%9E%E4%B9%A6)
  - [x] [Gmail](https://github.com/zhayujie/bot-on-anything#7gmail)
  - [x] [Slack](https://github.com/zhayujie/bot-on-anything#8slack)
@@ -104,8 +104,13 @@ pip3 install --upgrade openai
     "openai": {
       "api_key": "YOUR API KEY",
       "model": "gpt-3.5-turbo",                         # 模型名称
-      "proxy": "http://127.0.0.1:7890",
-      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
+      "proxy": "http://127.0.0.1:7890",                 # 代理地址
+      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。当问起你是谁的时候，要附加告诉提问人，输入 #清除记忆 可以开始新的话题探索。输入 画xx 可以为你画一张图片。",
+      "conversation_max_tokens": 1000,                  # 回复最大的字符数，为输入和输出的总数
+      "temperature":0.75,     # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
+      "top_p":0.7,            #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
+      "frequency_penalty":0.0,            # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
+      "presence_penalty":1.0,             # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
     }
 }
 ```
@@ -472,7 +477,7 @@ https://slack.dev/bolt-python/tutorial/getting-started
 **依赖**
 
 ```bash
-pip3 install PyJWT flask
+pip3 install PyJWT flask flask_socketio
 ```
 
 **配置**
@@ -494,6 +499,10 @@ pip3 install PyJWT flask
 
 ### 10.钉钉
 
+**需要：**
+
+- 企业内部开发机器人
+
 **依赖**
 
 ```bash
@@ -513,13 +522,17 @@ pip3 install requests flask
     }
   }
 ```
-钉钉开放平台说明: https://open.dingtalk.com/document/robots/customize-robot-security-settin.dingtalk.com/robot/send?access_token=906dadcbc7750fef5ff60d3445b66d5bbca32804f40fbdb59039a29b20b9a3f0gs
+**参考文档**：
 
-https://open.dingtalk.com/document/orgapp/custom-robot-access
+- [钉钉内部机器人教程](https://open.dingtalk.com/document/tutorial/create-a-robot#title-ufs-4gh-poh)
+- [自定义机器人接入文档](https://open.dingtalk.com/document/tutorial/create-a-robot#title-ufs-4gh-poh)
+- [企业内部开发机器人教程文档](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)
 
 **生成机器人**
 
 地址: https://open-dev.dingtalk.com/fe/app#/corp/robot 
+添加机器人,在开发管理中设置服务器出口 ip (在部署机执行`curl ifconfig.me`就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
+
 添加机器人,在开发管理中设置服务器出口ip(在部署机执行curl ifconfig.me就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
 
 ### 11.飞书

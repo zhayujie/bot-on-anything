@@ -1,4 +1,3 @@
-
 .typing_loader {
     width: 6px;
     height: 6px;
@@ -11,7 +10,9 @@
     left: -12px;
     margin: 7px 15px 6px;
 }
-ol,pre {
+
+ol,
+pre {
     background-color: #b1e3b1c4;
     border: 1px solid #c285e3ab;
     padding: 0.5rem 1.5rem 0.5rem;
@@ -20,50 +21,52 @@ ol,pre {
     overflow-y: auto;
 }
 
-pre::-webkit-scrollbar{
+pre::-webkit-scrollbar {
     width: 0px;
-    height:5px;
+    height: 5px;
 }
-pre::-webkit-scrollbar-thumb{
+
+pre::-webkit-scrollbar-thumb {
     border-right: 10px #ffffff00 solid;
     border-left: 10px #ffffff00 solid;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
 }
+
 .to .typing_loader {
     animation: typing-black 1s linear infinite alternate;
 }
 
 @-webkit-keyframes typing {
     0% {
-        background-color: rgba(255,255,255, 1);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 0.2);
     }
 
     50% {
-        background-color: rgba(255,255,255, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 1), 24px 0px 0px 0px rgba(255, 255, 255, 0.4);
     }
 
     100% {
-        background-color: rgba(255,255,255, 0.2);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 1);
     }
 }
 
 @-moz-keyframes typing {
     0% {
-        background-color: rgba(255,255,255, 1);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 0.2);
     }
 
     50% {
-        background-color: rgba(255,255,255, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 1), 24px 0px 0px 0px rgba(255, 255, 255, 0.4);
     }
 
     100% {
-        background-color: rgba(255,255,255, 0.2);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 1);
     }
 }
 
@@ -75,29 +78,29 @@ pre::-webkit-scrollbar-thumb{
 
     50% {
         background-color: rgba(74, 74, 74, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74, 1), 24px 0px 0px 0px rgba(74, 74, 74,0.4);
+        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74, 1), 24px 0px 0px 0px rgba(74, 74, 74, 0.4);
     }
 
     100% {
         background-color: rgba(74, 74, 74, 0.2);
-        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74,0.4), 24px 0px 0px 0px rgba(74, 74, 74,1);
+        box-shadow: 12px 0px 0px 0px rgba(74, 74, 74, 0.4), 24px 0px 0px 0px rgba(74, 74, 74, 1);
     }
 }
 
 @keyframes typing {
     0% {
-        background-color: rgba(255,255,255, 1);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,0.2);
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 0.2);
     }
 
     50% {
-        background-color: rgba(255,255,255, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,1), 24px 0px 0px 0px rgba(255,255,255,0.4);
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 1), 24px 0px 0px 0px rgba(255, 255, 255, 0.4);
     }
 
     100% {
-        background-color: rgba(255,255,255, 0.2);
-        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.4), 24px 0px 0px 0px rgba(255,255,255,1);
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 0.4), 24px 0px 0px 0px rgba(255, 255, 255, 1);
     }
 }
 
@@ -112,27 +115,30 @@ pre::-webkit-scrollbar-thumb{
 .convFormDynamic textarea.userInputDynamic {
     border: none;
     padding: 7px 10px;
-    overflow-x: hidden!important;
+    overflow-x: hidden !important;
     outline: none;
     font-size: 0.905rem;
     float: left;
     width: calc(100% - 70px);
     line-height: 1.3em;
-    min-height: 1.7em;
+    min-height: 2em;
     max-height: 10rem;
     display: block;
     max-width: 89vw;
     margin-right: -1vw;
     resize: none;
 }
-.convFormDynamic textarea::-webkit-scrollbar{
+
+.convFormDynamic textarea::-webkit-scrollbar {
     width: 2px;
     background-color: lawngreen;
 }
-.convFormDynamic textarea::-webkit-scrollbar-thumb{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color:  dodgerblue;
+
+.convFormDynamic textarea::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: dodgerblue;
 }
+
 .convFormDynamic input.userInputDynamic {
     border: none;
     padding: 7px 10px;
@@ -180,16 +186,20 @@ div.conv-form-wrapper:before {
     top: 0;
     left: 0;
     z-index: 2;
-    background: linear-gradient(#fff, transparent);
+    background: linear-gradient(#ffffff3b, transparent);
 }
 
 @media (max-width: 767px) {
-    div.conv-form-wrapper div.wrapper-messages, div.conv-form-wrapper div#messages {
+
+    div.conv-form-wrapper div.wrapper-messages,
+    div.conv-form-wrapper div#messages {
         max-height: 71vh;
     }
 }
 
-div.conv-form-wrapper div.wrapper-messages::-webkit-scrollbar, div#feed ul::-webkit-scrollbar, div.conv-form-wrapper div.options::-webkit-scrollbar {
+div.conv-form-wrapper div.wrapper-messages::-webkit-scrollbar,
+div#feed ul::-webkit-scrollbar,
+div.conv-form-wrapper div.options::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     /* remove scrollbar space */
@@ -261,12 +271,13 @@ div.conv-form-wrapper div#messages div.message.to {
 }
 
 div.conv-form-wrapper div#messages div.message.from {
-    background:  dodgerblue;
+    background: dodgerblue;
     color: #fff;
     border-top-right-radius: 0;
 }
 
-.message.to+.message.from, .message.from+.message.to {
+.message.to+.message.from,
+.message.from+.message.to {
     margin-top: 15px;
 }
 
@@ -294,7 +305,7 @@ div.conv-form-wrapper div#messages div.message.from {
     position: absolute;
     bottom: 0px;
     border: none;
-    left:95%;
+    left: 95%;
     margin: 5px;
     color: #fff;
     cursor: pointer;
@@ -315,10 +326,11 @@ div.conv-form-wrapper div#messages div.message.from {
 }
 
 button.submit.glow {
-    border: 1px solid  dodgerblue !important;
-    background:  dodgerblue !important;
-    box-shadow: 0 0 5px 2px rgba(14, 144, 255,0.4);
+    border: 1px solid dodgerblue !important;
+    background: dodgerblue !important;
+    box-shadow: 0 0 5px 2px rgba(14, 144, 255, 0.4);
 }
+
 .no-border {
     border: none !important;
 }
@@ -327,7 +339,8 @@ button.submit.glow {
     cursor: grab;
 }
 
-div.conv-form-wrapper div#messages::-webkit-scrollbar, div#feed ul::-webkit-scrollbar {
+div.conv-form-wrapper div#messages::-webkit-scrollbar,
+div#feed ul::-webkit-scrollbar {
     width: 0px;
     /* remove scrollbar space */
     background: transparent;
@@ -337,4 +350,269 @@ div.conv-form-wrapper div#messages::-webkit-scrollbar, div#feed ul::-webkit-scro
 span.clear {
     display: block;
     clear: both;
+}
+
+.drawer-icon-container {
+    position: fixed;
+    top: calc(50% - 24px);
+    right: -30px;
+    z-index: 1000;
+    transition: right 0.5s ease;
+}
+
+.drawer-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #b1cee350;
+    padding-left: 22px;
+    border-radius: 50%;
+}
+.drawer-icon:hover{
+    background-color: #005eff96;
+}
+.wrenchFilled.icon {
+    margin-left: -13px;
+    margin-top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #333333;
+    transform-origin: center 10.5px;
+    transform: rotate(-45deg);
+}
+
+.wrenchFilled.icon:after {
+    width: 0;
+    height: 0;
+    border-radius: 0 0 1px 1px;
+    background-color: #333333;
+    border-left: solid 1px transparent;
+    border-right: solid 1px transparent;
+    border-top: solid 1px white;
+    border-bottom: solid 1px transparent;
+    left: 4px;
+    top: 4px;
+}
+
+.wrenchFilled.icon:before {
+    width: 2px;
+    height: 5px;
+    background-color: white;
+    left: 4px;
+    border-radius: 0 0 1px 1px;
+    box-shadow: 0 15px 0px 1px #333333, 0 11px 0px 1px #333333, 0 8px 0px 1px #333333;
+}
+
+.icon {
+    position: absolute;
+}
+
+.icon:before,
+.icon:after {
+    content: '';
+    position: absolute;
+    display: block;
+}
+
+.icon i {
+    position: absolute;
+}
+
+.icon i:before,
+.icon i:after {
+    content: '';
+    position: absolute;
+    display: block;
+}
+
+.drawer-icon i {
+    margin-left: -15px;
+    line-height: 30px;
+    font-weight: bolder;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    z-index: 999;
+    transition: right 0.5s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #b1cee350;
+    border-bottom: 1px solid #ddd;
+    padding: 16px;
+}
+
+.drawer-header h2 {
+    margin: 0 0 0 16px;
+}
+
+.drawer-header button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.drawer-content {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: auto;
+    padding: 16px;
+}
+
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: none;
+}
+
+@-webkit-keyframes click-wave {
+    0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.35;
+        position: relative;
+    }
+
+    100% {
+        width: 60px;
+        height: 60px;
+        margin-left: 80px;
+        margin-top: 80px;
+        opacity: 0.0;
+    }
+}
+
+@-moz-keyframes click-wave {
+    0% {
+        width: 30px;
+        height: 30px;
+        opacity: 0.35;
+        position: relative;
+    }
+
+    100% {
+        width: 80px;
+        height: 80px;
+        margin-left: -23px;
+        margin-top: -23px;
+        opacity: 0.0;
+    }
+}
+
+@-o-keyframes click-wave {
+    0% {
+        width: 30px;
+        height: 30px;
+        opacity: 0.35;
+        position: relative;
+    }
+
+    100% {
+        width: 80px;
+        height: 80px;
+        margin-left: -23px;
+        margin-top: -23px;
+        opacity: 0.0;
+    }
+}
+
+@keyframes click-wave {
+    0% {
+        width: 30px;
+        height: 30px;
+        opacity: 0.35;
+        position: relative;
+    }
+
+    100% {
+        width: 80px;
+        height: 80px;
+        margin-left: -23px;
+        margin-top: -23px;
+        opacity: 0.0;
+    }
+}
+
+.option-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    position: relative;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    -webkit-transition: all 0.15s ease-out 0;
+    -moz-transition: all 0.15s ease-out 0;
+    transition: all 0.15s ease-out 0;
+    background: #cbd1d8;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+    position: relative;
+    margin-right: 0.5rem;
+    z-index: 1000;
+}
+
+.option-input:hover {
+    background: #9faab7;
+}
+
+.option-input:checked {
+    background: #1e90ffaa;
+}
+
+.option-input:checked::before {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    content: '☻';
+    display: inline-block;
+    font-size: 29px;
+    text-align: center;
+    line-height: 26px;
+}
+
+.option-input:checked::after {
+    -webkit-animation: click-wave 0.65s;
+    -moz-animation: click-wave 0.65s;
+    animation: click-wave 0.65s;
+    background: #40e0d0;
+    content: '';
+    display: block;
+    position: relative;
+    z-index: 100;
+}
+
+.option-input.radio {
+    border-radius: 50%;
+}
+
+.option-input.radio::after {
+    border-radius: 50%;
 }

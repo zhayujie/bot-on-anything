@@ -19,33 +19,141 @@
         <div id="chat" class="conv-form-wrapper">
         </div>
     </div>
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/marked/4.2.12/marked.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/autosize.js/6.0.1/autosize.min.js"></script>
-<script src="./static/1.js"></script>
-<script>
-    var rollbackTo = false;
-    var originalState = false;
-    function storeState(a) {
-        rollbackTo = a.current
-    }
-    function rollback(a) {
-        if (rollbackTo != false) {
-            if (originalState == false) {
-                originalState = a.current.next
+    <div class="drawer-icon-container">
+        <div class="drawer-icon">
+            <div class="wrenchFilled icon"></div>
+        </div>
+        <div class="drawer">
+            <div class="drawer-header">
+                <h2>设置</h2>
+                <button id="close-drawer">X</button>
+            </div>
+            <div class="drawer-content">
+                <div hidden="true">
+                    <input type="checkbox" id="bold" name="bold">
+                    <label for="bold">Bold</label>
+                    <input type="checkbox" id="italic" name="italic">
+                    <label for="italic">Italic</label>
+                </div>
+                <div>
+                    <label for="backgroundColor">背景颜色:</label>
+                    <input type="color" id="backgroundColor" name="backgroundColor" value="#ffffff">
+                </div>
+                <div>
+                    <p>AI回复方式：</p>
+                    <input type="radio" id="option1" name="conversationType" class="option-input radio" value=1 checked>
+                    <label for="option1">一次性发送</label>
+                    <input type="radio" id="option2" name="conversationType" class="option-input radio" value=2>
+                    <label for="option2">逐段发送</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="drawer-overlay"></div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/marked/4.2.12/marked.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/autosize.js/6.0.1/autosize.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+    <script src="./static/1.js"></script>
+    <script>
+        var rollbackTo = false;
+        var originalState = false;
+
+        function storeState(a) {
+            rollbackTo = a.current
+        }
+
+        function rollback(a) {
+            if (rollbackTo != false) {
+                if (originalState == false) {
+                    originalState = a.current.next
+                }
+                a.current.next = rollbackTo
             }
-            a.current.next = rollbackTo
         }
-    }
-    function restore(a) {
-        if (originalState != false) {
-            a.current.next = originalState
+
+        function restore(a) {
+            if (originalState != false) {
+                a.current.next = originalState
+            }
         }
-    }
-    jQuery(function (a) {
-        var b = a("#chat").convform()
-    });
-</script>
+
+        var ConvStateMap = {
+            bold: false,
+            italic: false,
+            backgroundColor: '#ffffff',
+            conversationType: conversationType.DISPOSABLE
+        };
+
+        // Create a Proxy object to watch all properties of the "ConvStateMap" object
+        var localConfig = new Proxy(ConvStateMap, {
+            set: function (target, prop, val) {
+                target[prop] = val;
+                // Call your function here
+                localStorage.setItem('botOnAnyThingConfig', JSON.stringify(localConfig))
+                switch (prop) {
+                    case 'backgroundColor':
+                        $('body').css('background-color', val);
+                        $(`#backgroundColor`)?.val(val);
+                        break;
+                    case 'conversationType':
+                        if (val)
+                            $(`#option${val}`)?.prop("checked", true);
+                }
+            }
+        });
+        $(document).ready(function () {
+            let config = localStorage.getItem('botOnAnyThingConfig')
+            if (config) {
+                config = JSON.parse(config)
+                Object.keys(config).forEach(item => localConfig[item] = config[item])
+            }
+            // Open drawer
+            $('.drawer-icon').click(function () {
+                if (!$('.drawer').hasClass('open')) {
+                    $('.drawer').toggleClass('open');
+                    $('.drawer-overlay').fadeIn();
+                    $('.drawer-icon-container').toggleClass('open').css('right', '270px');
+                } else
+                    closeDrawer()
+            });
+
+            // Close drawer
+            $('#close-drawer, .drawer-overlay').click(closeDrawer);
+
+            function closeDrawer() {
+                $('.drawer').removeClass('open');
+                $('.drawer-overlay').fadeOut();
+                $('.drawer-icon-container').removeClass('open').css('right', '-30px');
+            }
+        });
+        // Bind checkbox values to ConvStateMap object
+        $('input[type="checkbox"]').change(function () {
+            var key = $(this).attr('name');
+            if (key)
+                localConfig[key] = $(this).is(':checked');
+        });
+
+        // Bind radio button values to ConvStateMap object
+        $('input[type="radio"]').change(function () {
+            var key = $(this).attr('name');
+            if (key)
+                localConfig[key] = $(this).val();
+        });
+
+        // Bind color input value to ConvStateMap object
+        $('#backgroundColor').on("input", function (e) {
+            localConfig.backgroundColor = $(this).val();
+        });
+
+        $(window).on('unload', function () {
+            socket.disconnect();
+        });
+
+        jQuery(function (a) {
+            var b = a("#chat").convform()
+        });
+    </script>
 </body>
 
 </html>
