@@ -62,7 +62,7 @@ class WechatSubsribeAccount(Channel):
 
         if cache.get(key)['req_times'] == 3 and count >= 4:
             logger.info("微信超时3次")
-            return "处理中，请在20秒左右后输入\"1\"查看"
+            return "处理中，请在30秒后输入\"1\"查看"
 
         if count <= 5:
             time.sleep(1)
