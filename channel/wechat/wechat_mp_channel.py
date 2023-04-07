@@ -87,3 +87,7 @@ class WechatSubsribeAccount(Channel):
                     return value.get("data")
                 return "还在处理中，请在30秒后再次尝试"
         return "目前无等待回复信息，请输入对话"
+    
+@robot.subscribe
+def subscribe_reply(message):
+    return '感谢关注！\n老板不在，有事直接问我就好啦'
