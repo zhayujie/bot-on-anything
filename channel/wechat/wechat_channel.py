@@ -65,13 +65,13 @@ class WechatChannel(Channel):
         content = msg['Text']
 
         hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
-        if hot_reload == True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
+        if hot_reload == True and int(create_time) < int(time.time()) - 120:  # 跳过1分钟前的历史消息
             logger.debug("[WX]history message skipped")
             return
 
         # 调用敏感词检测函数
         if sw.process_text(content):
-            self.send('请检查您的输入是否有违规内容', from_user_id)
+            self.send('请检查输入是否有违规内容', from_user_id)
             return
 
         match_prefix = self.check_prefix(content, channel_conf_val(const.WECHAT, 'single_chat_prefix'))
@@ -109,7 +109,7 @@ class WechatChannel(Channel):
         create_time = msg['CreateTime']             # 消息时间
 
         hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
-        if hot_reload == True and int(create_time) < int(time.time()) - 60:  # 跳过1分钟前的历史消息
+        if hot_reload == True and int(create_time) < int(time.time()) - 120:  # 跳过1分钟前的历史消息
             logger.debug("[WX]history message skipped")
             return
 
@@ -131,7 +131,7 @@ class WechatChannel(Channel):
         # 如果在群里被at了 或 触发机器人关键字，则调用敏感词检测函数
         if match_prefix is True:
             if sw.process_text(content):
-                self.send('请检查您的输入是否有违规内容', group_id)
+                self.send('请检查输入是否有违规内容', group_id)
                 return
 
         group_white_list = channel_conf_val(const.WECHAT, 'group_name_white_list')
