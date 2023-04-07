@@ -121,6 +121,7 @@ class FeiShuChannel(Channel):
         elif chat_type == "p2p":
             receive_type = "open_id"
             receive_id = sender_id
+            at_id = None
 
         # 调用发消息 API 之前，先要获取 API 调用凭证：tenant_access_token
         access_token = self.get_tenant_access_token()
