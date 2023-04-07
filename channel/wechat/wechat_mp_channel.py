@@ -62,7 +62,7 @@ class WechatSubsribeAccount(Channel):
 
         if cache.get(key)['req_times'] == 3 and count >= 4:
             logger.info("微信超时3次")
-            return "已开始处理，请稍等片刻后输入\"1\"查看回复"
+            return "处理中，请在20秒左右后输入\"1\"查看"
 
         if count <= 5:
             time.sleep(1)
@@ -85,5 +85,5 @@ class WechatSubsribeAccount(Channel):
                 if value.get('status') == "success":
                     cache.pop(key)
                     return value.get("data")
-                return "还在处理中，请稍后再试"
+                return "还在处理中，请在2分钟内再次尝试"
         return "目前无等待回复信息，请输入对话"
