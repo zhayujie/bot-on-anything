@@ -2,11 +2,11 @@
     "selector":[
       {
         "model":"bing",
-        "prefix":["@bing"]
+        "prefix":["#bing"]
       },
       {
         "model":"chatgpt",
-        "prefix":["@gpt"]
+        "prefix":["#gpt"]
       }
     ] 
 }
