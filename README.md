@@ -8,6 +8,7 @@
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
  - [x] [文心一言 (测试版)](https://github.com/zhayujie/bot-on-anything#3%E6%96%87%E5%BF%83%E4%B8%80%E8%A8%80-%E6%B5%8B%E8%AF%95%E7%89%88)
  - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
+ - [x] [Google Bard](https://github.com/zhayujie/bot-on-anything#5bard)
 
  
 **应用：**
@@ -189,6 +190,20 @@ cookie示例:
         "value": ""
     }
 ]
+```
+
+### 5.Bard
+
+#### 配置项说明
+
+```bash
+{
+  "model": {
+    "type" : "bard",
+      "cookies":""
+      //登录https://bard.google.com/ 获取name为"__Secure-1PSID"的Cookie Value
+    }
+}
 ```
 
 ## 三、选择应用
