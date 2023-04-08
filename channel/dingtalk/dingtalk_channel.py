@@ -85,7 +85,7 @@ http_app = Flask(__name__,)
 
 @http_app.route("/", methods=['POST'])
 def chat():
-    # log.info("[DingTalk] chat_headers={}".format(str(request.headers)))
+    log.info("[DingTalk] chat_headers={}".format(str(request.headers)))
     log.info("[DingTalk] chat={}".format(str(request.data)))
     token = request.headers.get('token')
     if dd.dingtalk_post_token and token != dd.dingtalk_post_token:
@@ -95,7 +95,9 @@ def chat():
         content = data['text']['content']
         if not content:
             return
-        reply_text = dd.handle(data=data)
+        reply_text = "您好，有什么我可以帮助您解答的问题吗？"
+        if str(content) != 0 and content.strip():
+            reply_text = dd.handle(data=data)
         dd.notify_dingtalk(reply_text)
         return {'ret': 200}
     return {'ret': 201}

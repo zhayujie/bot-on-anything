@@ -9,9 +9,11 @@ TELEGRAM = "telegram"
 SLACK = "slack"
 HTTP = "http"
 DINGTALK = "dingtalk"
+FEISHU = "feishu"
 
 # model
 OPEN_AI = "openai"
 CHATGPT = "chatgpt"
 BAIDU = "baidu"
 BING = "bing"
+BARD = "bard"

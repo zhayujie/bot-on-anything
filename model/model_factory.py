@@ -29,5 +29,8 @@ def create_bot(model_type):
         from model.bing.new_bing_model import BingModel
         return BingModel()
 
-    raise RuntimeError
+    elif model_type == const.BARD:
+        from model.google.bard_model import BardModel
+        return BardModel()
 
+    raise RuntimeError
