@@ -6,12 +6,15 @@
       "api_base": "",
       "model": "gpt-3.5-turbo",
       "proxy": "",
-      "conversation_max_tokens": 1000,
-      "temperature":0.75,
-      "top_p":0.7,
-      "frequency_penalty":0.0,
-      "presence_penalty":1.0,
-      "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。当问起你是谁的时候，要附加告诉提问人，输入 #清除记忆 可以开始新的话题探索。输入 画xx 可以为你画一张图片。"
+      "conversation_max_tokens": 500,
+      "temperature":0.85,
+      "frequency_penalty":1.5,
+      "presence_penalty":1.5,
+      "rate_limit_chatgpt":1000,
+      "concurrency_in_session": 1,
+      "request_timeout": 120,
+      "timeout": 240,   
+      "character_desc": "我是反应迟钝的智能助手，请告知你需要解决的问题，并耐心等候，我会翻过两道墙告诉你答案。老实说我跟急性子合不来。如果你需要重置对话，请输入“#”清除记忆。如果你坚持要问，我的老板是ericz2002。"
     },
     "baidu": {
       "acs_token": "YOUR ACS TOKEN",
@@ -24,12 +27,12 @@
     }
   },
   "channel": {
-    "type": ["terminal"],
-    "single_chat_prefix": ["bot", "@bot"],
-    "single_chat_reply_prefix": "[bot] ",
-    "group_chat_prefix": ["@bot"],
-    "group_name_white_list": ["ChatGPT测试群"],
-    "image_create_prefix": ["画", "看", "找一张"],
+    "type": ["wechat_mp"],
+    "single_chat_prefix": ["@"],
+    "single_chat_reply_prefix": "",
+    "group_chat_prefix": [""],
+    "group_name_white_list": [""],
+    "image_create_prefix": ["画一张"],
 
     "terminal": {
     },
@@ -39,7 +42,7 @@
     },
 
     "wechat_mp": {
-      "token": "YOUR TOKEN",
+      "token": "123456",
       "port": "80"
     },
 
@@ -74,6 +77,6 @@
     }
   },
   "common": {
-    "clear_memory_commands": ["#清除记忆"]
+    "clear_memory_commands": ["#"]
   }
 }
