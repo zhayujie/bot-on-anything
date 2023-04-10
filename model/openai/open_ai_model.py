@@ -16,8 +16,8 @@ class OpenAIModel(Model):
         api_base = model_conf(const.OPEN_AI).get('api_base')
         if api_base:
             openai.api_base = api_base
-        proxy = model_conf(const.OPEN_AI).get('proxy')
         log.info("[OPEN_AI] api_base={}".format(openai.api_base))
+        self.model = model_conf(const.OPEN_AI).get('model', 'text-davinci-003')
         proxy = model_conf(const.OPEN_AI).get('proxy')
         if proxy:
             openai.proxy = proxy
@@ -51,7 +51,7 @@ class OpenAIModel(Model):
     def reply_text(self, query, user_id, retry_count=0):
         try:
             response = openai.Completion.create(
-                model="text-davinci-003",  # 对话模型的名称
+                model=self.model,  # 对话模型的名称
                 prompt=query,
                 temperature=model_conf(const.OPEN_AI).get("temperature", 0.75),  # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
                 #max_tokens=4096,  # 回复最大的字符数，为输入和输出的总数
