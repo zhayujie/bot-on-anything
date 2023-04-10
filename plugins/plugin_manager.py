@@ -3,7 +3,7 @@ import os
 import importlib.util
 from plugins.event import EventAction, EventContext,Event
 from plugins.plugin_registry import PluginRegistry
-from common import functions
+from common import functions, log
 
 @functions.singleton
 class PluginManager:
@@ -15,8 +15,11 @@ class PluginManager:
     def load_plugins(self):
         for plugin_name in self.find_plugin_names():
             if os.path.exists(f"./plugins/{plugin_name}/{plugin_name}.py"):
-                plugin_module = self.load_plugin_module(plugin_name)
-                self.plugin_registry.register_from_module(plugin_module)
+                try:
+                    plugin_module = self.load_plugin_module(plugin_name)
+                    self.plugin_registry.register_from_module(plugin_module)
+                except Exception as e:
+                    log.warn("Failed to import plugin %s" % (plugin_name))
 
     def find_plugin_names(self):
         plugin_names = []
