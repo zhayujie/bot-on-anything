@@ -2,12 +2,18 @@
 
 import logging
 import sys
+import config
 
-SWITCH = True
+
 
 def _get_logger():
+    global  SWITCH
+    config.load_config()
+    SWITCH = config.conf().get("logger").get("switch", True)
+    
     log = logging.getLogger('log')
-    log.setLevel(logging.INFO)
+    level = config.conf().get("logger").get("level", logging.INFO)
+    log.setLevel(level)
     console_handle = logging.StreamHandler(sys.stdout)
     console_handle.setFormatter(logging.Formatter('[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d] - %(message)s',
                                                   datefmt='%Y-%m-%d %H:%M:%S'))

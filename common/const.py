@@ -10,6 +10,7 @@ SLACK = "slack"
 HTTP = "http"
 DINGTALK = "dingtalk"
 FEISHU = "feishu"
+DISCORD = "discord"
 
 # model
 OPEN_AI = "openai"

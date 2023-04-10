@@ -1,4 +1,8 @@
 {
+  "logger": {
+    "switch": true,
+    "level": "INFO"
+  },
   "model": {
     "type" : "chatgpt",
     "openai": {
@@ -85,9 +89,15 @@
         "app_id": "xxx",
         "app_secret": "xxx",
         "verification_token": "xxx"
+    },
+    "discord": {
+        "app_token": "xxx",
+        "channel_name": "xxx",
+        "channel_session": "xxx"
     }
   },
   "common": {
-    "clear_memory_commands": ["#清除记忆"]
+    "clear_memory_commands": ["#清除记忆"],
+    "certificate_file": "xxx"
   }
 }
