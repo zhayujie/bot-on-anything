@@ -25,6 +25,10 @@ def create_channel(channel_type):
         from channel.wechat.wechat_mp_service_channel import WechatServiceAccount
         return WechatServiceAccount()
 
+    elif channel_type == const.WECHAT_COM:
+        from channel.wechat.wechat_com_channel import WechatEnterpriseChannel
+        return WechatEnterpriseChannel()
+
     elif channel_type == const.QQ:
         from channel.qq.qq_channel import QQChannel
         return QQChannel()
