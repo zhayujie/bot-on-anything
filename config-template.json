@@ -46,11 +46,12 @@
       "port": "80"
     },
     "wechat_com": {
-        "wechat_token": "",
-        "wechat_encoding_aes_key":"",
-        "wechat_corp_id":"",
-        "appid":"",
-        "secret":""
+      "wechat_token": "",
+      "wechat_encoding_aes_key":"",
+      "wechat_corp_id":"",
+      "appid":"",
+      "secret":"",
+      "port": "8888"
     },
 
     "gmail": {

@@ -27,7 +27,7 @@ def handler_msg():
     return WechatEnterpriseChannel().handle()
 
 
-_conf = conf().get("wechat_com")
+_conf = conf().get("channel").get("wechat_com")
 
 
 class WechatEnterpriseChannel(Channel):
@@ -42,7 +42,7 @@ class WechatEnterpriseChannel(Channel):
 
     def startup(self):
         # start message listener
-        app.run(host='0.0.0.0', port=8888)
+        app.run(host='0.0.0.0', port=_conf.get('port'))
 
     def send(self, msg, receiver):
         logger.info('[WXCOM] sendMsg={}, receiver={}'.format(msg, receiver))
@@ -86,9 +86,8 @@ class WechatEnterpriseChannel(Channel):
                 abort(403)
             msg = parse_message(message)
             if msg.type == 'text':
-                reply = '收到，思考中...'
                 thread_pool.submit(self._do_send, msg.content, msg.source)
             else:
                 reply = 'Can not handle this for now'
-            self.client.message.send_text(self.AppId, msg.source, reply)
+                self.client.message.send_text(self.AppId, msg.source, reply)
             return 'success'

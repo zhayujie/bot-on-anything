@@ -18,7 +18,7 @@
  - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
  - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#3%E4%B8%AA%E4%BA%BA%E8%AE%A2%E9%98%85%E5%8F%B7)
  - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
- - [ ] 企业微信
+ - [x] 企业微信
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
@@ -589,6 +589,29 @@ pip3 install requests flask
     - im:message:send_as_bot
 3. 订阅菜单添加事件(接收消息v2.0) 配置请求地址(配置中的对外地址如 https://xx.xx.com:8081)
 4. 版本管理与发布中上架应用,app中会收到审核信息,通过审核后在群里添加自建应用
+
+### 12.企业微信
+
+**需要：** 一个服务器、一个已认证的企业微信。
+
+企业微信的 `config.json` 配置只需修改type为`wechat_com`，默认接收消息服务器URL：http://ip:8888/wechat
+
+```bash
+"channel": {
+    "type": "wechat_com",
+        
+    "wechat_mp": {
+      "wechat_token": "YOUR TOKEN",            # token值
+      "port": "8888",                          # 程序启动监听的端口
+      "app_id": "YOUR APP ID",                 # app ID
+      "app_secret": "YOUR APP SECRET"          # app secret
+      "wechat_corp_id": "YOUR CORP ID"
+      "wechat_encoding_aes_key": "YOUR AES KEY"
+    }
+}
+```
+
+注意：需将服务器ip地址配置在 "企业可信IP" 内，否则用户将收不到主动推送的消息。
 
 ### 通用配置
 
