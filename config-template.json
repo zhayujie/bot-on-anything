@@ -46,11 +46,11 @@
       "port": "80"
     },
     "wechat_com": {
-        "wechat_token": "6a7948ff36d8",
-        "wechat_encoding_aes_key":"jMQA7bDP4u52dILb1W6IGib5c1FooFrHJpEuTczQQeT",
-        "wechat_corp_id":"ww288c216b922e23a1",
-        "appid":"1000002",
-        "secret":"UMPISp6qiaKheLdv1src9nNaKsCWSKE_-5ujU_l2QdY"
+        "wechat_token": "",
+        "wechat_encoding_aes_key":"",
+        "wechat_corp_id":"",
+        "appid":"",
+        "secret":""
     },
 
     "gmail": {
