@@ -14,7 +14,7 @@ from common.log import logger
 from common import const
 from config import channel_conf_val
 import requests
-
+from plugins.plugin_manager import *
 from common.sensitive_word import SensitiveWord
 
 import io
@@ -81,25 +81,14 @@ class WechatChannel(Channel):
                 str_list = content.split(match_prefix, 1)
                 if len(str_list) == 2:
                     content = str_list[1].strip()
-
-            img_match_prefix = self.check_prefix(content, channel_conf_val(const.WECHAT, 'image_create_prefix'))
-            if img_match_prefix:
-                content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, from_user_id)
-            else:
-                thread_pool.submit(self._do_send, content, from_user_id)
+            thread_pool.submit(self._do_send, content, from_user_id)
 
         elif to_user_id == other_user_id and match_prefix:
             # 自己给好友发送消息
             str_list = content.split(match_prefix, 1)
             if len(str_list) == 2:
                 content = str_list[1].strip()
-            img_match_prefix = self.check_prefix(content, channel_conf_val(const.WECHAT, 'image_create_prefix'))
-            if img_match_prefix:
-                content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, to_user_id)
-            else:
-                thread_pool.submit(self._do_send, content, to_user_id)
+            thread_pool.submit(self._do_send, content, to_user_id)
 
 
     def handle_group(self, msg):
@@ -137,13 +126,7 @@ class WechatChannel(Channel):
         group_white_list = channel_conf_val(const.WECHAT, 'group_name_white_list')
         
         if ('ALL_GROUP' in group_white_list or group_name in group_white_list or self.check_contain(group_name, channel_conf_val(const.WECHAT, 'group_name_keyword_white_list'))) and match_prefix:
-
-            img_match_prefix = self.check_prefix(content, channel_conf_val(const.WECHAT, 'image_create_prefix'))
-            if img_match_prefix:
-                content = content.split(img_match_prefix, 1)[1].strip()
-                thread_pool.submit(self._do_send_img, content, group_id)
-            else:
-                thread_pool.submit(self._do_send_group, content, msg)
+            thread_pool.submit(self._do_send_group, content, msg)
         return None
 
     def send(self, msg, receiver):
@@ -156,18 +139,25 @@ class WechatChannel(Channel):
                 return
             context = dict()
             context['from_user_id'] = reply_user_id
-            reply_text = super().build_reply_content(query, context)
-            if reply_text:
-                self.send(channel_conf_val(const.WECHAT, "single_chat_reply_prefix") + reply_text, reply_user_id)
+            e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
+                'channel': self, 'context': query,  "args": context}))
+
+            reply = e_context['reply']
+            if not e_context.is_pass():
+                reply = super().build_reply_content(e_context["context"], e_context["args"])
+                e_context = PluginManager().emit_event(EventContext(Event.ON_DECORATE_REPLY, {
+                    'channel': self, 'context': context, 'reply': reply, "args": e_context["args"]}))
+                reply = e_context['reply']
+                if reply:
+                    self.send(channel_conf_val(const.WECHAT, "single_chat_reply_prefix") + reply, reply_user_id)
         except Exception as e:
             logger.exception(e)
 
-    def _do_send_img(self, query, reply_user_id):
+    def _do_send_img(self, query, context):
         try:
             if not query:
                 return
-            context = dict()
-            context['type'] = 'IMAGE_CREATE'
+            reply_user_id=context['from_user_id']
             img_urls = super().build_reply_content(query, context)
             if not img_urls:
                 return
@@ -192,12 +182,19 @@ class WechatChannel(Channel):
         if not query:
             return
         context = dict()
-        context['from_user_id'] = msg['ActualUserName']
-        reply_text = super().build_reply_content(query, context)
-        if reply_text:
-            reply_text = '@' + msg['ActualNickName'] + ' ' + reply_text.strip()
-            self.send(channel_conf_val(const.WECHAT, "group_chat_reply_prefix", "") + reply_text, msg['User']['UserName'])
-
+        context['from_user_id'] = msg['User']['UserName']
+        e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
+            'channel': self, 'context': query,  "args": context}))
+        reply = e_context['reply']
+        if not e_context.is_pass():
+            context['from_user_id'] = msg['ActualUserName']
+            reply = super().build_reply_content(e_context["context"], e_context["args"])
+            e_context = PluginManager().emit_event(EventContext(Event.ON_DECORATE_REPLY, {
+                'channel': self, 'context': context, 'reply': reply, "args": e_context["args"]}))
+            reply = e_context['reply']
+            if reply:
+                reply = '@' + msg['ActualNickName'] + ' ' + reply.strip()
+                self.send(channel_conf_val(const.WECHAT, "group_chat_reply_prefix", "") + reply, msg['User']['UserName'])
 
     def check_prefix(self, content, prefix_list):
         for prefix in prefix_list:

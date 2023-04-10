@@ -1,0 +1,16 @@
+{
+    "selector":[
+      {
+        "model":"bing",
+        "prefix":["#bing"]
+      },
+      {
+        "model":"chatgpt",
+        "prefix":["#gpt"]
+      },
+      {
+        "model":"bard",
+        "prefix":["#google"]
+      }
+    ] 
+}
