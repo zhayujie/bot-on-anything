@@ -4,13 +4,13 @@ import logging
 import sys
 import config
 
-
+SWITCH = True
 
 def _get_logger():
     global  SWITCH
     config.load_config()
     SWITCH = config.conf().get("logger").get("switch", True)
-    
+
     log = logging.getLogger('log')
     level = config.conf().get("logger").get("level", logging.INFO)
     log.setLevel(level)
