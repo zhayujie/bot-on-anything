@@ -543,10 +543,10 @@ pip3 install requests flask
     "type": "dingtalk",
     "dingtalk": {
       "image_create_prefix": ["画", "draw", "Draw"],
-      "port": "8081", //对外端口
-      "dingtalk_token": "xx", //webhook地址的access_token
-      "dingtalk_post_token": "xx", //钉钉post回消息时header中带的检验token
-      "dingtalk_secret": "xx"// 安全加密加签串,群机器人中
+      "port": "8081",                  # 对外端口
+      "dingtalk_token": "xx",          # webhook地址的access_token
+      "dingtalk_post_token": "xx",     # 钉钉post回消息时header中带的检验token
+      "dingtalk_secret": "xx"          # 安全加密加签串,群机器人中
     }
   }
 ```
@@ -574,7 +574,7 @@ pip3 install requests flask
 ```
 **配置**
 
-```json
+```bash
 "channel": {
     "type": "dingtalk",
     "feishu": {
