@@ -4,13 +4,11 @@
 
 **模型：**
 
- - [x] [ChatGPT (gpt-3.5)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
+ - [x] [ChatGPT (gpt-3.5/4.0)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
- - [x] [文心一言 (测试版)](https://github.com/zhayujie/bot-on-anything#3%E6%96%87%E5%BF%83%E4%B8%80%E8%A8%80-%E6%B5%8B%E8%AF%95%E7%89%88)
  - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
  - [x] [Google Bard](https://github.com/zhayujie/bot-on-anything#5bard)
 
- 
 **应用：**
 
  - [x] [终端](https://github.com/zhayujie/bot-on-anything#1%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%88%E7%AB%AF)
@@ -18,7 +16,7 @@
  - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
  - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#3%E4%B8%AA%E4%BA%BA%E8%AE%A2%E9%98%85%E5%8F%B7)
  - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
- - [x] [企业微信](https://github.com/lichengzhe/bot-on-anything/tree/master#12企业微信)
+ - [x] [企业微信](https://github.com/zhayujie/bot-on-anything#12%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1)
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
@@ -79,7 +77,7 @@ cp config-template.json config.json
 
 ### 1. ChatGPT
 
-使用的模型是 `gpt-3.5-turbo`，详情参考[官方文档](https://platform.openai.com/docs/guides/chat)。
+默认模型是 `gpt-3.5-turbo`，详情参考[官方文档](https://platform.openai.com/docs/guides/chat)，同样支持`gpt-4.0`，只需修改model type参数即可。
 
 #### (1) 注册 OpenAI 账号
 
@@ -121,6 +119,8 @@ pip3 install --upgrade openai
  + `character_desc`: 配置中保存着你对chatgpt说的一段话，他会记住这段话并作为他的设定，你可以为他定制任何人格
  + `max_history_num`[optional]: 对话最大记忆长度，超过该长度则清理前面的记忆。
 
+---
+
 ### 2.GPT-3.0
 
 使用的模型是 `text-davinci-003`，详情参考[官方文档]([https://platform.openai.com/docs/guides/chat](https://platform.openai.com/docs/guides/completion/introduction))。
@@ -142,11 +142,13 @@ pip3 install --upgrade openai
     }
 }
 ```
+---
 
 ### 3.文心一言 (测试版)
 
 参考: [#154](https://github.com/zhayujie/bot-on-anything/issues/154)
 
+---
 
 ### 4.NewBing
 
@@ -191,6 +193,7 @@ cookie示例:
     }
 ]
 ```
+---
 
 ### 5.Bard
 
@@ -214,7 +217,7 @@ cookie示例:
 
 ![terminal_demo.png](docs/images/terminal_demo.png)
 
-
+---
 
 ### 2.个人微信
 
@@ -259,6 +262,7 @@ bash fix-itchat.sh
 
 在项目根目录下执行 `python3 app.py` 即可启动程序，用手机扫码后完成登录，使用详情参考 [chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat)。
 
+---
 
 ### 3.个人订阅号
 
@@ -316,7 +320,7 @@ Hit Ctrl-C to quit.
 
 > 注：用户发送消息后，微信后台会向配置的URL地址推送，但如果5s内未回复就会断开连接，同时重试3次，但往往请求openai接口不止5s。本项目中通过异步和缓存将5s超时限制优化至15s，但超出该时间仍无法正常回复。 同时每次5s连接断开时web框架会报错，待后续优化。
 
-
+---
 
 ### 4.企业服务号
 
@@ -340,6 +344,8 @@ Hit Ctrl-C to quit.
 ```
 
 注意：需将服务器ip地址配置在 "IP白名单" 内，否则用户将收不到主动推送的消息。
+
+---
 
 ### 5.QQ
 
@@ -387,6 +393,7 @@ cd channel/qq
 + 目前未设置任何 关键词匹配 及 群聊白名单，对所有私聊均会自动回复，在群聊中只要被@也会自动回复。
 + 如果出现 账号被冻结 等异常提示，可将 go-cqhttp 同目录下的 device.json 文件中`protocol`的值由5改为2，参考该[Issue](https://github.com/Mrs4s/go-cqhttp/issues/1942)。
 
+---
 
 ### 6.Telegram
 
@@ -412,6 +419,7 @@ pip install pyTelegramBotAPI
     }
 }
 ```
+---
 
 ### 7.Gmail
 
@@ -431,6 +439,7 @@ Follow [官方文档](https://support.google.com/mail/answer/185833?hl=en) to cr
     }
   }
 ```
+---
 
 ### 8.Slack
 
@@ -485,6 +494,8 @@ app_mention
 https://slack.dev/bolt-python/tutorial/getting-started
 ```
 
+---
+
 ### 9.Web
 
 **Contributor:** [RegimenArsenic](https://github.com/RegimenArsenic)
@@ -512,6 +523,8 @@ pip3 install PyJWT flask flask_socketio
 
 服务器运行：部署后访问 `http://公网域名或IP:端口`
 
+---
+
 ### 10.钉钉
 
 **需要：**
@@ -530,10 +543,10 @@ pip3 install requests flask
     "type": "dingtalk",
     "dingtalk": {
       "image_create_prefix": ["画", "draw", "Draw"],
-      "port": "8081", //对外端口
-      "dingtalk_token": "xx", //webhook地址的access_token
-      "dingtalk_post_token": "xx", //钉钉post回消息时header中带的检验token
-      "dingtalk_secret": "xx"// 安全加密加签串,群机器人中
+      "port": "8081",                  # 对外端口
+      "dingtalk_token": "xx",          # webhook地址的access_token
+      "dingtalk_post_token": "xx",     # 钉钉post回消息时header中带的检验token
+      "dingtalk_secret": "xx"          # 安全加密加签串,群机器人中
     }
   }
 ```
@@ -550,6 +563,8 @@ pip3 install requests flask
 
 添加机器人,在开发管理中设置服务器出口ip(在部署机执行curl ifconfig.me就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
 
+---
+
 ### 11.飞书
 
 **依赖**
@@ -559,7 +574,7 @@ pip3 install requests flask
 ```
 **配置**
 
-```json
+```bash
 "channel": {
     "type": "dingtalk",
     "feishu": {
@@ -568,10 +583,10 @@ pip3 install requests flask
             "draw",
             "Draw"
         ],
-        "port": "8082",//对外端口
-        "app_id": "xxx", //应用app_id
-        "app_secret": "xxx",//应用Secret
-        "verification_token": "xxx" //事件订阅 Verification Token
+        "port": "8082",                  # 对外端口
+        "app_id": "xxx",                 # 应用app_id
+        "app_secret": "xxx",             # 应用Secret
+        "verification_token": "xxx"      # 事件订阅 Verification Token
     }
 }
 ```
@@ -589,6 +604,8 @@ pip3 install requests flask
     - im:message:send_as_bot
 3. 订阅菜单添加事件(接收消息v2.0) 配置请求地址(配置中的对外地址如 https://xx.xx.com:8081)
 4. 版本管理与发布中上架应用,app中会收到审核信息,通过审核后在群里添加自建应用
+
+---
 
 ### 12.企业微信
 
