@@ -1,8 +1,4 @@
 {
-  "logger": {
-    "switch": true,
-    "level": "INFO"
-  },
   "model": {
     "type" : "chatgpt",
     "openai": {
