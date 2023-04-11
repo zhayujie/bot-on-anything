@@ -89,5 +89,6 @@ class WechatEnterpriseChannel(Channel):
                 thread_pool.submit(self._do_send, msg.content, msg.source)
             else:
                 reply = 'Can not handle this for now'
-                self.client.message.send_text(self.AppId, msg.source, reply)
+                # 未能处理的消息或菜单事件暂不做响应优化用户体验
+                # self.client.message.send_text(self.AppId, msg.source, reply)
             return 'success'

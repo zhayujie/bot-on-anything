@@ -616,7 +616,6 @@ pip3 install requests flask
 ```bash
 "channel": {
     "type": "wechat_com",
-        
     "wechat_mp": {
       "wechat_token": "YOUR TOKEN",            # token值
       "port": "8888",                          # 程序启动监听的端口
@@ -629,6 +628,10 @@ pip3 install requests flask
 ```
 
 注意：需将服务器ip地址配置在 "企业可信IP" 内，否则用户将收不到主动推送的消息。
+
+**参考文档**：
+
+- [企业微信配置教程](https://www.wangpc.cc/software/wechat_com-chatgpt/)
 
 ### 通用配置
 
