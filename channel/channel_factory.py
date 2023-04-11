@@ -57,5 +57,9 @@ def create_channel(channel_type):
         from channel.feishu.feishu_channel import FeiShuChannel
         return FeiShuChannel()
 
+    elif channel_type == const.DISCORD:
+        from channel.discord.discord_channel import DiscordChannel
+        return DiscordChannel()
+
     else:
         raise RuntimeError("unknown channel_type in config.json: " + channel_type)

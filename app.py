@@ -20,6 +20,7 @@ def start_process(channel_type, config_path):
         channel.startup()
     except Exception as e:
         log.error("[MultiChannel] Start up failed on {}: {}", channel_type, str(e))
+        raise e
 
 
 def main():
