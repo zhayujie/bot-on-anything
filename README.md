@@ -576,7 +576,7 @@ pip3 install requests flask
 
 ```bash
 "channel": {
-    "type": "dingtalk",
+    "type": "feishu",
     "feishu": {
         "image_create_prefix": [
             "画",
