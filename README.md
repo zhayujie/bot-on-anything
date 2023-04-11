@@ -18,7 +18,7 @@
  - [x] [个人微信](https://github.com/zhayujie/bot-on-anything#2%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1)
  - [x] [订阅号](https://github.com/zhayujie/bot-on-anything#3%E4%B8%AA%E4%BA%BA%E8%AE%A2%E9%98%85%E5%8F%B7)
  - [x] [服务号](https://github.com/zhayujie/bot-on-anything#4%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1%E5%8F%B7)
- - [x] 企业微信
+ - [x] [企业微信](https://github.com/lichengzhe/bot-on-anything/tree/master#12企业微信)
  - [x] [Telegram](https://github.com/zhayujie/bot-on-anything#6telegram)
  - [x] [QQ](https://github.com/zhayujie/bot-on-anything#5qq)
  - [x] [钉钉](https://github.com/zhayujie/bot-on-anything#10%E9%92%89%E9%92%89)
@@ -599,7 +599,6 @@ pip3 install requests flask
 ```bash
 "channel": {
     "type": "wechat_com",
-        
     "wechat_mp": {
       "wechat_token": "YOUR TOKEN",            # token值
       "port": "8888",                          # 程序启动监听的端口
@@ -612,6 +611,10 @@ pip3 install requests flask
 ```
 
 注意：需将服务器ip地址配置在 "企业可信IP" 内，否则用户将收不到主动推送的消息。
+
+**参考文档**：
+
+- [企业微信配置教程](https://www.wangpc.cc/software/wechat_com-chatgpt/)
 
 ### 通用配置
 
