@@ -53,7 +53,7 @@ class PlanetChannel(Channel):
     def _handle_topic(self, topic):
         talk_content = topic['talk']['text']
         talk_user_id = str(topic['talk']['owner']['user_id'])
-
+        logger.info("[Planet] handle topic, user_id={}, content={}".format(talk_content, talk_user_id))
         # 主题自动回复
         if talk_content.find(self.bot_user_id) != -1 and not self._has_topic_reply(topic):
             logger.info("[Planet] find new topic, topic={}".format(topic))
