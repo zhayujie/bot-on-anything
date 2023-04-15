@@ -8,6 +8,7 @@ from config import channel_conf, channel_conf_val
 from common import const
 
 MENTION_STR = '<e type=\"mention\" uid=\"815111251481452\" title=\"@ueno\" \/>'
+MENTION_STR2 = '<e type="mention" uid="815111251481452" title="@ueno" />'
 
 class PlanetChannel(Channel):
     def startup(self):
@@ -43,6 +44,7 @@ class PlanetChannel(Channel):
                 for topic in topics:
                     self._handle_topic(topic)
                     time.sleep(3)
+                time.sleep(30)
 
             except Exception as e:
                 logger.exception("[Planet] process failed, exception={}".format(e))
@@ -57,6 +59,7 @@ class PlanetChannel(Channel):
             logger.info("[Planet] find new topic, topic={}".format(topic))
             # 场景一：用户直接在主题上艾特
             query = talk_content.replace(MENTION_STR, '')
+            query = query.replace(MENTION_STR2, '')
 
             # 此时system_prompt使用全局配置, query为主题中的问题
             context = {"from_user_id": talk_user_id}
@@ -87,6 +90,7 @@ class PlanetChannel(Channel):
                     continue
                 if query.find(self.bot_user_id) != -1:
                     query = query.replace(MENTION_STR, '')
+                    query = query.replace(MENTION_STR2, '')
 
                 context = {"from_user_id": comment_user_id}
                 reply_txt = super().build_reply_content(query, context)
@@ -183,5 +187,6 @@ class PlanetChannel(Channel):
                    "origin": "https://wx.zsxq.com",
                    "referer": "https://wx.zsxq.com/",
                    "sec-ch-ua-platform": "macOS",
-                   "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}
-
+                   "Content-Type": "application/json; charset=UTF-8",
+                   "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+                }
