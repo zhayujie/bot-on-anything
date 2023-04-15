@@ -12,6 +12,7 @@ HTTP = "http"
 DINGTALK = "dingtalk"
 FEISHU = "feishu"
 DISCORD = "discord"
+PLANTE = "planet"
 
 # model
 OPEN_AI = "openai"

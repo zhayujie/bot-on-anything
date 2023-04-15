@@ -61,5 +61,9 @@ def create_channel(channel_type):
         from channel.discord.discord_channel import DiscordChannel
         return DiscordChannel()
 
+    elif channel_type == const.PLANTE:
+        from channel.planet.planet_channel import PlanetChannel
+        return PlanetChannel()
+
     else:
         raise RuntimeError("unknown channel_type in config.json: " + channel_type)
