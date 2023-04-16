@@ -21,6 +21,7 @@ class PlanetChannel(Channel):
         while True:
             try:
                 questions = self._get_topics("unanswered_questions")
+                logger.info("[Planet] fetch questions, size={}".format(len(questions)))
                 if questions and len(questions) > 0:
                     logger.info("[Planet] find new question, content={}".format(questions))
 
@@ -41,6 +42,7 @@ class PlanetChannel(Channel):
 
                 # 处理主题
                 topics = self._get_topics("all")
+                logger.info("[Planet] fetch topics, size={}".format(len(topics)))
                 for topic in topics:
                     try:
                         self._handle_topic(topic)
@@ -84,7 +86,7 @@ class PlanetChannel(Channel):
 
         # 评论自动回复
         for comment in comment_list:
-            # 场景二：机器人自己发的帖子，只要有没有被回复的，都立即回复 (目前别人之前的回复，也会被回复哦)
+            # 场景二：机器人自己发的帖子，只要有没有被回复的，都立即回复
             # 场景三：用户发的帖子，评论中有艾特机器人，且没有被回复的
             query = comment['text']
             comment_user_id = str(comment['owner']['user_id'])
