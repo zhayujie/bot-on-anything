@@ -84,7 +84,7 @@ class PlanetChannel(Channel):
 
         # 评论自动回复
         for comment in comment_list:
-            # 场景二：机器人自己发的帖子，只要有没有被回复的，都立即回复
+            # 场景二：机器人自己发的帖子，只要有没有被回复的，都立即回复 (目前别人之前的回复，也会被回复哦)
             # 场景三：用户发的帖子，评论中有艾特机器人，且没有被回复的
             query = comment['text']
             comment_user_id = str(comment['owner']['user_id'])
@@ -102,9 +102,6 @@ class PlanetChannel(Channel):
                 self._send_comment(topic['topic_id'], reply_txt, comment['comment_id'])
                 logger.info("[Planet] comment success, id={}".format(comment['comment_id']))
                 return
-
-
-        logger.info("[Planet] no topic need reply")
 
     def _is_reply_bot(self, comment_map, comment):
         # 是否是回复机器人的评论
