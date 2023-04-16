@@ -58,7 +58,6 @@ class PlanetChannel(Channel):
             return
         talk_content = topic['talk']['text']
         talk_user_id = str(topic['talk']['owner']['user_id'])
-        logger.info("[Planet] handle topic, user_id={}, content={}".format(talk_user_id, talk_content))
         # 主题自动回复
         if talk_content.find(self.bot_user_id) != -1 and not self._has_topic_reply(topic):
             logger.info("[Planet] find new topic, topic={}".format(topic))
@@ -72,6 +71,7 @@ class PlanetChannel(Channel):
 
             # 直接回复主题
             self._send_comment(topic['topic_id'], reply_txt)
+            logger.info("[Planet] direct topic reply, user_id={}, content={}".format(talk_user_id, talk_content))
             return
 
         comment_list = topic.get('show_comments')
