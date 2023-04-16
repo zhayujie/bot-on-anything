@@ -53,7 +53,7 @@ class PlanetChannel(Channel):
     def _handle_topic(self, topic):
         talk_content = topic['talk']['text']
         talk_user_id = str(topic['talk']['owner']['user_id'])
-        logger.info("[Planet] handle topic, user_id={}, content={}".format(talk_content, talk_user_id))
+        logger.info("[Planet] handle topic, user_id={}, content={}".format(talk_user_id, talk_content))
         # 主题自动回复
         if talk_content.find(self.bot_user_id) != -1 and not self._has_topic_reply(topic):
             logger.info("[Planet] find new topic, topic={}".format(topic))
@@ -186,7 +186,7 @@ class PlanetChannel(Channel):
         return {"cookie": f"{self.cookie}",
                    "origin": "https://wx.zsxq.com",
                    "referer": "https://wx.zsxq.com/",
-                   "sec-ch-ua-platform": "macOS",
+                   "sec-ch-ua-platform": "Windows",
                    "Content-Type": "application/json; charset=UTF-8",
-                   "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+                   "user_agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36"
                 }
