@@ -42,7 +42,10 @@ class PlanetChannel(Channel):
                 # 处理主题
                 topics = self._get_topics("all")
                 for topic in topics:
-                    self._handle_topic(topic)
+                    try:
+                        self._handle_topic(topic)
+                    except Exception as e:
+                        logger.warn("[Planet] process topic failed, exception={}".format(e))
                     time.sleep(3)
                 time.sleep(30)
 
@@ -51,6 +54,8 @@ class PlanetChannel(Channel):
 
 
     def _handle_topic(self, topic):
+        if not topic.get('talk'):
+            return
         talk_content = topic['talk']['text']
         talk_user_id = str(topic['talk']['owner']['user_id'])
         logger.info("[Planet] handle topic, user_id={}, content={}".format(talk_user_id, talk_content))
