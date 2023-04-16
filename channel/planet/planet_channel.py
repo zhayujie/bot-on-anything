@@ -46,7 +46,7 @@ class PlanetChannel(Channel):
                         self._handle_topic(topic)
                     except Exception as e:
                         logger.warn("[Planet] process topic failed, exception={}".format(e))
-                    time.sleep(3)
+                    time.sleep(0.5)
                 time.sleep(30)
 
             except Exception as e:
