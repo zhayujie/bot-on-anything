@@ -9,6 +9,7 @@ from common import const
 
 MENTION_STR = '<e type=\"mention\" uid=\"815111251481452\" title=\"@ueno\" \/>'
 MENTION_STR2 = '<e type="mention" uid="815111251481452" title="@ueno" />'
+MENTION_STR3 = '<e type="mention" uid="815111251481452" title="%40ueno" />'
 
 class PlanetChannel(Channel):
     def startup(self):
@@ -49,7 +50,7 @@ class PlanetChannel(Channel):
                     except Exception as e:
                         logger.warn("[Planet] process topic failed, exception={}".format(e))
                     time.sleep(0.5)
-                time.sleep(30)
+                time.sleep(60)
 
             except Exception as e:
                 logger.exception("[Planet] process failed, exception={}".format(e))
@@ -66,6 +67,7 @@ class PlanetChannel(Channel):
             # 场景一：用户直接在主题上艾特
             query = talk_content.replace(MENTION_STR, '')
             query = query.replace(MENTION_STR2, '')
+            query = query.replace(MENTION_STR3, '')
 
             # 此时system_prompt使用全局配置, query为主题中的问题
             context = {"from_user_id": talk_user_id}
@@ -80,6 +82,25 @@ class PlanetChannel(Channel):
         if not comment_list or len(comment_list) <= 0:
             return
 
+        if len(comment_list) >= 8:
+            # 评论大于8条时需要展开
+            all_comments = self._get_comments(topic['topic_id'])
+            if all_comments:
+                for comment in all_comments:
+                    comment['repliee'] = {'user_id': talk_user_id}
+                    comment_part = [comment]
+                    if comment.get('replied_comments'):
+                        comment_part.extend(comment.get('replied_comments'))
+                    self._auto_comment(comment_part, topic)
+                return
+
+        else:
+            self._auto_comment(comment_list, topic)
+
+
+
+    def _auto_comment(self, comment_list: list, topic):
+        talk_user_id = str(topic['talk']['owner']['user_id'])
         comment_map = {}
         for comment in comment_list:
             comment_map[str(comment['comment_id'])] = comment
@@ -98,12 +119,14 @@ class PlanetChannel(Channel):
                 if query.find(self.bot_user_id) != -1:
                     query = query.replace(MENTION_STR, '')
                     query = query.replace(MENTION_STR2, '')
+                    query = query.replace(MENTION_STR3, '')
 
                 context = {"from_user_id": comment_user_id}
                 reply_txt = super().build_reply_content(query, context)
                 self._send_comment(topic['topic_id'], reply_txt, comment['comment_id'])
                 logger.info("[Planet] comment success, id={}".format(comment['comment_id']))
                 return
+
 
     def _is_reply_bot(self, comment_map, comment):
         # 是否是回复机器人的评论
@@ -148,6 +171,21 @@ class PlanetChannel(Channel):
             return questions_data
         else:
             print("Unable to get questions data.")
+            return []
+
+    # 访问知识星球API，获取评论列表
+    def _get_comments(self, topic_id):
+        questions_url = f"https://api.zsxq.com/v2/topics/{topic_id}/comments?sort=asc&count=30&with_sticky=true"
+        response = requests.get(questions_url, headers=self._create_header())
+        if response.status_code == 200:
+            try:
+                questions_data = response.json()["resp_data"]["comments"]
+            except:
+                logger.error("[Planet] get comments failed, res={}".format(response.text))
+                questions_data = []
+            return questions_data
+        else:
+            print("Unable to get comments data.")
             return []
 
 
