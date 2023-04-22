@@ -6,6 +6,8 @@
 @file: wechat_com_channel.py
 
 """
+import time
+
 from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
 from common.log import logger
@@ -45,8 +47,21 @@ class WechatEnterpriseChannel(Channel):
         app.run(host='0.0.0.0', port=_conf.get('port'))
 
     def send(self, msg, receiver):
-        logger.info('[WXCOM] sendMsg={}, receiver={}'.format(msg, receiver))
-        self.client.message.send_text(self.AppId, receiver, msg)
+        # 切片长度
+        n = 450
+        if len(msg) < n:
+          logger.info('[WXCOM] sendMsg={}, receiver={}'.format(msg, receiver))
+          self.client.message.send_text(self.AppId, receiver, msg)
+          return
+        # 分割后的子字符串列表
+        chunks = [msg[i:i+n] for i in range(0, len(msg), n)]
+        # 总消息数
+        total = len(chunks)
+        # 循环发送每个子字符串
+        for i, chunk in enumerate(chunks):
+            logger.info('[WXCOM] sendMsg={}, receiver={}, page_number={}, page_total={}'.format(msg, chunk, i+1, total))
+            self.client.message.send_text(self.AppId, receiver, chunk)
+            time.sleep(1) # 用延迟的方式使微信插件的输出顺序正常
 
     def _do_send(self, query, reply_user_id):
         try:
