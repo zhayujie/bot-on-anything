@@ -59,7 +59,7 @@ cp config-template.json config.json
     }
   },
   "channel": {
-    "type": "wechat_mp",            # 需要接入的应用 
+    "type": "wechat_mp",            # 需要接入的应用
     "wechat": {
         # 个人微信配置
     },
@@ -99,7 +99,7 @@ pip3 install --upgrade openai
 {
   "model": {
     "type" : "chatgpt",
-   
+
     "openai": {
       "api_key": "YOUR API KEY",
       "model": "gpt-3.5-turbo",                         # 模型名称
@@ -128,14 +128,14 @@ pip3 install --upgrade openai
 使用步骤和上述GPT-3.5基本相同：
 
 1. 注册OpenAI账号并配置API KEY
-2. 安装openai依赖，要求版本高于 `0.25.0` 
+2. 安装openai依赖，要求版本高于 `0.25.0`
 3. 修改`config.json`配置中的type字段为 `openai`
- 
+
 ```bash
 {
   "model": {
     "type" : "openai",
-   
+
     "openai": {
       "api_key": "YOUR API KEY",
       "character_desc": "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
@@ -203,7 +203,7 @@ cookie示例:
 {
   "model": {
     "type" : "bard",
-      "cookies":""
+      "cookie":""
       //登录https://bard.google.com/ 获取name为"__Secure-1PSID"的Cookie Value
     }
 }
@@ -247,13 +247,13 @@ bash fix-itchat.sh
 ```bash
 "channel": {
     "type": "wechat",
-    
+
     "single_chat_prefix": ["bot", "@bot"],
     "single_chat_reply_prefix": "[bot] ",
     "group_chat_prefix": ["@bot"],
     "group_name_white_list": ["ChatGPT测试群"],
     "image_create_prefix": ["画", "看", "找一张"],
-    
+
     "wechat": {
     }
 }
@@ -281,7 +281,7 @@ pip3 install werobot
 ```bash
 "channel": {
     "type": "wechat_mp",
-        
+
     "wechat_mp": {
       "token": "YOUR TOKEN",           # token值
       "port": "8088"                   # 程序启动监听的端口
@@ -333,7 +333,7 @@ Hit Ctrl-C to quit.
 ```bash
 "channel": {
     "type": "wechat_mp_service",
-        
+
     "wechat_mp": {
       "token": "YOUR TOKEN",            # token值
       "port": "8088",                   # 程序启动监听的端口
@@ -558,7 +558,7 @@ pip3 install requests flask
 
 **生成机器人**
 
-地址: https://open-dev.dingtalk.com/fe/app#/corp/robot 
+地址: https://open-dev.dingtalk.com/fe/app#/corp/robot
 添加机器人,在开发管理中设置服务器出口 ip (在部署机执行`curl ifconfig.me`就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
 
 添加机器人,在开发管理中设置服务器出口ip(在部署机执行curl ifconfig.me就可以得到)和消息接收地址(配置中的对外地址如 https://xx.xx.com:8081)
@@ -593,8 +593,8 @@ pip3 install requests flask
 
 **生成机器人**
 
-地址: https://open.feishu.cn/app/ 
-1. 添加企业自建应用 
+地址: https://open.feishu.cn/app/
+1. 添加企业自建应用
 2. 开通权限
     - im:message
     - im:message.group_at_msg
