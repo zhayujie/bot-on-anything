@@ -616,7 +616,7 @@ pip3 install requests flask
 ```bash
 "channel": {
     "type": "wechat_com",
-    "wechat_mp": {
+    "wechat_com": {
       "wechat_token": "YOUR TOKEN",            # token值
       "port": "8888",                          # 程序启动监听的端口
       "app_id": "YOUR APP ID",                 # app ID
