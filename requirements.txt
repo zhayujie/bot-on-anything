@@ -6,3 +6,5 @@ openai
 EdgeGPT
 requests
 discord.py>=2.0.0
+wechatpy
+cryptography
