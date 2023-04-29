@@ -21,10 +21,11 @@ class BingModel(Model):
 
     def __init__(self):
         try:
+            self.proxy = model_conf_val("bing", "proxy")
             self.cookies = model_conf_val("bing", "cookies")
             self.jailbreak = model_conf_val("bing", "jailbreak")
-            self.bot = SydneyBot(cookies=self.cookies, options={}) if (
-                self.jailbreak) else Chatbot(cookies=self.cookies)
+            self.bot = SydneyBot(cookies=self.cookies, options={"proxy": self.proxy}) if (
+                self.jailbreak) else Chatbot(cookies=self.cookies, options={"proxy": self.proxy})
         except Exception as e:
             log.warn(e)
 
