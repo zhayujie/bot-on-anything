@@ -108,7 +108,7 @@ class SydneyBot(Chatbot):
             message_id=message_id
         ):
             if final:
-                self.update_reply_cache(response["item"]["messages"][-1])
+                self.update_reply_cache(response.get("item").get("messages")[-1])
                 return response
 
     def update_reply_cache(
