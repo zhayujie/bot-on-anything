@@ -5,7 +5,7 @@ import websockets
 import random
 import uuid
 import EdgeGPT
-from EdgeGPT import ChatHubRequest, Chatbot, Conversation, ChatHub
+from EdgeGPT import _ChatHubRequest, Chatbot, _Conversation, _ChatHub
 from typing import Generator
 from config import model_conf_val
 
@@ -50,8 +50,8 @@ class SydneyBot(Chatbot):
         message_id: str = None
     ) -> dict:
         # 开启新对话
-        self.chat_hub = SydneyHub(Conversation(
-            self.cookiePath, self.cookies, self.proxy))
+        self.chat_hub = SydneyHub(_Conversation(
+            self.cookies, self.proxy))
         self.parent_message_id = message_id if message_id != None else uuid.uuid4()
         # 构造历史对话字符串,更新SydneyHubRequest的历史对话
         conversation = self.conversations_cache.get(self.conversation_key)
@@ -83,7 +83,8 @@ class SydneyBot(Chatbot):
 
         async for final, response in self.chat_hub.ask_stream(
             prompt=prompt,
-            conversation_style=conversation_style
+            conversation_style=conversation_style,
+            cookies=self.cookies
         ):
             if final:
                 try:
@@ -107,7 +108,7 @@ class SydneyBot(Chatbot):
             message_id=message_id
         ):
             if final:
-                self.update_reply_cache(response["item"]["messages"][-1])
+                self.update_reply_cache(response.get("item").get("messages")[-1])
                 return response
 
     def update_reply_cache(
@@ -127,12 +128,12 @@ class SydneyBot(Chatbot):
         self.user_message_id = replyMessage["id"]
 
 
-class SydneyHub(ChatHub):
+class SydneyHub(_ChatHub):
     """
     Chat API
     """
 
-    def __init__(self, conversation: Conversation) -> None:
+    def __init__(self, conversation: _Conversation) -> None:
         self.wss: websockets.WebSocketClientProtocol | None = None
         self.request: SydneyHubRequest
         self.loop: bool
@@ -146,14 +147,15 @@ class SydneyHub(ChatHub):
     async def ask_stream(
         self,
         prompt: str,
+        cookies: str,
         wss_link: str = "wss://sydney.bing.com/sydney/ChatHub",
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
     ) -> Generator[str, None, None]:
-        async for item in super().ask_stream(prompt=prompt, conversation_style=conversation_style, wss_link=wss_link):
+        async for item in super().ask_stream(prompt=prompt, conversation_style=conversation_style, wss_link=wss_link, cookies=cookies):
             yield item
 
 
-class SydneyHubRequest(ChatHubRequest):
+class SydneyHubRequest(_ChatHubRequest):
 
     def __init__(
         self,
