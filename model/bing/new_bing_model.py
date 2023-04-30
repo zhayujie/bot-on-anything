@@ -83,6 +83,8 @@ class BingModel(Model):
                 bot = self.bot
             else:
                 query = self.get_quick_ask_query(query, context)
+                if query == "输入的序号不在建议列表范围中":
+                    return "对不起，您输入的序号不在建议列表范围中（数字1-9均会被认为是建议列表），请重新输入。"
 
             user_session[context['from_user_id']] = bot
             log.info("[NewBing] query={}".format(query))
@@ -123,11 +125,14 @@ class BingModel(Model):
         if (len(query) == 1 and query.isdigit() and query != "0"):
             suggestion_dict = suggestion_session[context['from_user_id']]
             if (suggestion_dict != None):
-                query = suggestion_dict[int(query)-1]
-                if (query == None):
+                try:
+                    query = suggestion_dict[int(query)-1]
+                    if (query == None):
+                        return "输入的序号不在建议列表范围中"
+                    else:
+                        query = "在上面的基础上，"+query
+                except:
                     return "输入的序号不在建议列表范围中"
-                else:
-                    query = "在上面的基础上，"+query
         return query
 
     def build_source_attributions(self, answer, context):
@@ -158,13 +163,14 @@ class BingModel(Model):
             throttling = answer["item"]["throttling"]
             throttling_str = ""
 
-            if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
-                user_session.get(context['from_user_id'], None).reset()
-                throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
-            else:
-                throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
+            if not self.jailbreak:
+                if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
+                    user_session.get(context['from_user_id'], None).reset()
+                    throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
+                else:
+                    throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
 
-            response = f"{reply_text}\n{reference}\n{suggestion}\n***\n{throttling_str}"
+            response = f"{reply_text}\n{reference}\n{suggestion}***\n{throttling_str}"
             log.info("[NewBing] reply={}", response)
             return response
         else:
