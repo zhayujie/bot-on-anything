@@ -21,14 +21,15 @@ class TerminalChannel(Channel):
                 prompt = prompt.replace("#绘画：","",1)
 
             print("Bot:")
+            response = super().build_reply_content(prompt, context)
             sys.stdout.flush()
-            if context.get('type', None) == 'IMAGE_CREATE':
+            if context.get('type', None) == 'IMAGE_CREATE' and response != "输入的内容可能违反微软的图片生成内容策略。过多的策略冲突可能会导致你被暂停访问。":
                 print("\n")
-                for res in super().build_reply_content(prompt, context):
+                for res in response:
                     print(res)
                     sys.stdout.flush()
             else:
-                for res in super().build_reply_content(prompt, context):
+                for res in response:
                     print(res, end="")
                     sys.stdout.flush()
                 print("\n")
