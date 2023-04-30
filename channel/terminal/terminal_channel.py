@@ -15,13 +15,24 @@ class TerminalChannel(Channel):
             except KeyboardInterrupt:
                 print("\nExiting...")
                 sys.exit()
+            
+            if prompt.startswith("#绘画："):
+                context['type'] = 'IMAGE_CREATE'
+                prompt = prompt.replace("#绘画：","",1)
 
             print("Bot:")
             sys.stdout.flush()
-            for res in super().build_reply_content(prompt, context):
-                print(res, end="")
-                sys.stdout.flush()
-            print("\n")
+            if context.get('type', None) == 'IMAGE_CREATE':
+                print("\n")
+                for res in super().build_reply_content(prompt, context):
+                    print(res)
+                    sys.stdout.flush()
+            else:
+                for res in super().build_reply_content(prompt, context):
+                    print(res, end="")
+                    sys.stdout.flush()
+                print("\n")
+                
 
 
     def get_input(self, prompt):

@@ -109,9 +109,7 @@ class BingModel(Model):
                 log.warn(answer)
                 return "本轮对话已超时，已开启新的一轮对话,请重新提问。"
             return self.build_source_attributions(answer, context)
-        elif context.get('type', None) == 'IMAGE_CREATE':
-            if functions.contain_chinese(query):
-                return "ImageGen目前仅支持使用英文关键词生成图片"
+        elif context.get('type', None) == 'IMAGE_CREATE':  # 现在支持中文了
             return self.create_img(query)
 
     def create_img(self, query):
