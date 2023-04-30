@@ -95,6 +95,11 @@ class BingModel(Model):
                 task = bot.ask(query, conversation_style=self.style)
 
             answer = asyncio.run(task)
+            if True and answer == "AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请清除全部记忆后再次尝试":  # 自动尝试第二次，一般第二次不会拦截
+                log.warn("本次会话已拦截，正在重试一次...")
+                task = bot.ask(query, conversation_style=self.style,
+                               message_id=bot.user_message_id)
+                answer = asyncio.run(task)
             if isinstance(answer, str):
                 return answer
             try:

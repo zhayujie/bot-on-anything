@@ -7,7 +7,7 @@ config.json
 QR.png
 data/
 device.json
-go-cqhttp
+go-cqhttp*
 logs/
 session.token
 .vscode

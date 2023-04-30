@@ -8,7 +8,6 @@ import EdgeGPT
 from EdgeGPT import Chatbot, _ChatHubRequest, _Conversation, _ChatHub
 from typing import Generator
 from config import model_conf_val
-from common import log
 
 
 class SydneyBot(Chatbot):
