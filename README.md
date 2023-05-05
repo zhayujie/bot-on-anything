@@ -641,4 +641,5 @@ pip3 install requests flask
 # 教程
 
 1.视频教程 (微信、QQ、公众号、Web网页)：https://www.bilibili.com/video/BV1KM4y167e8
+
 2.视频教程 (企业微信、钉钉、飞书)：https://www.bilibili.com/video/BV1yL411a7DP
