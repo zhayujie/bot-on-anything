@@ -8,19 +8,16 @@ from ImageGen import ImageGen
 from common import functions
 import random
 import json
-# from model.bing.jailbroken_sydney import SydneyBot
+
 user_chathistory = dict()
 suggestion_session = dict()
-
 # newBing对话模型逆向网页gitAPI
 
 
 class BingModel(Model):
 
-    style = 'creative'
     bot: Chatbot = None
     cookies = None
-
 
     def __init__(self):
         try:
@@ -29,8 +26,60 @@ class BingModel(Model):
         except Exception as e:
             log.warn(e)
 
-    async def reply_text_stream(self, query: str, context=None):
-        pass
+    async def reply_text_stream(self, query: str, context=None) -> dict:
+        async def handle_answer(final, answer):
+            if final:
+                try:
+                    reply = self.build_source_attributions(answer, context)
+                    log.info("[NewBing] reply:{}", reply)
+                    await bot.close()
+                    yield True, reply
+                except Exception as e:
+                    log.warn(answer)
+                    log.warn(e)
+                    await user_chathistory.get(context['from_user_id'], None).reset()
+                    yield True, answer
+            else:
+                try:
+                    yield False, answer
+                except Exception as e:
+                    log.warn(answer)
+                    log.warn(e)
+                    await user_chathistory.get(context['from_user_id'], None).reset()
+                    yield True, answer
+
+        if not context or not context.get('type') or context.get('type') == 'TEXT':
+            clear_memory_commands = common_conf_val(
+                'clear_memory_commands', ['#清除记忆'])
+            if query in clear_memory_commands:
+                user_chathistory[context['from_user_id']] = None
+                yield True, '记忆已清除'
+            
+            chat_style = ""
+            chat_history = ""
+            if user_chathistory.get(context['from_user_id'], None) == None:
+                if (self.jailbreak):
+                    chars = model_conf_val("bing", "jailbreak_prompt")
+                    chars = chars + "\n\n"
+                    chat_history = ''.join(chars)
+                user_chathistory[context['from_user_id']] = ['creative', chat_history]
+            else:
+                if not chat_history.endswith("\n\n"):
+                    if chat_history.endswith("\n"):
+                        chat_history += "\n"
+                    else:
+                        chat_history += "\n\n"
+            chat_style = user_chathistory[context['from_user_id']][0]
+            chat_history = user_chathistory[context['from_user_id']][1]
+
+            query = self.get_quick_ask_query(query, context)
+            bot = await Chatbot.create(cookies=self.cookies)
+            user_chathistory[context['from_user_id']][1] += f"[user](#message)\n{query}\n\n"
+            log.info("[NewBing] query={}".format(query))
+
+            async for final, answer in bot.ask_stream(prompt=query, raw=True, webpage_context=chat_history, conversation_style=chat_style, search_result=True):
+                async for result in handle_answer(final, answer):
+                    yield result
 
     def reply(self, query: str, context=None):
         if not context or not context.get('type') or context.get('type') == 'TEXT':
@@ -69,8 +118,6 @@ class BingModel(Model):
         if "[style]已切换至" in query:
             return query
 
-        print(user_chathistory)
-
         log.info("[NewBing] query={}".format(query))
         bot = await Chatbot.create(cookies=self.cookies)
         reply_text = ""
@@ -93,10 +140,9 @@ class BingModel(Model):
             ):
                 if not final and response["type"] == 1 and "messages" in response["arguments"][0]:
                     message = response["arguments"][0]["messages"][0]
-                    # match message.get("messageType"):
                     if message.get("messageType") == "InternalSearchQuery":
-                        pass
                         #chat_history += f"[assistant](#search_query)\n{message['hiddenText']}\n\n"
+                        pass
                     elif message.get("messageType") == "InternalSearchResult":
                         #chat_history += f"[assistant](#search_results)\n{message['hiddenText']}\n\n"
                         reference += f"[assistant](#search_results)\n{message['hiddenText']}"
@@ -120,7 +166,6 @@ class BingModel(Model):
                                 break
                 if final and not response["item"]["messages"][-1].get("text"):
                     raise Exception("发送的消息被过滤或者对话超时")
-
         
         try:
             await stream_output()
@@ -130,9 +175,7 @@ class BingModel(Model):
         # 更新历史对话
         user_chathistory[context['from_user_id']][1] = chat_history
         await bot.close()
-        return self.build_source_attributions(reply_text, reference, suggestion, context)
-        
-
+        return self.build_source_text(reply_text, reference, suggestion, context)
 
     def create_img(self, query):
         try:
@@ -169,7 +212,50 @@ class BingModel(Model):
             return "[style]已切换至精确模式"
         return query
 
-    def build_source_attributions(self, reply_text, reference, suggestion, context):
+    def build_source_attributions(self, answer, context):
+        reference = ""
+        reply = answer["item"]["messages"][-1]
+        reply_text = reply["text"]
+        user_chathistory[context['from_user_id']][1] += f"[assistant](#message)\n{reply_text}\n"
+        if "sourceAttributions" in reply:
+            for i, attribution in enumerate(reply["sourceAttributions"]):
+                display_name = attribution["providerDisplayName"]
+                url = attribution["seeMoreUrl"]
+                reference += f"{i+1}、[{display_name}]({url})\n\n"
+
+            if len(reference) > 0:
+                reference = "***\n"+reference
+
+            suggestion = ""
+            if "suggestedResponses" in reply:
+                suggestion_dict = dict()
+                for i, attribution in enumerate(reply["suggestedResponses"]):
+                    suggestion_dict[i] = attribution["text"]
+                    suggestion += f">{i+1}、{attribution['text']}\n\n"
+                suggestion_session[context['from_user_id']
+                                   ] = suggestion_dict
+
+            if len(suggestion) > 0:
+                suggestion = "***\n你可以通过输入序号快速追问我以下建议问题：\n\n"+suggestion
+
+            throttling = answer["item"]["throttling"]
+            throttling_str = ""
+
+            if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
+                user_chathistory.get(context['from_user_id'], None).reset()
+                throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
+            else:
+                throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
+
+            response = f"{reply_text}\n{reference}\n{suggestion}\n***\n{throttling_str}"
+            log.info("[NewBing] reply={}", response)
+            return response
+        else:
+            user_chathistory.get(context['from_user_id'], None).reset()
+            log.warn("[NewBing] reply={}", answer)
+            return "对话被接口拒绝，已开启新的一轮对话。"
+
+    def build_source_text(self, reply_text, reference, suggestion, context):
         if not reply_text.endswith("\n\n"):
             if reply_text.endswith("\n"):
                 reply_text += "\n"
@@ -177,7 +263,6 @@ class BingModel(Model):
                 reply_text += "\n\n"
 
         references = ""
-        print(reference[36:-3])
         if 'json' in reference:
             reference_dict = json.loads(reference[36:-3])
             for i in range(len(reference_dict['web_search_results'])):
@@ -185,7 +270,6 @@ class BingModel(Model):
                 title = r['title']
                 url = r['url']
                 references += f"{i+1}、[{title}]({url})\n\n"
-
 
         suggestions = ""
         suggestion_dict = dict()
@@ -196,17 +280,6 @@ class BingModel(Model):
             suggestions = "=====\n💡你可能想问(输入序号):\n\n" + suggestions
         suggestion_session[context['from_user_id']] = suggestion_dict
 
-        # throttling = answer["item"]["throttling"]
-        # throttling_str = ""
-
-        # if not self.jailbreak:
-        #     if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
-        #         user_session.get(context['from_user_id'], None).reset()
-        #         throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
-        #     else:
-        #         throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
-
         response = f"{reply_text}******\n{references}{suggestions}******\n"
         log.info("[NewBing] reply={}", response)
         return response
-
