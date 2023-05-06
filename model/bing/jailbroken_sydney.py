@@ -5,7 +5,7 @@ import websockets
 import random
 import uuid
 import EdgeGPT
-from EdgeGPT import ChatHubRequest, Chatbot, Conversation, ChatHub
+from EdgeGPT import Chatbot, _ChatHubRequest, _Conversation, _ChatHub
 from typing import Generator
 from config import model_conf_val
 
@@ -25,7 +25,7 @@ class SydneyBot(Chatbot):
         self.cookiePath: str = cookiePath
         self.cookies: dict | None = cookies
         self.proxy: str | None = proxy
-        self.chat_hub: SydneyHub
+        self.chat_hub: _SydneyHub
         cache_options = options.get('cache', {})
         cache_options['namespace'] = cache_options.get('namespace', 'bing')
         self.conversations_cache = cache_options
@@ -50,8 +50,8 @@ class SydneyBot(Chatbot):
         message_id: str = None
     ) -> dict:
         # 开启新对话
-        self.chat_hub = SydneyHub(Conversation(
-            self.cookiePath, self.cookies, self.proxy))
+        self.chat_hub = _SydneyHub(_Conversation(
+            self.cookies, self.proxy))
         self.parent_message_id = message_id if message_id != None else uuid.uuid4()
         # 构造历史对话字符串,更新SydneyHubRequest的历史对话
         conversation = self.conversations_cache.get(self.conversation_key)
@@ -83,6 +83,7 @@ class SydneyBot(Chatbot):
 
         async for final, response in self.chat_hub.ask_stream(
             prompt=prompt,
+            cookies=self.cookies,
             conversation_style=conversation_style
         ):
             if final:
@@ -90,6 +91,7 @@ class SydneyBot(Chatbot):
                     if self.chat_hub.wss and not self.chat_hub.wss.closed:
                         await self.chat_hub.wss.close()
                     self.update_reply_cache(response["item"]["messages"][-1])
+                    response["item"]["messages"][-1]["text"]
                 except Exception as e:
                     self.conversations_cache[self.conversation_key]["messages"].pop()
                     yield True, f"AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请清除全部记忆后再次尝试"
@@ -107,7 +109,10 @@ class SydneyBot(Chatbot):
             message_id=message_id
         ):
             if final:
-                self.update_reply_cache(response["item"]["messages"][-1])
+                try:
+                    self.update_reply_cache(response["item"]["messages"][-1])                    
+                except Exception as e:
+                    pass
                 return response
 
     def update_reply_cache(
@@ -123,21 +128,22 @@ class SydneyBot(Chatbot):
             "details": reply,
         }
         self.conversations_cache[self.conversation_key]["messages"].append(
-            replyMessage)
+        replyMessage)
         self.user_message_id = replyMessage["id"]
 
 
-class SydneyHub(ChatHub):
+
+class _SydneyHub(_ChatHub):
     """
     Chat API
     """
 
-    def __init__(self, conversation: Conversation) -> None:
+    def __init__(self, conversation: _Conversation) -> None:
         self.wss: websockets.WebSocketClientProtocol | None = None
-        self.request: SydneyHubRequest
+        self.request: _SydneyHubRequest
         self.loop: bool
         self.task: asyncio.Task
-        self.request = SydneyHubRequest(
+        self.request = _SydneyHubRequest(
             conversation_signature=conversation.struct["conversationSignature"],
             client_id=conversation.struct["clientId"],
             conversation_id=conversation.struct["conversationId"],
@@ -146,14 +152,15 @@ class SydneyHub(ChatHub):
     async def ask_stream(
         self,
         prompt: str,
+        cookies: str,
         wss_link: str = "wss://sydney.bing.com/sydney/ChatHub",
         conversation_style: EdgeGPT.CONVERSATION_STYLE_TYPE = None,
     ) -> Generator[str, None, None]:
-        async for item in super().ask_stream(prompt=prompt, conversation_style=conversation_style, wss_link=wss_link):
+        async for item in super().ask_stream(prompt=prompt, conversation_style=conversation_style, wss_link=wss_link, cookies=cookies):
             yield item
 
 
-class SydneyHubRequest(ChatHubRequest):
+class _SydneyHubRequest(_ChatHubRequest):
 
     def __init__(
         self,

@@ -28,8 +28,16 @@ class QQChannel(Channel):
         context = dict()
         log.info("event: {}", "do_handle")
         context['from_user_id'] = msg.user_id
+        if msg.message.startswith("#绘画："):
+                context['type'] = 'IMAGE_CREATE'
+                msg.message = msg.message.replace("#绘画：","",1)
         reply_text = super().build_reply_content(msg.message, context)
-        bot.sync.send_private_msg(user_id=msg.user_id, message=reply_text)
+        if context.get('type', None) == 'IMAGE_CREATE' and reply_text != "输入的内容可能违反微软的图片生成内容策略。过多的策略冲突可能会导致你被暂停访问。":
+            bot.sync.send_private_msg(user_id=msg.user_id, message="点击链接查看图片：")
+            for reply in reply_text:
+                        bot.sync.send_private_msg(user_id=msg.user_id, message=reply)
+        else:
+            bot.sync.send_private_msg(user_id=msg.user_id, message=reply_text)
 
     # group chat
     def handle_group(self, msg):
@@ -44,7 +52,16 @@ class QQChannel(Channel):
                 if len(text_list) == 2 and len(text_list[1]) > 0:
                     query = text_list[1].strip()
                     context['from_user_id'] = str(msg.user_id)
+                    if query.startswith("#绘画："):
+                        context['type'] = 'IMAGE_CREATE'
+                        query = query.replace("#绘画：","",1)
                     reply_text = super().build_reply_content(query, context)
-                    reply_text = '[CQ:at,qq=' + str(msg.user_id) + '] ' + reply_text
 
-                    bot.sync.send_group_msg(group_id=msg['group_id'], message=reply_text)
+                    if context.get('type', None) == 'IMAGE_CREATE':
+                        bot.sync.send_group_msg(group_id=msg['group_id'], message=
+                                                '[CQ:at,qq=' + str(msg.user_id) + '] 点击链接查看图片：')
+                        for reply in reply_text:
+                                    bot.sync.send_private_msg(group_id=msg['group_id'], message=reply)
+                    else:
+                        reply_text = '[CQ:at,qq=' + str(msg.user_id) + '] ' + reply_text
+                        bot.sync.send_group_msg(group_id=msg['group_id'], message=reply_text)

@@ -83,6 +83,8 @@ class BingModel(Model):
                 bot = self.bot
             else:
                 query = self.get_quick_ask_query(query, context)
+                if query == "输入的序号不在建议列表范围中":
+                    return "对不起，您输入的序号不在建议列表范围中（数字1-9均会被认为是建议列表），请重新输入。"
 
             user_session[context['from_user_id']] = bot
             log.info("[NewBing] query={}".format(query))
@@ -93,6 +95,11 @@ class BingModel(Model):
                 task = bot.ask(query, conversation_style=self.style)
 
             answer = asyncio.run(task)
+            if True and answer == "AI生成内容被微软内容过滤器拦截,已删除最后一次提问的记忆,请尝试使用其他文字描述问题,若AI依然无法正常回复,请清除全部记忆后再次尝试":  # 自动尝试第二次，一般第二次不会拦截
+                log.warn("本次会话已拦截，正在重试一次...")
+                task = bot.ask(query, conversation_style=self.style,
+                               message_id=bot.user_message_id)
+                answer = asyncio.run(task)
             if isinstance(answer, str):
                 return answer
             try:
@@ -102,9 +109,7 @@ class BingModel(Model):
                 log.warn(answer)
                 return "本轮对话已超时，已开启新的一轮对话,请重新提问。"
             return self.build_source_attributions(answer, context)
-        elif context.get('type', None) == 'IMAGE_CREATE':
-            if functions.contain_chinese(query):
-                return "ImageGen目前仅支持使用英文关键词生成图片"
+        elif context.get('type', None) == 'IMAGE_CREATE':  # 现在支持中文了
             return self.create_img(query)
 
     def create_img(self, query):
@@ -123,51 +128,60 @@ class BingModel(Model):
         if (len(query) == 1 and query.isdigit() and query != "0"):
             suggestion_dict = suggestion_session[context['from_user_id']]
             if (suggestion_dict != None):
-                query = suggestion_dict[int(query)-1]
-                if (query == None):
+                try:
+                    query = suggestion_dict[int(query)-1]
+                    if (query == None):
+                        return "输入的序号不在建议列表范围中"
+                    else:
+                        query = "在上面的基础上，"+query
+                except:
                     return "输入的序号不在建议列表范围中"
-                else:
-                    query = "在上面的基础上，"+query
         return query
 
     def build_source_attributions(self, answer, context):
+
+        for i in range(len(answer["item"]["messages"])):
+            if "sourceAttributions" in answer["item"]["messages"][-1-i]:
+                reply = answer["item"]["messages"][-1-i]
+                break
+        else:
+            user_session.get(context['from_user_id'], None).reset()
+            log.warn("[NewBing] reply={}", answer)
+            return "对话被接口拒绝，已开启新的一轮对话。"
+        
         reference = ""
-        reply = answer["item"]["messages"][-1]
         reply_text = reply["text"]
-        if "sourceAttributions" in reply:
-            for i, attribution in enumerate(reply["sourceAttributions"]):
-                display_name = attribution["providerDisplayName"]
-                url = attribution["seeMoreUrl"]
-                reference += f"{i+1}、[{display_name}]({url})\n\n"
+        for i, attribution in enumerate(reply["sourceAttributions"]):
+            display_name = attribution["providerDisplayName"]
+            url = attribution["seeMoreUrl"]
+            reference += f"{i+1}、[{display_name}]({url})\n\n"
 
-            if len(reference) > 0:
-                reference = "***\n"+reference
+        if len(reference) > 0:
+            reference = "***\n"+reference
 
-            suggestion = ""
-            if "suggestedResponses" in reply:
-                suggestion_dict = dict()
-                for i, attribution in enumerate(reply["suggestedResponses"]):
-                    suggestion_dict[i] = attribution["text"]
-                    suggestion += f">{i+1}、{attribution['text']}\n\n"
-                suggestion_session[context['from_user_id']
-                                   ] = suggestion_dict
+        suggestion = ""
+        if "suggestedResponses" in reply:
+            suggestion_dict = dict()
+            for i, attribution in enumerate(reply["suggestedResponses"]):
+                suggestion_dict[i] = attribution["text"]
+                suggestion += f">{i+1}、{attribution['text']}\n\n"
+            suggestion_session[context['from_user_id']
+                                ] = suggestion_dict
 
-            if len(suggestion) > 0:
-                suggestion = "***\n你可以通过输入序号快速追问我以下建议问题：\n\n"+suggestion
+        if len(suggestion) > 0:
+            suggestion = "***\n你可以通过输入序号快速追问我以下建议问题：\n\n"+suggestion
 
-            throttling = answer["item"]["throttling"]
-            throttling_str = ""
+        throttling = answer["item"]["throttling"]
+        throttling_str = ""
 
+        if not self.jailbreak:
             if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
                 user_session.get(context['from_user_id'], None).reset()
                 throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
             else:
                 throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
 
-            response = f"{reply_text}\n{reference}\n{suggestion}\n***\n{throttling_str}"
-            log.info("[NewBing] reply={}", response)
-            return response
-        else:
-            user_session.get(context['from_user_id'], None).reset()
-            log.warn("[NewBing] reply={}", answer)
-            return "对话被接口拒绝，已开启新的一轮对话。"
+        response = f"{reply_text}\n{reference}\n{suggestion}***\n{throttling_str}"
+        log.info("[NewBing] reply={}", response)
+        return response
+    
