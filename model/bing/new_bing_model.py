@@ -9,7 +9,7 @@ from common import functions
 import random
 import json
 
-user_chathistory = dict()
+user_chat_history = dict()
 suggestion_session = dict()
 # newBing对话模型逆向网页gitAPI
 
@@ -17,7 +17,7 @@ suggestion_session = dict()
 class BingModel(Model):
 
     bot: Chatbot = None
-    cookies = None
+    cookies_list = None
 
     def __init__(self):
         try:
@@ -37,7 +37,7 @@ class BingModel(Model):
                 except Exception as e:
                     log.warn(answer)
                     log.warn(e)
-                    await user_chathistory.get(context['from_user_id'], None).reset()
+                    await user_chat_history.get(context['from_user_id'], None).reset()
                     yield True, answer
             else:
                 try:
@@ -45,36 +45,36 @@ class BingModel(Model):
                 except Exception as e:
                     log.warn(answer)
                     log.warn(e)
-                    await user_chathistory.get(context['from_user_id'], None).reset()
+                    await user_chat_history.get(context['from_user_id'], None).reset()
                     yield True, answer
 
         if not context or not context.get('type') or context.get('type') == 'TEXT':
             clear_memory_commands = common_conf_val(
                 'clear_memory_commands', ['#清除记忆'])
             if query in clear_memory_commands:
-                user_chathistory[context['from_user_id']] = None
+                user_chat_history[context['from_user_id']] = None
                 yield True, '记忆已清除'
             
             chat_style = ""
             chat_history = ""
-            if user_chathistory.get(context['from_user_id'], None) == None:
+            if user_chat_history.get(context['from_user_id'], None) == None:
                 if (self.jailbreak):
                     chars = model_conf_val("bing", "jailbreak_prompt")
                     chars = chars + "\n\n"
                     chat_history = ''.join(chars)
-                user_chathistory[context['from_user_id']] = ['creative', chat_history]
+                user_chat_history[context['from_user_id']] = ['creative', chat_history]
             else:
                 if not chat_history.endswith("\n\n"):
                     if chat_history.endswith("\n"):
                         chat_history += "\n"
                     else:
                         chat_history += "\n\n"
-            chat_style = user_chathistory[context['from_user_id']][0]
-            chat_history = user_chathistory[context['from_user_id']][1]
+            chat_style = user_chat_history[context['from_user_id']][0]
+            chat_history = user_chat_history[context['from_user_id']][1]
 
             query = self.get_quick_ask_query(query, context)
             bot = await Chatbot.create(cookies=self.cookies)
-            user_chathistory[context['from_user_id']][1] += f"[user](#message)\n{query}\n\n"
+            user_chat_history[context['from_user_id']][1] += f"[user](#message)\n{query}\n\n"
             log.info("[NewBing] query={}".format(query))
 
             async for final, answer in bot.ask_stream(prompt=query, raw=True, webpage_context=chat_history, conversation_style=chat_style, search_result=True):
@@ -91,26 +91,26 @@ class BingModel(Model):
         clear_memory_commands = common_conf_val(
                 'clear_memory_commands', ['#清除记忆'])
         if query in clear_memory_commands:
-            user_chathistory[context['from_user_id']] = None
+            user_chat_history[context['from_user_id']] = None
             return '记忆已清除'
         
         # deal chat_history
         chat_style = ""
         chat_history = ""
-        if user_chathistory.get(context['from_user_id'], None) == None:
+        if user_chat_history.get(context['from_user_id'], None) == None:
             if (self.jailbreak):
                 chars = model_conf_val("bing", "jailbreak_prompt")
                 chars = chars + "\n\n"
                 chat_history = ''.join(chars)
-            user_chathistory[context['from_user_id']] = ['creative', chat_history]
+            user_chat_history[context['from_user_id']] = ['creative', chat_history]
         else:
             if not chat_history.endswith("\n\n"):
                 if chat_history.endswith("\n"):
                     chat_history += "\n"
                 else:
                     chat_history += "\n\n"
-        chat_style = user_chathistory[context['from_user_id']][0]
-        chat_history = user_chathistory[context['from_user_id']][1]
+        chat_style = user_chat_history[context['from_user_id']][0]
+        chat_history = user_chat_history[context['from_user_id']][1]
 
         query = self.get_quick_ask_query(query, context)
         if query == "输入的序号不在建议列表范围中":
@@ -173,7 +173,7 @@ class BingModel(Model):
             log.info(e)
 
         # 更新历史对话
-        user_chathistory[context['from_user_id']][1] = chat_history
+        user_chat_history[context['from_user_id']][1] = chat_history
         await bot.close()
         return self.build_source_text(reply_text, reference, suggestion, context)
 
@@ -202,13 +202,13 @@ class BingModel(Model):
                 except:
                     return "输入的序号不在建议列表范围中"
         elif(query == "/creative"):
-            user_chathistory[context['from_user_id']][0] = query[1:]
+            user_chat_history[context['from_user_id']][0] = query[1:]
             return "[style]已切换至创造模式"
         elif(query == "/balanced"):
-            user_chathistory[context['from_user_id']][0] = query[1:]
+            user_chat_history[context['from_user_id']][0] = query[1:]
             return "[style]已切换至平衡模式"
         elif(query == "/precise"):
-            user_chathistory[context['from_user_id']][0] = query[1:]
+            user_chat_history[context['from_user_id']][0] = query[1:]
             return "[style]已切换至精确模式"
         return query
 
@@ -216,7 +216,7 @@ class BingModel(Model):
         reference = ""
         reply = answer["item"]["messages"][-1]
         reply_text = reply["text"]
-        user_chathistory[context['from_user_id']][1] += f"[assistant](#message)\n{reply_text}\n"
+        user_chat_history[context['from_user_id']][1] += f"[assistant](#message)\n{reply_text}\n"
         if "sourceAttributions" in reply:
             for i, attribution in enumerate(reply["sourceAttributions"]):
                 display_name = attribution["providerDisplayName"]
@@ -242,7 +242,7 @@ class BingModel(Model):
             throttling_str = ""
 
             if throttling["numUserMessagesInConversation"] == throttling["maxNumUserMessagesInConversation"]:
-                user_chathistory.get(context['from_user_id'], None).reset()
+                user_chat_history.get(context['from_user_id'], None).reset()
                 throttling_str = "(对话轮次已达上限，本次聊天已结束，将开启新的对话)"
             else:
                 throttling_str = f"对话轮次: {throttling['numUserMessagesInConversation']}/{throttling['maxNumUserMessagesInConversation']}\n"
@@ -251,7 +251,7 @@ class BingModel(Model):
             log.info("[NewBing] reply={}", response)
             return response
         else:
-            user_chathistory.get(context['from_user_id'], None).reset()
+            user_chat_history.get(context['from_user_id'], None).reset()
             log.warn("[NewBing] reply={}", answer)
             return "对话被接口拒绝，已开启新的一轮对话。"
 
