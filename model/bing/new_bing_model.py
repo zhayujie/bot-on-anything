@@ -264,7 +264,7 @@ class BingModel(Model):
 
         references = ""
         if 'json' in reference:
-            reference_dict = json.loads(reference[36:-3])
+            reference_dict = json.loads(reference[37:-4])
             for i in range(len(reference_dict['web_search_results'])):
                 r = reference_dict['web_search_results'][i]
                 title = r['title']
