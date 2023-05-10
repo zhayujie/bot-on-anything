@@ -3,7 +3,7 @@ flask
 flask_socketio
 itchat-uos==1.5.0.dev0
 openai
-EdgeGPT
+EdgeGPT==0.3.5
 requests
 discord.py>=2.0.0
 wechatpy
