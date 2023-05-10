@@ -119,7 +119,11 @@ class BingModel(Model):
             return query
 
         log.info("[NewBing] query={}".format(query))
-        bot = await Chatbot.create(cookies=self.cookies)
+        try:
+            bot = await Chatbot.create(cookies=self.cookies)
+        except Exception as e:
+            log.info(e)
+            return "RemoteProtocolError: Bing Server disconnected without sending a response."
         reply_text = ""
         reference = ""
         suggestion = ""
@@ -263,7 +267,7 @@ class BingModel(Model):
                 reply_text += "\n\n"
 
         references = ""
-        if 'json' in reference:
+        if 'json' in reference and reference[29] != 'W':
             reference_dict = json.loads(reference[37:-4])
             for i in range(len(reference_dict['web_search_results'])):
                 r = reference_dict['web_search_results'][i]
