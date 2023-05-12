@@ -59,10 +59,13 @@ class QQChannel(Channel):
                     reply_text = super().build_reply_content(query, context)
 
                     if context.get('type', None) == 'IMAGE_CREATE':
-                        bot.sync.send_group_msg(group_id=msg['group_id'], message=
+                       if any("http" in reply for reply in reply_text):
+                          bot.sync.send_group_msg(group_id=msg['group_id'], message=
                                                 '[CQ:at,qq=' + str(msg.user_id) + '] 已经为您生成图片')
-                        for reply in reply_text:
-                            send_group_message_image(gid=msg['group_id'], pic_url=reply, uid=str(msg.user_id), msg='')
+                          for reply in reply_text:
+                              send_group_message_image(gid=msg['group_id'], pic_url=reply, uid=str(msg.user_id), msg='')
+                       else:
+                          bot.sync.send_group_msg(group_id=msg['group_id'], message='[CQ:at,qq=' + str(msg.user_id) + '] 已屏蔽')
                     else:
                         reply_text = '[CQ:at,qq=' + str(msg.user_id) + '] ' + reply_text
                         bot.sync.send_group_msg(group_id=msg['group_id'], message=reply_text)
