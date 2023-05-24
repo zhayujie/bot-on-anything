@@ -4,6 +4,7 @@
 
 **模型：**
 
+
  - [x] [ChatGPT (gpt-3.5/4.0)](https://github.com/zhayujie/bot-on-anything#1-chatgpt)
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
  - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
