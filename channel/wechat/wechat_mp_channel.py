@@ -74,6 +74,11 @@ class WechatSubsribeAccount(Channel):
     def _do_send(self, query, context):
         key = query + '|' + context['from_user_id']
         reply_text = super().build_reply_content(query, context)
+        with open('sensitive_words_output.txt', 'r', encoding='utf-8') as f:
+        sensitive_words = [line.strip() for line in f.readlines()]
+        for word in sensitive_words:
+            if word != '' and word in reply_text:
+                reply_text = "这个问题不大好回答，咱聊点别的好了。"
         logger.info('[WX_Public] reply content: {}'.format(reply_text))
         cache[key]['status'] = "success"
         cache[key]['data'] = reply_text
