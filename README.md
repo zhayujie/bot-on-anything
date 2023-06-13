@@ -8,6 +8,7 @@
  - [x] [GPT-3.0](https://github.com/zhayujie/bot-on-anything#2gpt-30)
  - [x] [New Bing](https://github.com/zhayujie/bot-on-anything#4newbing)
  - [x] [Google Bard](https://github.com/zhayujie/bot-on-anything#5bard)
+ - [x] [Azure OpenAI](#azure)
 
 **应用：**
 
@@ -208,6 +209,44 @@ cookie示例:
     }
 }
 ```
+
+### 6. Azure OpenAI
+
+这个选项主要是为了解决OpenAI的api免费额度到期后，无法使用国内信用卡继续使用的问题。
+众所周知微软和OpenAI的关系，微软在自家的Azure上也提供了OpenAI的服务，而Azure是可以绑定国内信用卡进行付费的。
+
+#### (0) 申请开通 Azure OpenAI 服务 <a id="azure"></a>
+
+参考这个视频：
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1686642690/video_to_markdown/images/youtube---RI2pXNfOKQ-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=-RI2pXNfOKQ "")
+
+Azure OpenAI 服务的快速入门文档：https://learn.microsoft.com/zh-cn/azure/cognitive-services/openai/chatgpt-quickstart?tabs=command-line&pivots=programming-language-python
+
+#### (1) 安装依赖
+
+``` shell
+pip install openai
+```
+
+#### (2) 配置说明
+
+基本与ChatGPT的配置相同，从依赖项就能看出来，实际使用的还是openai的python库，只是调用时部分参数有所不同。
+
+``` json
+{
+  "model": {
+    "type" : "azure_openai",
+    "azure_openai": {
+      "api_key": "你在Azure上创建的OpenAI服务实例的Key",
+      "api_base": "你在Azure上创建的OpenAI服务实例的Endpoint",
+      "api_version": "2023-05-15", # 目前是这个版本，如果有更新，可以在Azure上查看
+      "engine": "你在OpenAI服务实例中部署模型时设置的名称",
+    }
+  }
+}
+```
+
+以上4个配置项都是必须的，其中engine相当于ChatGPT配置中的model。ChatGPT中的其他配置亦可在此使用。
 
 ## 三、选择应用
 

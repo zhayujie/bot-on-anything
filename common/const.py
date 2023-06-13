@@ -15,6 +15,7 @@ DISCORD = "discord"
 
 # model
 OPEN_AI = "openai"
+AZURE_OPEN_AI = "azure_openai"
 CHATGPT = "chatgpt"
 BAIDU = "baidu"
 BING = "bing"

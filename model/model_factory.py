@@ -21,6 +21,10 @@ def create_bot(model_type):
         from model.openai.chatgpt_model import ChatGPTModel
         return ChatGPTModel()
 
+    elif model_type == const.AZURE_OPEN_AI:
+        from model.openai.azure_open_ai_model import AzureOpenAIModel
+        return AzureOpenAIModel()
+
     elif model_type == const.BAIDU:
         from model.baidu.yiyan_model import YiyanModel
         return YiyanModel()
