@@ -43,7 +43,7 @@ class WechatChannel(Channel):
         # login by scan QRCode
         hot_reload = channel_conf_val(const.WECHAT, 'hot_reload', True)
         if channel_conf_val(const.WECHAT, 'receive_qrcode_api'):
-            itchat.auto_login(enableCmdQR=2, hot_reload=hot_reload, qrCallback=self.login)
+            itchat.auto_login(enableCmdQR=2, hotReload=hot_reload, qrCallback=self.login)
         else:
             itchat.auto_login(enableCmdQR=2, hotReload=hot_reload)
 
