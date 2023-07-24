@@ -85,7 +85,7 @@ class DingTalkHandler():
         img_match_prefix = functions.check_prefix(
             prompt, channel_conf_val(const.DINGTALK, 'image_create_prefix'))
         nick = data['senderNick']
-        staffid = data['senderStaffId']
+        staffid = data['senderId']
         robotCode = data['robotCode']
         if img_match_prefix and isinstance(reply, list):
             images = ""
@@ -119,7 +119,7 @@ class DingTalkHandler():
         img_match_prefix = functions.check_prefix(
             prompt, channel_conf_val(const.DINGTALK, 'image_create_prefix'))
         nick = data['senderNick']
-        staffid = data['senderStaffId']
+        staffid = data['senderId']
         robot_code = data['robotCode']
         if img_match_prefix and isinstance(reply, list):
             images = ""
@@ -166,7 +166,7 @@ class DingTalkHandler():
         img_match_prefix = functions.check_prefix(
             prompt, channel_conf_val(const.DINGTALK, 'image_create_prefix'))
         nick = data['senderNick']
-        staffid = data['senderStaffId']
+        staffid = data['senderId']
         robotCode = data['robotCode']
         if img_match_prefix and isinstance(reply, list):
             images = ""
