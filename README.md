@@ -208,9 +208,34 @@ cookie示例:
     }
 }
 ```
+### 6.LinkAI
+
+#### 配置项说明
+```bash
+{
+  "model": {
+    "type" : "linkai",
+    "linkai": {
+      "api_key": "",
+      "api_base": "https://api.link-ai.tech",
+      "app_code":  "",
+      "model": "",
+      "conversation_max_tokens": 1000,
+      "temperature":0.75,
+      "top_p":0.7,
+      "frequency_penalty":0.0,
+      "presence_penalty":1.0,
+      "character_desc": "你是一位智能助手。"
+    },
+}
+```
+
++ `api_key`: LinkAI服务调用的密钥，可在 [控制台](https://link-ai.tech/console/interface) 创建
++ `app_code`: LinkAI 应用或工作流的code，选填，参考[应用创建](https://docs.link-ai.tech/platform/create-app)
++ `model`: 支持国内外常见模型，参考[模型列表](https://docs.link-ai.tech/platform/api/chat#models) ，可以留空，在[LinKAI平台](https://link-ai.tech/console/factory) 修改应用的默认模型即可
++ 其他参数含义与ChatGPT模型一致
 
 ## 三、选择应用
-
 ### 1.命令行终端
 
 配置模板中默认启动的应用即是终端，无需任何额外配置，直接在项目目录下通过命令行执行 `python3 app.py` 便可启动程序。用户通过命令行的输入与对话模型交互，且支持流式响应效果。

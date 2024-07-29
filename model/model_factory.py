@@ -32,5 +32,8 @@ def create_bot(model_type):
     elif model_type == const.BARD:
         from model.google.bard_model import BardModel
         return BardModel()
+    elif model_type == const.LINKAI:
+        from model.linkai.link_ai_bot import LinkAIBot
+        return LinkAIBot()
 
     raise RuntimeError

@@ -119,6 +119,7 @@ class HttpChannel(Channel):
         query = data["msg"]
         id = data["id"]
         context['from_user_id'] = str(id)
+        context['channel'] = self
         e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
             'channel': self, 'context': query,  "args": context}))
         reply = e_context['reply']
@@ -135,6 +136,7 @@ class HttpChannel(Channel):
         context['from_user_id'] = str(id)
         context['stream'] = True
         context['origin'] = data["msg"]
+        context['channel'] = self
         e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
             'channel': self, 'context': data["msg"], 'reply': data["msg"], "args": context}))
         reply = e_context['reply']
