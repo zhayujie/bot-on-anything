@@ -54,7 +54,9 @@ class Createimg(Plugin):
                 images = ""
                 for url in reply:
                     images += f"[!['IMAGE_CREATE']({url})]({url})\n\n"
-            e_context["reply"] = images
+                e_context["reply"] = images
+            else:
+                e_context["reply"] = reply
         return e_context
 
     def send_images(self, e_context: EventContext):

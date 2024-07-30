@@ -7,6 +7,7 @@ wechat channel
 import time
 import itchat
 import json
+import re
 from itchat.content import *
 from channel.channel import Channel
 from concurrent.futures import ThreadPoolExecutor
@@ -131,7 +132,39 @@ class WechatChannel(Channel):
 
     def send(self, msg, receiver):
         logger.info('[WX] sendMsg={}, receiver={}'.format(msg, receiver))
-        itchat.send(msg, toUserName=receiver)
+        reply_type = self.determine_type(msg)
+        if reply_type == "text":
+            itchat.send(msg, toUserName=receiver)
+        elif reply_type == "img_url":
+            image_storage = self.dowdload_img_url(msg)
+            itchat.send_image(image_storage, toUserName=receiver)
+        elif reply_type == "file_url":
+            image_storage = self.dowdload_img_url(msg)
+            itchat.send_file(image_storage, toUserName=receiver)
+        else:
+            return None
+
+    def determine_type(self, msg):
+        # 正则表达式来匹配URL
+        url_pattern = re.compile(
+            r'^(?:http|ftp)s?://'  # http:// or https://
+            r'(?:\S+(?::\S*)?@)?'  # 用户名和密码
+            r'(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,6}'  # 域名
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+        # 检查是否是URL
+        if re.match(url_pattern, msg):
+            # 如果是URL，进一步检查是不是图片链接
+            if any(msg.endswith(extension) for extension in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg']):
+                return "img_url"
+            # 检查是否是其他类型的文件链接
+            elif any(msg.endswith(extension) for extension in
+                     ['.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar']):
+                return "img_file"
+            else:
+                return "others"
+        else:
+            return "text"
 
     def _do_send(self, query, reply_user_id):
         try:
@@ -139,9 +172,9 @@ class WechatChannel(Channel):
                 return
             context = dict()
             context['from_user_id'] = reply_user_id
+            context['channel'] = self
             e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
                 'channel': self, 'context': query,  "args": context}))
-
             reply = e_context['reply']
             if not e_context.is_pass():
                 reply = super().build_reply_content(e_context["context"], e_context["args"])
@@ -178,11 +211,22 @@ class WechatChannel(Channel):
         except Exception as e:
             logger.exception(e)
 
+
+    def dowdload_img_url(self, url):
+        pic_res = requests.get(url, stream=True)
+        image_storage = io.BytesIO()
+        for block in pic_res.iter_content(1024):
+            image_storage.write(block)
+        image_storage.seek(0)
+        return image_storage
+
+
     def _do_send_group(self, query, msg):
         if not query:
             return
         context = dict()
         context['from_user_id'] = msg['User']['UserName']
+        context['channel'] = self
         e_context = PluginManager().emit_event(EventContext(Event.ON_HANDLE_CONTEXT, {
             'channel': self, 'context': query,  "args": context}))
         reply = e_context['reply']
