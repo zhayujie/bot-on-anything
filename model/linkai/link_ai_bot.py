@@ -48,16 +48,13 @@ class LinkAIBot(Model):
         elif context.get('type', None) == 'IMAGE_CREATE':
             ok, res = self.create_img(query, 0)
             if ok:
-                #return [res]
-                reply_content = res
+                return [res]
             else:
-                #return res
-                reply_content = "failed to create images"
+                return res
         #     return reply
         # else:
         #     # reply = Reply(ReplyType.ERROR, "Bot不支持处理{}类型的消息".format(context.type))
         #     return reply
-            return reply_content
 
     def _chat(self, query, context, retry_count=0):
         """
@@ -121,10 +118,15 @@ class LinkAIBot(Model):
                         reply_content += knowledge_suffix
                 # image process
                 if response["choices"][0].get("img_urls"):
-                    reply_content = response["choices"][0].get("text_content", "") + " " + " ".join(response["choices"][0].get("img_urls"))
-                else:
-                    reply_content = response["choices"][0]["message"]["content"]
-                    
+                    if 'send' in type(context['channel']).__dict__:  # 通道实例所属类的定义是否有send方法
+                        thread = threading.Thread(target=self._send_image, args=(context['channel'], context, response["choices"][0].get("img_urls")))
+                        thread.start()
+                        if response["choices"][0].get("text_content"):
+                            reply_content = response["choices"][0].get("text_content")
+                    else:
+                        reply_content = response["choices"][0].get("text_content", "") + " " + " ".join(response["choices"][0].get("img_urls"))  # 图像生成时候需要合并文本和图片url
+                reply_content = self._process_url(reply_content)
+                                    
                 #    thread = threading.Thread(target=self._send_image, args=(context['channel'], context, response["choices"][0].get("img_urls")))
                 #    thread.start()
                 #    if response["choices"][0].get("text_content"):
