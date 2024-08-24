@@ -35,14 +35,14 @@ class LinkAIBot(Model):
                 return '记忆已清除'
             new_query = Session.build_session_query(query, from_user_id)
             context['session'] = new_query  # 将 new_query 添加到 context 字典中 session
-            log.debug("[lINKAI] session query={}".format(new_query))
+            log.debug("[LINKAI] session query={}".format(new_query))
 
             # if context.get('stream'):
             #     # reply in stream
             #     return self.reply_text_stream(query, context)
 
             reply_content = self._chat(query, context)
-            log.debug("[lINKAI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
+            log.debug("[LINKAI] new_query={}, user={}, reply_cont={}".format(new_query, from_user_id, reply_content))
             return reply_content
 
         elif context.get('type', None) == 'IMAGE_CREATE':
@@ -95,7 +95,7 @@ class LinkAIBot(Model):
             headers = {"Authorization": "Bearer " + linkai_api_key}
 
             # do http request
-            base_url = model_conf(const.LINKAI).get("api_base", "https://api.link-ai.chat")
+            base_url = model_conf(const.LINKAI).get("api_base", "https://api.link-ai.tech")
             res = requests.post(url=base_url + "/v1/chat/completions", json=body, headers=headers,
                                 timeout=180)
             if res.status_code == 200:
@@ -118,11 +118,20 @@ class LinkAIBot(Model):
                         reply_content += knowledge_suffix
                 # image process
                 if response["choices"][0].get("img_urls"):
-                    thread = threading.Thread(target=self._send_image, args=(context['channel'], context, response["choices"][0].get("img_urls")))
-                    thread.start()
-                    if response["choices"][0].get("text_content"):
-                        reply_content = response["choices"][0].get("text_content")
+                    if 'send' in type(context['channel']).__dict__:  # 通道实例所属类的定义是否有send方法
+                        thread = threading.Thread(target=self._send_image, args=(context['channel'], context, response["choices"][0].get("img_urls")))
+                        thread.start()
+                        if response["choices"][0].get("text_content"):
+                            reply_content = response["choices"][0].get("text_content")
+                    else:
+                        reply_content = response["choices"][0].get("text_content", "") + " " + " ".join(response["choices"][0].get("img_urls"))  # 图像生成时候需要合并文本和图片url
                 reply_content = self._process_url(reply_content)
+                                    
+                #    thread = threading.Thread(target=self._send_image, args=(context['channel'], context, response["choices"][0].get("img_urls")))
+                #    thread.start()
+                #    if response["choices"][0].get("text_content"):
+                #        reply_content = response["choices"][0].get("text_content")
+                #reply_content = self._process_url(reply_content)
                 return reply_content
 
             else:
@@ -244,7 +253,7 @@ class LinkAIBot(Model):
             headers = {"Authorization": "Bearer " + linkai_api_key}
 
             # do http request
-            base_url = model_conf(const.LINKAI).get("api_base", "https://api.link-ai.chat")
+            base_url = model_conf(const.LINKAI).get("api_base", "https://api.link-ai.tech")
             res = requests.post(url=base_url + "/v1/chat/completions", json=body, headers=headers, stream=True,
                                 timeout=180)
             if res.status_code == 200:
@@ -439,7 +448,7 @@ class Session(object):
         '''
         session = user_session.get(user_id, [])
         if len(session) == 0:
-            system_prompt = model_conf(const.OPEN_AI).get("character_desc", "")
+            system_prompt = model_conf(const.LINKAI).get("character_desc", "")
             system_item = {'role': 'system', 'content': system_prompt}
             session.append(system_item)
             user_session[user_id] = session
@@ -449,8 +458,8 @@ class Session(object):
 
     @staticmethod
     def save_session(query, answer, user_id, used_tokens=0):
-        max_tokens = model_conf(const.OPEN_AI).get('conversation_max_tokens')
-        max_history_num = model_conf(const.OPEN_AI).get('max_history_num', None)
+        max_tokens = model_conf(const.LINKAI).get('conversation_max_tokens')
+        max_history_num = model_conf(const.LINKAI).get('max_history_num', None)
         if not max_tokens or max_tokens > 4000:
             # default value
             max_tokens = 1000
