@@ -3,7 +3,8 @@
 <p align="center">
    <a href="https://github.com/zhayujie/bot-on-anything/releases/latest"><img src="https://img.shields.io/github/v/release/zhayujie/bot-on-anything" alt="Latest release"></a>
   <a href="https://github.com/zhayujie/bot-on-anything/blob/master/LICENSE"><img src="https://img.shields.io/github/license/zhayujie/bot-on-anything" alt="License: MIT"></a>
-  <a href="https://github.com/zhayujie/bot-on-anything"><img src="https://img.shields.io/github/stars/zhayujie/bot-on-anything?style=flat-square" alt="Stars"></a>    
+  <a href="https://github.com/zhayujie/bot-on-anything"><img src="https://img.shields.io/github/stars/zhayujie/bot-on-anything?style=flat-square" alt="Stars"></a> <br/>
+    [<a href="/README.md">English</a>] | [<a href="/docs/README-CN.md">中文</a>]
 </p>
 
 **Bot on Anything** is a powerful AI chatbot builder. It allows you to create chatbots with multiple AI models, and integrate into various platforms.
