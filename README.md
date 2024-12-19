@@ -1,3 +1,13 @@
+<p align="center"><img src= "https://github.com/user-attachments/assets/8db79567-3cc5-47cc-9855-296ef20130e8" alt="Bot-On-Anything" width="600" /></p>
+
+<p align="center">
+   <a href="https://github.com/zhayujie/bot-on-anything/releases/latest"><img src="https://img.shields.io/github/v/release/zhayujie/bot-on-anything" alt="Latest release"></a>
+  <a href="https://github.com/zhayujie/bot-on-anything/blob/master/LICENSE"><img src="https://img.shields.io/github/license/zhayujie/bot-on-anything" alt="License: MIT"></a>
+  <a href="https://github.com/zhayujie/bot-on-anything"><img src="https://img.shields.io/github/stars/zhayujie/bot-on-anything?style=flat-square" alt="Stars"></a>    
+</p>
+
+**Bot on Anything** is a powerful AI chatbot builder. It allows you to create chatbots with multiple AI models, and integrate into various platforms.
+
 # 简介
 
 将 **AI模型** 接入各类 **消息应用**，开发者通过轻量配置即可在二者之间选择一条连线，运行起一个智能对话机器人，在一个项目中轻松完成多条链路的切换。该架构扩展性强，每接入一个应用可复用已有的算法能力，同样每接入一个模型也可作用于所有应用之上。
