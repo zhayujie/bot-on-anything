@@ -1,4 +1,4 @@
-<p align="center"><img src= "https://github.com/user-attachments/assets/8db79567-3cc5-47cc-9855-296ef20130e8" alt="Bot-On-Anything" width="600" /></p>
+<p align="center"><img src= "https://github.com/user-attachments/assets/6e931057-e09f-4742-9fbd-2417cf6bc2f3" alt="Bot-On-Anything" width="600" /></p>
 
 <p align="center">
    <a href="https://github.com/zhayujie/bot-on-anything/releases/latest"><img src="https://img.shields.io/github/v/release/zhayujie/bot-on-anything" alt="Latest release"></a>
