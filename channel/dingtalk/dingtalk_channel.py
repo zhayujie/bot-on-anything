@@ -203,25 +203,32 @@ class DingTalkHandler():
     
     def chat(self, channel, data):
         reply = channel.handle(data)
-        type = data['conversationType']
-        if type == "1":
-            reply_json = self.build_response(reply, data)
-            self.notify_dingtalk(data, reply_json)
-        else:
-            # group的不清楚怎么@，先用webhook调用
-            reply_json = self.build_webhook_response(reply, data)
-            self.notify_dingtalk_webhook(reply_json)
+        self.notify_dingtalk(data, reply)
         
 
-    def notify_dingtalk(self, data, reply_json):
+    def notify_dingtalk(self, data, reply):
         headers = {
-            'content-type': 'application/json', 
-            'x-acs-dingtalk-access-token': self.get_token()
+            'content-type': 'application/json',
+            'Accept': '*/*',
         }
+        staff_id = data.get("senderStaffId", None)
+        values = {
+            'msgtype': 'text',
+            'text': {
+                'content': reply,
+            }
+        }
+        if staff_id:
+            values['at'] = {
+                    "atUserIds": [
+                       staff_id
+                    ],
+                    "isAtAll": False
+                }
 
-        notify_url = self.get_post_url(data)
+        notify_url = data.get("sessionWebhook")
         try:
-            r = requests.post(notify_url, json=reply_json, headers=headers)
+            r = requests.post(notify_url, json=values, headers=headers)
             resp = r.json()
             log.info("[DingTalk] response={}".format(str(resp)))
         except Exception as e:
@@ -230,6 +237,7 @@ class DingTalkHandler():
 
 class DingTalkChannel(Channel):
     def __init__(self):
+        self.data = None
         log.info("[DingTalk] started.")
 
     def startup(self):
@@ -239,10 +247,12 @@ class DingTalkChannel(Channel):
         reply = "您好，有什么我可以帮助您解答的问题吗？"
         prompt = data['text']['content']
         prompt = prompt.strip()
+        self.data = data
         if str(prompt) != 0:
             conversation_id = data['conversationId']
             sender_id = data['senderId']
             context = dict()
+            context['channel'] = self
             img_match_prefix = functions.check_prefix(
                 prompt, channel_conf_val(const.DINGTALK, 'image_create_prefix'))
             if img_match_prefix:
@@ -252,6 +262,42 @@ class DingTalkChannel(Channel):
             context['from_user_id'] = str(id)
             reply = super().build_reply_content(prompt, context)
         return reply
+
+    def send(self, msg, receiver):
+        # 暂时无法区分是什么类型的格式，先按图片处理，后期等待有志兄弟来重构
+        self.reply_markdown("图片信息", f"![]({msg})")
+
+    def reply_markdown(self, title: str,text: str):
+        request_headers = {
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+        }
+        values = {
+            'msgtype': 'markdown',
+            'markdown': {
+                'title': title,
+                'text': text,
+            }
+        }
+        staff_id = self.data.get("senderStaffId", None)
+        if staff_id:
+            values['at'] = {
+                "atUserIds": [
+                    staff_id
+                ],
+                "isAtAll": False
+            }
+        try:
+            notify_url = self.data.get("sessionWebhook")
+            response = requests.post(notify_url,
+                                     headers=request_headers,
+                                     data=json.dumps(values))
+            response.raise_for_status()
+        except Exception as e:
+            log.error(
+                f'reply markdown failed, error={e}, response.text={response.text if "response" in locals() else ""}')
+            return None
+        return response.json()
          
 
 dd = DingTalkChannel()
@@ -283,8 +329,6 @@ def chat():
         if 'conversationTitle' in data:
             group_name = data['conversationTitle']
         handler = handlers.get(group_name, handlers.get(code, handlers.get('DEFAULT')))
-        if handler.dingtalk_post_token and token != handler.dingtalk_post_token:
-            return {'ret': 203}
         handler.chat(dd, data)
         return {'ret': 200}
     
