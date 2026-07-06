@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/zhayujie-bot-on-anything-badge.png)](https://mseep.ai/app/zhayujie-bot-on-anything)
+
 <p align="center"><img src= "https://github.com/user-attachments/assets/6e931057-e09f-4742-9fbd-2417cf6bc2f3" alt="Bot-On-Anything" width="600" /></p>
 
 <p align="center">
