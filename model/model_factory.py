@@ -36,4 +36,8 @@ def create_bot(model_type):
         from model.linkai.link_ai_bot import LinkAIBot
         return LinkAIBot()
 
+    elif model_type == const.LITELLM:
+        from model.litellm.litellm_model import LiteLLMModel
+        return LiteLLMModel()
+
     raise RuntimeError
