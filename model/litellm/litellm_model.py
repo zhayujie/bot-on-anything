@@ -6,29 +6,34 @@ from common import const
 from common import log
 import time
 
+try:
+    import litellm
+    from litellm.exceptions import (
+        AuthenticationError,
+        RateLimitError,
+        APIConnectionError,
+        Timeout,
+        NotFoundError,
+        BadRequestError,
+        ContextWindowExceededError,
+    )
+except ImportError:
+    litellm = None
+
 user_session = dict()
 
 
 class LiteLLMModel(Model):
     def __init__(self):
-        try:
-            import litellm
-        except ImportError:
+        if litellm is None:
             raise ImportError(
                 "LiteLLM is required for this model. "
                 "Install it with: pip install litellm"
             )
         conf = model_conf(const.LITELLM)
-        self.model = conf.get("model", "gpt-4o-mini")
+        self.model = conf.get("model", "openai/gpt-4o-mini")
         self.api_key = conf.get("api_key", "")
         self.api_base = conf.get("api_base", "")
-
-        if self.api_key:
-            import os
-            os.environ["LITELLM_API_KEY"] = self.api_key
-        if self.api_base:
-            import os
-            os.environ["LITELLM_API_BASE"] = self.api_base
 
         log.info("[LITELLM] model={} api_base={}".format(self.model, self.api_base))
 
@@ -44,17 +49,19 @@ class LiteLLMModel(Model):
             new_query = Session.build_session_query(query, from_user_id)
             log.debug("[LITELLM] session query={}".format(new_query))
 
+            if context.get('stream'):
+                return self.reply_text_stream(query, new_query, from_user_id)
+
             reply_content = self.reply_text(new_query, from_user_id, 0)
             return reply_content
 
-    def reply_text(self, query, user_id, retry_count=0):
-        import litellm
-
+    def _build_call_kwargs(self, messages, stream=False):
         conf = model_conf(const.LITELLM)
         call_kwargs = {
             "model": self.model,
-            "messages": query,
+            "messages": messages,
             "drop_params": True,
+            "stream": stream,
         }
         if conf.get("temperature") is not None:
             call_kwargs["temperature"] = conf.get("temperature", 0.75)
@@ -64,38 +71,101 @@ class LiteLLMModel(Model):
             call_kwargs["api_key"] = self.api_key
         if self.api_base:
             call_kwargs["api_base"] = self.api_base
+        return call_kwargs
+
+    def reply_text(self, query, user_id, retry_count=0):
+        call_kwargs = self._build_call_kwargs(query)
 
         try:
             response = litellm.completion(**call_kwargs)
-            reply_content = response.choices[0].message.content
+            content = response.choices[0].message.content
+            reply_content = content.strip() if content else ""
             used_token = response.usage.total_tokens if response.usage else 0
             log.info("[LITELLM] reply={}", reply_content)
             if reply_content:
                 Session.save_session(query, reply_content, user_id, used_token)
             return reply_content
-        except Exception as e:
-            qualname = f"{type(e).__module__}.{type(e).__qualname__}"
-            if qualname in {
-                "litellm.exceptions.RateLimitError",
-            }:
-                log.warn(e)
-                if retry_count < 1:
-                    time.sleep(5)
-                    log.warn("[LITELLM] RateLimit exceeded, retry #{}".format(retry_count + 1))
-                    return self.reply_text(query, user_id, retry_count + 1)
-                else:
-                    return "Rate limit exceeded, please try again later"
-            elif qualname in {
-                "litellm.exceptions.APIConnectionError",
-                "litellm.exceptions.Timeout",
-            }:
-                log.warn(e)
-                log.warn("[LITELLM] Connection failed")
-                return "Connection error, please try again later"
+        except RateLimitError as e:
+            log.warn(e)
+            if retry_count < 3:
+                sleep_time = 2 ** retry_count  # 1s, 2s, 4s
+                time.sleep(sleep_time)
+                log.warn("[LITELLM] RateLimit exceeded, retry #{} in {}s".format(
+                    retry_count + 1, sleep_time))
+                return self.reply_text(query, user_id, retry_count + 1)
             else:
-                log.exception(e)
-                Session.clear_session(user_id)
-                return "An error occurred, please try again"
+                return "Rate limit exceeded, please try again later"
+        except AuthenticationError as e:
+            log.warn(e)
+            return "Authentication failed, please check your API key"
+        except (APIConnectionError, Timeout) as e:
+            log.warn(e)
+            log.warn("[LITELLM] Connection failed")
+            return "Connection error, please try again later"
+        except NotFoundError as e:
+            log.warn(e)
+            return "Model not found, please check your model configuration"
+        except ContextWindowExceededError as e:
+            log.warn(e)
+            Session.clear_session(user_id)
+            return "Context window exceeded, conversation history cleared. Please try again"
+        except BadRequestError as e:
+            log.warn(e)
+            return "Bad request, please check your input"
+        except Exception as e:
+            log.exception(e)
+            Session.clear_session(user_id)
+            return "An error occurred, please try again"
+
+    async def reply_text_stream(self, query, context, retry_count=0):
+        user_id = context['from_user_id']
+        new_query = Session.build_session_query(query, user_id)
+        call_kwargs = self._build_call_kwargs(new_query, stream=True)
+
+        try:
+            response = litellm.completion(**call_kwargs)
+            full_response = ""
+            for chunk in response:
+                if chunk.choices[0].finish_reason == "stop":
+                    break
+                chunk_content = chunk.choices[0].delta.content
+                if chunk_content:
+                    full_response += chunk_content
+                yield False, full_response
+            Session.save_session(query, full_response, user_id)
+            log.info("[LITELLM] reply={}", full_response)
+            yield True, full_response
+        except RateLimitError as e:
+            log.warn(e)
+            if retry_count < 3:
+                sleep_time = 2 ** retry_count
+                time.sleep(sleep_time)
+                log.warn("[LITELLM] RateLimit exceeded, retry #{} in {}s".format(
+                    retry_count + 1, sleep_time))
+                yield True, self.reply_text_stream(query, user_id, retry_count + 1)
+            else:
+                yield True, "Rate limit exceeded, please try again later"
+        except AuthenticationError as e:
+            log.warn(e)
+            yield True, "Authentication failed, please check your API key"
+        except (APIConnectionError, Timeout) as e:
+            log.warn(e)
+            log.warn("[LITELLM] Connection failed")
+            yield True, "Connection error, please try again later"
+        except NotFoundError as e:
+            log.warn(e)
+            yield True, "Model not found, please check your model configuration"
+        except ContextWindowExceededError as e:
+            log.warn(e)
+            Session.clear_session(user_id)
+            yield True, "Context window exceeded, conversation history cleared"
+        except BadRequestError as e:
+            log.warn(e)
+            yield True, "Bad request, please check your input"
+        except Exception as e:
+            log.exception(e)
+            Session.clear_session(user_id)
+            yield True, "An error occurred, please try again"
 
 
 class Session(object):
