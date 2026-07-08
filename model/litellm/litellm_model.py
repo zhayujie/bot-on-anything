@@ -188,9 +188,10 @@ class Session(object):
         if not max_tokens or max_tokens > 4000:
             max_tokens = 1000
         session = user_session.get(user_id)
-        if session:
-            gpt_item = {'role': 'assistant', 'content': answer}
-            session.append(gpt_item)
+        if not session:
+            return
+        gpt_item = {'role': 'assistant', 'content': answer}
+        session.append(gpt_item)
 
         if used_tokens > max_tokens and len(session) >= 3:
             session.pop(1)
