@@ -43,7 +43,11 @@ command after their normal mention/prefix rules. Streaming callers receive one
 complete search reply.
 
 Only explicit `/search` commands send a query to `https://search.parallel.ai/mcp`.
-Model credentials are not sent. Each HTTP request has a 5-second connection
+The optional MCP `session_id` argument is omitted; the plugin does not attach a
+shared identifier or user/channel identifiers to searches. Model credentials and
+saved netrc credentials are not sent. HTTP redirects are rejected before another
+request is prepared, while environment proxy and CA settings remain supported.
+Each HTTP request has a 5-second connection
 timeout and a 30-second read timeout; failures produce an unavailable message
 without automatic retries or a fallback model call. Set the setting to `false`
 and restart the app to disable the command.

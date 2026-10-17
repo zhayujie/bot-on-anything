@@ -1,7 +1,6 @@
 """An explicit, opt-in web search command using the anonymous Parallel MCP."""
 
 import json
-import uuid
 
 import requests
 
@@ -14,13 +13,22 @@ ENDPOINT = "https://search.parallel.ai/mcp"
 USER_AGENT = "bot-on-anything/parallel-search"
 
 
+def _reject_redirect(response, **kwargs):
+    if 300 <= response.status_code < 400:
+        # Session.send prepares Response.next even with allow_redirects=False.
+        # Reject in the hook, before redirect auth can consult saved netrc data.
+        response.close()
+        raise requests.HTTPError("MCP redirects are not allowed", response=response)
+
+
 def _rpc(session, method, params=None, request_id=None):
     payload = {"jsonrpc": "2.0", "method": method}
     if params is not None:
         payload["params"] = params
     if request_id is not None:
         payload["id"] = request_id
-    with session.post(ENDPOINT, json=payload, timeout=(5, 30), stream=True) as response:
+    with session.post(ENDPOINT, json=payload, timeout=(5, 30), stream=True,
+                      allow_redirects=False) as response:
         response.raise_for_status()
         if response.headers.get("Mcp-Session-Id"):
             session.headers["Mcp-Session-Id"] = response.headers["Mcp-Session-Id"]
@@ -46,10 +54,11 @@ def _rpc(session, method, params=None, request_id=None):
         return message["result"]
 
 
-def _search(query, session_id):
+def _search(query):
     with requests.Session() as session:
         # Keep proxy settings, but never load credentials from ~/.netrc.
         session.auth = lambda request: request
+        session.hooks["response"].append(_reject_redirect)
         session.headers.update({
             "User-Agent": USER_AGENT,
             "Accept": "application/json, text/event-stream",
@@ -66,7 +75,7 @@ def _search(query, session_id):
         _rpc(session, "notifications/initialized")
         result = _rpc(session, "tools/call", {
             "name": "web_search",
-            "arguments": {"objective": query, "search_queries": [query], "session_id": session_id},
+            "arguments": {"objective": query, "search_queries": [query]},
         }, 2)
         if result.get("isError"):
             raise ValueError("Search tool failed")
@@ -94,8 +103,6 @@ def _search(query, session_id):
 class ParallelSearch(Plugin):
     def __init__(self):
         super().__init__()
-        # Reuse one anonymous identifier for this plugin instance, including errors.
-        self.session_id = str(uuid.uuid4())
         self.handlers[Event.ON_BRIDGE_HANDLE_CONTEXT] = self.search
 
     def get_help_text(self, **kwargs):
@@ -116,7 +123,7 @@ class ParallelSearch(Plugin):
             reply = "Usage: /search <query>"
         else:
             try:
-                reply = _search(parts[1], self.session_id)
+                reply = _search(parts[1])
             except (requests.RequestException, ValueError, KeyError, TypeError, AttributeError):
                 reply = "Parallel Search is unavailable. Please try again later."
         e_context["reply"] = reply
