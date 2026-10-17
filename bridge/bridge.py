@@ -25,8 +25,8 @@ class Bridge(object):
         type = econtext['args'].get('model') or config.conf().get("model").get("type")
         query = econtext.econtext.get("context", None)
         reply = econtext.econtext.get("reply", "无回复")
-        bot = model_factory.create_bot(type)
         if not econtext.is_pass() and query:
+            bot = model_factory.create_bot(type)
             async for final, response in bot.reply_text_stream(query, context):
                 yield final, response
         else:

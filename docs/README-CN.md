@@ -667,6 +667,8 @@ pip3 install "discord.py>=2.0.0"
 
 参考 [CowAgent](https://github.com/zhayujie/CowAgent/tree/master/plugins) 的插件设计，本项目也做了插件化，尽量兼容它的插件事件模型，可以用来扩展图片生成、模型选择等自定义逻辑。详见 [插件开发文档](../plugins/README.md)。
 
+如需获取带来源链接的最新网页结果，可启用可选的 [Parallel Search 插件](../plugins/parallel_search/README.md)，使用 `/search <查询内容>`。插件默认关闭，无需 Parallel API Key。
+
 <br/>
 
 ## 📺 视频教程
