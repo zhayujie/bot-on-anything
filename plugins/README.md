@@ -1,5 +1,7 @@
 # 简介
 
+可选的 [Parallel Search 插件](parallel_search/README.md) 支持通过 `/search <查询内容>` 获取网页搜索结果和来源链接，默认关闭，无需 Parallel API Key。
+
 按 **[chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat/tree/master/plugins)** 插件的思路对 **bot-on-anything** 进行插件化，期望能实现插件的共享使用，但是由于两个项目的架构存在较大差异，只能尽最大可能兼容 **[chatgpt-on-wechat](https://github.com/zhayujie/chatgpt-on-wechat/tree/master/plugins)** 的插件，部分功能还需进行适配。
 
 

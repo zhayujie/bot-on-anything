@@ -667,6 +667,8 @@ pip3 install "discord.py>=2.0.0"
 
 Following the plugin design of [chatgpt-on-wechat](https://github.com/zhayujie/CowAgent/tree/master/plugins), this project is also pluginized and stays as compatible as possible with its plugin event model, so you can extend it with image generation, model selectors, and other custom logic. See the [plugin docs](plugins/README.md).
 
+For current web results with source links, enable the optional [Parallel Search plugin](plugins/parallel_search/README.md) and use `/search <query>`. It is disabled by default and needs no Parallel API key.
+
 <br/>
 
 ## 📺 Video Tutorials (Chinese)

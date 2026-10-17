@@ -114,6 +114,7 @@
     }
   },
   "common": {
+    "parallel_search_enabled": false,
     "clear_memory_commands": ["#清除记忆"],
     "certificate_file": "xxx"
   }
